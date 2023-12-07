@@ -4,8 +4,9 @@ import {createRouter, createWebHistory, RouteLocationNormalized} from 'vue-route
 import {authTokenService} from '@/services'
 import {useToastDialog} from '@/composables'
 import SignInView from '@/views/SignInView.vue'
-import PostsView from '@/views/PostsView.vue'
+import CatalogView from '@/views/CatalogView.vue'
 import ErrorView from '@/views/ErrorView.vue'
+import ProductsView from '@/views/ProductsView.vue'
 
 const toastDialog = useToastDialog()
 const authToken = authTokenService()
@@ -19,10 +20,15 @@ const routes: RouteRecordRaw[] = [
       meta: {auth: false}
    },
    {
-      path: '/posts',
-      name: 'Posts',
-      component: PostsView,
+      path: '/Catalog',
+      name: 'Catalog',
+      component: CatalogView,
       meta: {auth: true}
+   },
+   {
+      path: '/products',
+      name: 'Products',
+      component: ProductsView,
    },
    {
       path: '/:all(.*)*',

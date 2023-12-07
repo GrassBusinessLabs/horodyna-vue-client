@@ -1,6 +1,6 @@
 <template>
    <v-layout class='rounded rounded-md'>
-      <app-header />
+      <app-header :header-title="'Авторизація'" />
 
       <v-main class='d-flex align-center justify-center'>
          <slot />

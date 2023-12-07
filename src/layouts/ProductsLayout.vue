@@ -1,11 +1,11 @@
 <template>
    <v-layout class='rounded rounded-md'>
-      <app-header />
+      <app-header :header-title="'Список продуктів'" />
 
       <v-main class='bg-grey-lighten-3'>
          <v-container>
             <v-row>
-               <v-col cols='3' lg='2'>
+               <v-col cols='12'>
                   <v-card
                      class='mx-auto'
                      rounded='lg'
@@ -24,7 +24,7 @@
                         <span class='card-title'>{{ currentUser?.username }}</span>
                      </template>
 
-                     <v-card-text>
+                     <template v-slot:append>
                         <v-btn
                            class='mt-2'
                            :block='true'
@@ -34,12 +34,13 @@
                         >
                            {{ translate('BTNS.LOGOUT') }}
                         </v-btn>
-                     </v-card-text>
+                     </template>
                   </v-card>
                </v-col>
 
                <v-col>
                   <v-sheet
+                     class='pa-3'
                      min-height='70vh'
                      rounded='lg'
                   >
@@ -65,9 +66,6 @@ const {logout} = userStore
 const {currentUser} = storeToRefs(userStore)
 </script>
 
-<style lang='scss' scoped>
-.card-title {
-   font-size: 1rem;
-}
-</style>
+<style scoped>
 
+</style>

@@ -8,11 +8,16 @@ export const useRouting = () => {
    }
 
    async function toPosts() {
-      return router.push('/posts')
+      return router.push('/catalog')
+   }
+   
+   async function toProducts() {
+      return router.push('/products')
    }
 
    return {
       toSignIn,
-      toPosts
+      toPosts,
+      toProducts
    }
 }
