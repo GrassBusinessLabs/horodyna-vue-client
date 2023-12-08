@@ -1,50 +1,10 @@
 <template>
    <home-layout>
-<!--      <v-sheet class='mx-auto'>-->
-<!--         <v-form @submit.prevent='submit'>-->
-<!--            <v-row class='ma-0'>-->
-<!--               <v-col cols='12'>-->
-<!--                  <v-text-field-->
-<!--                     v-model='title'-->
-<!--                     v-bind='titleAttrs'-->
-<!--                     :label='translate("INPUTS.TITLE")'-->
-<!--                     :disabled='isSubmitting || loadingPosts'-->
-<!--                     :hide-details='true'-->
-<!--                     type='text'-->
-<!--                  ></v-text-field>-->
-<!--               </v-col>-->
-
-<!--               <v-col cols='12'>-->
-<!--                  <v-text-field-->
-<!--                     v-model='text'-->
-<!--                     v-bind='textAttrs'-->
-<!--                     :label='translate("INPUTS.TEXT")'-->
-<!--                     :disabled='isSubmitting || loadingPosts'-->
-<!--                     :hide-details='true'-->
-<!--                     type='text'-->
-<!--                  ></v-text-field>-->
-<!--               </v-col>-->
-
-<!--               <v-col cols='12'>-->
-<!--                  <v-btn-->
-<!--                     class='mt-2'-->
-<!--                     :block='true'-->
-<!--                     :disabled='isSubmitting || loadingPosts'-->
-<!--                     type='submit'-->
-<!--                     color='primary'-->
-<!--                  >-->
-<!--                     {{ translate('BTNS.ADD_POST') }}-->
-<!--                  </v-btn>-->
-<!--               </v-col>-->
-<!--            </v-row>-->
-<!--         </v-form>-->
-<!--      </v-sheet>-->
-
       <v-row class='ma-0'>
-         <app-post
-            v-for='category in categoriesData'
-            :key='category.name'
-            :category='category'
+         <app-category
+            v-for='letter in ukrainianAlphabet'
+            :key='letter'
+            :letter='letter'
          />
       </v-row>
    </home-layout>
@@ -64,9 +24,10 @@
 // import {useAppI18n} from '@/i18n'
 // import {useUserStore} from '@/stores'
 import HomeLayout from '@/layouts/CatalogLayout.vue'
-import AppPost from '@/components/AppCategory.vue'
+import AppCategory from '@/components/AppCategory.vue'
 //
-import {categoriesData} from '@/constants/categories.ts'
+
+const ukrainianAlphabet = 'АБВГДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЮЯ'
 
 //
 // const {handleError} = useHandleError()

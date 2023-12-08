@@ -5,39 +5,6 @@
       <v-main class='bg-grey-lighten-3'>
          <v-container>
             <v-row>
-               <v-col cols='12'>
-                  <v-card
-                     class='mx-auto'
-                     rounded='lg'
-                  >
-                     <template v-slot:prepend>
-                        <v-avatar
-                           v-if='currentUser'
-                           color='grey-darken-1'
-                           size='32'
-                           :image='currentUser.image'
-                        ></v-avatar>
-                     </template>
-
-
-                     <template v-slot:title>
-                        <span class='card-title'>{{ currentUser?.username }}</span>
-                     </template>
-
-                     <template v-slot:append>
-                        <v-btn
-                           class='mt-2'
-                           :block='true'
-                           type='button'
-                           variant='text'
-                           @click='logout'
-                        >
-                           {{ translate('BTNS.LOGOUT') }}
-                        </v-btn>
-                     </template>
-                  </v-card>
-               </v-col>
-
                <v-col>
                   <v-sheet
                      class='pa-3'

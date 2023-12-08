@@ -15,7 +15,10 @@
          </v-card-title>
 
          <v-card-subtitle class='text-subtitle-1'>
-            Всі товари додаються в корзину
+            Продавець: {{ product.author }}
+         </v-card-subtitle>
+         <v-card-subtitle class='text-subtitle-1'>
+            Ціна: {{ product.price }} грн за кг
          </v-card-subtitle>
 
          <v-card-actions class='pa-4'>
@@ -27,7 +30,7 @@
                      :block='true'
                      @click='() => count++'
                   >
-                     Додати {{ count ? count : '' }}
+                     Додати {{ count ? count + ' кг' : '' }}
                   </v-btn>
                </v-col>
                <v-col cols='6'>

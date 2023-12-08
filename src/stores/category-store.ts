@@ -1,16 +1,14 @@
 import {defineStore} from 'pinia'
 import {ref, Ref} from 'vue'
 
-type Category = 'Овочі' | 'Фрукти' | `М'ясо` | 'Мед';
-
 export const useCategoryStore = defineStore('category', () => {
-   const currentCategory: Ref<Category | null> = ref<Category | null>(null)
+   const currentCategory: Ref<string | null> = ref<string | null>(null)
    
-   function setCurrentCategory(value: Category | null): void {
+   function setCurrentCategory(value: string | null): void {
       currentCategory.value = value
    }
    
-   function getCurrentCategory(): Category | null {
+   function getCurrentCategory(): string | null {
       if(currentCategory.value) {
          return currentCategory.value
       }
