@@ -3,6 +3,17 @@
       <app-header :header-title="'Категорії продуктів'" />
 
       <v-main>
+
+         <v-btn
+            class='mt-2'
+            :block='true'
+            type='button'
+            variant='text'
+            @click='logout'
+         >
+            {{ translate('BTNS.LOGOUT') }}
+         </v-btn>
+
          <v-container>
             <v-row>
                <v-col>
@@ -22,14 +33,17 @@
 </template>
 
 <script lang='ts' setup>
-// import {storeToRefs} from 'pinia'
-// import {useAppI18n} from '@/i18n'
+import {storeToRefs} from 'pinia'
+import {useAppI18n} from '@/i18n'
 
 import AppHeader from '@/components/AppHeader.vue'
 
-// const {translate} = useAppI18n()
-// const {logout} = userStore
-// const {currentUser} = storeToRefs(userStore)
+import {useUserStore} from '@/stores'
+
+const userStore = useUserStore()
+
+const {translate} = useAppI18n()
+const {logout} = userStore
 
 </script>
 

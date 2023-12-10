@@ -76,8 +76,8 @@ const form = useForm({
       })
    ),
    initialValues: {
-      username: 'kminchelle',
-      password: '0lelplR'
+      username: 'sa@test.com',
+      password: '12345678'
    }
 })
 
@@ -95,7 +95,7 @@ const submit = form.handleSubmit(async values => {
       isSubmitting.value = true
 
       const body: LoginBody = {
-         username: values.username,
+         email: values.username,
          password: values.password
       }
 
