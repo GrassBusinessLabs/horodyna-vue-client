@@ -1,5 +1,8 @@
 <template>
-   <v-col cols='12'>
+   <v-col
+      cols='12'
+      v-if='showFilter'
+   >
       <v-card
          class='rounded-lg bg-grey-lighten-4'
          elevation='3'
@@ -67,12 +70,13 @@
 import type {Product} from '@/models'
 import {useRouting} from '@/composables'
 
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 import {productsData} from '@/constants/products.ts'
 import {useCategoryStore} from '@/stores'
 
 const props = defineProps<{
-  letter: string
+   letter: string
+   filter: string
 }>()
 
 const routing = useRouting()
@@ -89,6 +93,18 @@ const setCategory = async (name: string) => {
    setCurrentCategory(name)
    await routing.toProducts()
 }
+
+const showFilter = computed(() => {
+   switch (props.filter) {
+      case 'filled':
+         return filteredProducts.length !== 0
+      case 'empty':
+         return filteredProducts.length === 0
+      case 'all':
+      default:
+         return true
+   }
+})
 
 </script>
 

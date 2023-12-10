@@ -1,10 +1,30 @@
 <template>
    <home-layout>
       <v-row class='ma-0'>
+         <v-col cols='12'>
+            <v-btn-toggle
+               mandatory
+               v-model="filter"
+               class='rounded-lg bg-grey-lighten-3'
+            >
+               <v-btn class='border w-auto' value="all">
+                  Всі
+               </v-btn>
+
+               <v-btn class='border w-auto' value="filled">
+                  Повні
+               </v-btn>
+
+               <v-btn class='border w-auto' value="empty">
+                  Пусті
+               </v-btn>
+            </v-btn-toggle>
+         </v-col>
          <app-category
             v-for='letter in ukrainianAlphabet'
             :key='letter'
             :letter='letter'
+            :filter='filter'
          />
       </v-row>
    </home-layout>
@@ -25,9 +45,12 @@
 // import {useUserStore} from '@/stores'
 import HomeLayout from '@/layouts/CatalogLayout.vue'
 import AppCategory from '@/components/AppCategory.vue'
+import {ref} from 'vue'
 //
 
 const ukrainianAlphabet = 'АБВГДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЮЯ'
+
+const filter = ref('all')
 
 //
 // const {handleError} = useHandleError()
@@ -112,6 +135,14 @@ const ukrainianAlphabet = 'АБВГДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦ�
 </script>
 
 <style lang='scss' scoped>
+.v-btn-toggle {
+   display: flex;
+   flex-wrap: wrap;
+}
 
+.v-btn {
+   flex: 1 0 auto;
+   flex-shrink: 0;
+}
 </style>
 

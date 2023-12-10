@@ -4,19 +4,17 @@
 
       <v-main>
 
-         <v-btn
-            class='mt-2'
-            :block='true'
-            type='button'
-            variant='text'
-            @click='logout'
-         >
-            {{ translate('BTNS.LOGOUT') }}
-         </v-btn>
+<!--         <v-btn-->
+<!--            class='mt-2'-->
+<!--            :block='true'-->
+<!--            type='button'-->
+<!--            variant='text'-->
+<!--            @click='logout'-->
+<!--         >-->
+<!--            {{ translate('BTNS.LOGOUT') }}-->
+<!--         </v-btn>-->
 
          <v-container>
-            <v-row>
-               <v-col>
                   <v-sheet
                      class='pa-1'
                      min-height='70vh'
@@ -25,25 +23,22 @@
                   >
                      <slot />
                   </v-sheet>
-               </v-col>
-            </v-row>
          </v-container>
       </v-main>
    </v-layout>
 </template>
 
 <script lang='ts' setup>
-import {storeToRefs} from 'pinia'
-import {useAppI18n} from '@/i18n'
-
 import AppHeader from '@/components/AppHeader.vue'
 
-import {useUserStore} from '@/stores'
+// import {storeToRefs} from 'pinia'
+// import {useAppI18n} from '@/i18n'
+// import {useUserStore} from '@/stores'
 
-const userStore = useUserStore()
+// const userStore = useUserStore()
 
-const {translate} = useAppI18n()
-const {logout} = userStore
+// const {translate} = useAppI18n()
+// const {logout} = userStore
 
 </script>
 
