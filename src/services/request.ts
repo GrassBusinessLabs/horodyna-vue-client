@@ -18,12 +18,11 @@ export const requestService = () => {
    }
 
    async function getCurrentUser(): Promise<CurrentUser> {
-      // WARNING!!! In real projects, this request will look something like this api.get('/users/me')
-      return api.get('/users/me')
+      return api.get('users')
    }
 
    async function logout(): Promise<void> {
-      // WARNING!!! In real projects, this request will look something like this api.post('/logout')
+      return api.post('/auth/logout')
    }
 
    return {

@@ -15,14 +15,13 @@
 import ProductsLayout from '@/layouts/ProductsLayout.vue'
 import AppProduct from '@/components/AppProduct.vue'
 import {useCategoryStore} from '@/stores'
-import {Product} from '@/models'
 import {categoryProducts} from '@/constants/categoryProducts.ts'
 
 const categoryStore = useCategoryStore()
 const {getCurrentCategory} = categoryStore
 const currentCategory = getCurrentCategory()
 
-const filteredProducts = categoryProducts.filter((product: Product) => product.category === currentCategory)
+const filteredProducts = categoryProducts.filter((product) => product.category === currentCategory)
 
 </script>
 

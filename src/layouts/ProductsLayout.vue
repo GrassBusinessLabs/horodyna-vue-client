@@ -21,16 +21,17 @@
 </template>
 
 <script lang='ts' setup>
-import {storeToRefs} from 'pinia'
-
-import {useUserStore} from '@/stores'
-import {useAppI18n} from '@/i18n'
 import AppHeader from '@/components/AppHeader.vue'
 
-const {translate} = useAppI18n()
-const userStore = useUserStore()
-const {logout} = userStore
-const {currentUser} = storeToRefs(userStore)
+// import {storeToRefs} from 'pinia'
+//
+// import {useUserStore} from '@/stores'
+// import {useAppI18n} from '@/i18n'
+
+// const {translate} = useAppI18n()
+// const userStore = useUserStore()
+// const {logout} = userStore
+// const {currentUser} = storeToRefs(userStore)
 </script>
 
 <style scoped>

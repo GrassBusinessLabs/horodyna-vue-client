@@ -1,33 +1,12 @@
 <template>
-   <home-layout>
-      <v-row class='ma-0'>
-         <v-col cols='12'>
-            <v-btn-toggle
-               mandatory
-               v-model="filter"
-               class='rounded-lg bg-grey-lighten-3'
-            >
-               <v-btn class='border w-auto' value="all">
-                  Всі
-               </v-btn>
-
-               <v-btn class='border w-auto' value="filled">
-                  Повні
-               </v-btn>
-
-               <v-btn class='border w-auto' value="empty">
-                  Пусті
-               </v-btn>
-            </v-btn-toggle>
-         </v-col>
+   <catalog-layout>
          <app-category
             v-for='letter in ukrainianAlphabet'
             :key='letter'
             :letter='letter'
             :filter='filter'
          />
-      </v-row>
-   </home-layout>
+   </catalog-layout>
 </template>
 
 <script lang='ts' setup>
@@ -43,7 +22,7 @@
 // import {useHandleError} from '@/composables'
 // import {useAppI18n} from '@/i18n'
 // import {useUserStore} from '@/stores'
-import HomeLayout from '@/layouts/CatalogLayout.vue'
+import CatalogLayout from '@/layouts/CatalogLayout.vue'
 import AppCategory from '@/components/AppCategory.vue'
 import {ref} from 'vue'
 //

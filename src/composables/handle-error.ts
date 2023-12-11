@@ -11,7 +11,7 @@ export const useHandleError = () => {
 
    const utils = utilsService()
 
-   const tokenExpiredMsg: string = 'Token Expired!'
+   const tokenExpiredMsg: string = 'token is expired'
 
    function handleError(error: any): void {
       const errorMsg: string = utils.getErrorMessage(error)
