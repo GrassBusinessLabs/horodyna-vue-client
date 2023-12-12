@@ -40,6 +40,7 @@
 <script lang='ts' setup>
 import AppHeader from '@/components/AppHeader.vue'
 import {onMounted, ref} from 'vue'
+import {ukrainianAlphabet} from '@/constants'
 
 // import {useAppI18n} from '@/i18n'
 // import {useUserStore} from '@/stores'
@@ -49,21 +50,13 @@ import {onMounted, ref} from 'vue'
 // const {translate} = useAppI18n()
 // const {logout} = userStore
 
-const ukrainianAlphabet: string = 'АБВГДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЮЯ'
-
-const scrollRef = ref<string | null>(null);
-
-const scrollToLetter = (letter) => {
+const scrollToLetter = (letter: string) => {
    const element = document.querySelector(`.${letter}`)
    if (element) {
       element.scrollIntoView({ behavior: 'smooth' })
    }
-   console.log()
 }
 
-onMounted(() => {
-   scrollRef.value = scrollToLetter;
-})
 </script>
 
 <style lang='scss' scoped>

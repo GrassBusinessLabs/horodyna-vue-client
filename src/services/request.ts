@@ -24,7 +24,7 @@ export const requestService = () => {
    async function logout(): Promise<void> {
       return api.post('/auth/logout')
    }
-//p
+
    return {
       login,
       getPosts,

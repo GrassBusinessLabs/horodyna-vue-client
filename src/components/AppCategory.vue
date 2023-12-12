@@ -11,7 +11,6 @@
          variant="flat"
          size="small"
          :icon="''"
-         :class='`${letter}`'
       >
          {{ letter }}
       </v-btn>
@@ -20,13 +19,8 @@
    <v-col
       cols='10'
       v-if='filteredProducts.length !== 0'
+      :class='`${letter}`'
    >
-<!--      <v-col cols='12' v-if='filteredProducts.length === 0'>-->
-<!--         <v-card-title class='text-subtitle-1'>-->
-<!--            Товарів немає-->
-<!--         </v-card-title>-->
-<!--         <v-divider :thickness="2"></v-divider>-->
-<!--      </v-col>-->
 
       <v-list lines="two" class='mt-2'>
          <v-list-item

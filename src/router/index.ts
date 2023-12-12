@@ -7,6 +7,7 @@ import SignInView from '@/views/SignInView.vue'
 import CatalogView from '@/views/CatalogView.vue'
 import ErrorView from '@/views/ErrorView.vue'
 import ProductsView from '@/views/ProductsView.vue'
+import SettingsView from '@/views/SettingsView.vue'
 
 const toastDialog = useToastDialog()
 const authToken = authTokenService()
@@ -29,6 +30,12 @@ const routes: RouteRecordRaw[] = [
       path: '/products',
       name: 'Products',
       component: ProductsView,
+   },
+   {
+      path: '/settings',
+      name: 'Settings',
+      component: SettingsView,
+      meta: {auth: true}
    },
    {
       path: '/:all(.*)*',

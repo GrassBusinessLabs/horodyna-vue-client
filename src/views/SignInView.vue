@@ -103,7 +103,7 @@ const submit = form.handleSubmit(async values => {
       setCurrentUser(currentUser)
       await authToken.set(currentUser.token)
 
-      await routing.toPosts()
+      await routing.toCatalog()
 
       isSubmitting.value = false
    } catch (e) {

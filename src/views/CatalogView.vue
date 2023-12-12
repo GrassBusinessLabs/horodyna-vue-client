@@ -11,8 +11,8 @@
 <script lang='ts' setup>
 import CatalogLayout from '@/layouts/CatalogLayout.vue'
 import AppCategory from '@/components/AppCategory.vue'
+import {ukrainianAlphabet} from '@/constants'
 
-const ukrainianAlphabet = 'АБВГДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЮЯ'
 </script>
 
 <style lang='scss' scoped>
