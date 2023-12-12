@@ -12,10 +12,26 @@
 <!--         >-->
 <!--            {{ translate('BTNS.LOGOUT') }}-->
 <!--         </v-btn>-->
-         <v-container class='py-5 pl-8'>
+         <v-container class='py-5 pl-8 pr-9'>
             <v-row>
                <slot />
             </v-row>
+            <v-sheet>
+               <v-btn
+                  color='primary'
+                  density="comfortable"
+                  class='font-weight-bold'
+                  variant="text"
+                  size="x-small"
+                  :icon="''"
+                  v-for='letter in ukrainianAlphabet'
+                  :key='letter'
+                  :letter='letter'
+                  @click='scrollToLetter(letter)'
+               >
+                  {{ letter }}
+               </v-btn>
+            </v-sheet>
          </v-container>
       </v-main>
    </v-layout>
@@ -23,6 +39,7 @@
 
 <script lang='ts' setup>
 import AppHeader from '@/components/AppHeader.vue'
+import {onMounted, ref} from 'vue'
 
 // import {useAppI18n} from '@/i18n'
 // import {useUserStore} from '@/stores'
@@ -32,6 +49,21 @@ import AppHeader from '@/components/AppHeader.vue'
 // const {translate} = useAppI18n()
 // const {logout} = userStore
 
+const ukrainianAlphabet: string = 'АБВГДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЮЯ'
+
+const scrollRef = ref<string | null>(null);
+
+const scrollToLetter = (letter) => {
+   const element = document.querySelector(`.${letter}`)
+   if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+   }
+   console.log()
+}
+
+onMounted(() => {
+   scrollRef.value = scrollToLetter;
+})
 </script>
 
 <style lang='scss' scoped>
@@ -40,9 +72,17 @@ import AppHeader from '@/components/AppHeader.vue'
 }
 
 .v-container {
-   height: 100vh;
+   height: calc(100vh - 64px);
    width: 100%;
    overflow: auto;
+}
+
+.v-sheet {
+   position: fixed;
+   top: 87px;
+   right: 15px;
+   display: flex;
+   flex-direction: column;
 }
 </style>
 
