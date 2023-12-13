@@ -7,35 +7,14 @@
          <v-list
             density="compact"
             lines="two"
-            class="py-1"
+            class="py-0"
          >
-            <v-list-item
-               v-for="(setting, index) in settings"
-               :key="setting.title"
-               color="primary"
-               class="pa-0 py-5"
-               :class="{ 'border-bottom': index !== settings.length - 1 }"
-            >
-               <template v-slot:prepend>
-                  <v-icon
-                     :icon="setting.icon"
-                     color="black"
-                     size="large"
-                  ></v-icon>
-               </template>
-
-               <v-list-item-title
-                  v-text="setting.title"
-               ></v-list-item-title>
-
-               <template v-slot:append>
-                  <v-icon
-                     size="large"
-                     icon="mdi-chevron-right"
-                     color="black"
-                  ></v-icon>
-               </template>
-            </v-list-item>
+            <app-setting
+                v-for="(setting, index) in settings"
+                :setting='setting'
+                :show-divider='index !== settings.length - 1'
+                :key="setting.title"
+            ></app-setting>
          </v-list>
       </v-card>
    </settings-layout>
@@ -43,6 +22,7 @@
 
 <script lang='ts' setup>
 import SettingsLayout from '@/layouts/SettingsLayout.vue'
+import AppSetting from '@/components/AppSetting.vue'
 
 const settings = [
    {title: 'Аккаунт', icon: 'mdi-account-outline'},
@@ -55,11 +35,4 @@ const settings = [
 </script>
 
 <style lang='scss' scoped>
-.border-bottom {
-   border-bottom: 1px solid rgba(128, 128, 128, 0.8);
-}
-
-.v-list-item-title {
-   font-size: 18px;
-}
 </style>

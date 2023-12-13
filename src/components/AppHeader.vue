@@ -8,7 +8,7 @@
       <template v-slot:append>
          <v-container class='pr-1'>
             <v-menu>
-               <template v-slot:activator="{ props }">
+               <template v-if="route.path !== '/sign-in'" v-slot:activator="{ props }">
                   <v-btn
                      dark
                      v-bind="props"
@@ -34,17 +34,18 @@
 </template>
 
 <script lang='ts' setup>
-import {useRouting} from '@/composables'
+import { useRouting } from '@/composables'
+import { useRoute } from 'vue-router'
+import {useUserStore} from '@/stores'
 
 defineProps<{
    headerTitle: string
 }>()
 
-import {useUserStore} from '@/stores'
-
 const userStore = useUserStore()
 
 const routing = useRouting()
+const route = useRoute()
 
 const items = [
    { title: 'Каталог', routing: routing.toCatalog},
