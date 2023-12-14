@@ -2,7 +2,6 @@
    <settings-layout>
       <v-list
          density="compact"
-         lines="two"
          class="py-0 bg-transparent"
       >
          <app-setting
@@ -14,15 +13,18 @@
       </v-list>
       <v-bottom-sheet v-model="sheet">
          <v-card
-            height='395'
-            class='bg-grey-lighten-4 px-5 py-5'
+            height='475'
+            class='pa-0 rounded-t-lg bg-grey-lighten-3'
          >
+            <v-card-title class='py-7 mb-1 text-center text-white text-h5'>
+               {{ category }}
+            </v-card-title>
             <v-list
-               class='pa-0 rounded-lg my-border'
+               class='pa-0 ma-5 bg-transparent rounded-t-lg'
             >
                <v-list-item
                   v-for='item in filteredItems'
-                  class='text-h6 bg-white pa-5'
+                  class='text-h6 bg-white pa-5 my-border'
                   :class="`${item.showSwitch ? 'py-1' : 'py-4'}`"
                >
                   {{ item.title}} {{ item.value }}
@@ -32,6 +34,9 @@
                         hide-details
                         :inset='true'
                      ></v-switch>
+                  </template>
+                  <template v-if='item.icon' v-slot:append>
+                     <v-icon :icon="item.icon"></v-icon>
                   </template>
                </v-list-item>
             </v-list>
@@ -52,6 +57,7 @@ interface SettingItem {
    category: string
    value: string
    showSwitch: boolean
+   icon: string
 }
 
 const settings = [
@@ -82,23 +88,21 @@ const showSettingSheet = (settingCategory: string) => {
 }
 
 const settingsItems: SettingItem[] = [
-   {title: `Ім'я:`, category: 'Аккаунт', value: name, showSwitch: false},
-   {title: 'Email:', category: 'Аккаунт', value: email, showSwitch: false},
-   {title: 'Сповіщати', category: 'Повідомлення', value: '', showSwitch: true},
+   {title: `Ім'я:`, category: 'Аккаунт', value: name, showSwitch: false, icon: ''},
+   {title: 'Email:', category: 'Аккаунт', value: email, showSwitch: false, icon: ''},
+   {title: 'Змінити пароль', category: 'Аккаунт', value: '', showSwitch: false, icon: 'mdi-chevron-right'},
+   {title: 'Вийти з аккаунту', category: 'Аккаунт', value: '', showSwitch: false, icon: 'mdi-chevron-right'},
+   {title: 'Сповіщати', category: 'Повідомлення', value: '', showSwitch: true, icon: ''},
 ]
 
 </script>
 
 <style lang='scss' scoped>
 .my-border {
-   border: 2px solid rgba(2, 0, 112, 0.5);
+   border-bottom: 3px solid rgba(128, 128, 128, 0.4);
 }
 
-.my-border .v-list-item {
-   border-bottom: 2px solid rgba(2, 0, 112, 0.5);
-}
-
-.my-border .v-list-item:last-child {
-   border-bottom: none;
+.v-card-title {
+   background-color: #135DD8;
 }
 </style>
