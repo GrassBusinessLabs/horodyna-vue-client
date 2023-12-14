@@ -62,9 +62,9 @@ router.beforeEach(async (to: RouteLocationNormalized) => {
          return {name: 'SignIn'}
       }
 
-      if (authTokenValue && !metaAuth) {
-         return {name: 'Posts'}
-      }
+      // if (authTokenValue && !metaAuth) {
+      //    return {name: 'Posts'}
+      // }
 
       return true
    } catch (e) {

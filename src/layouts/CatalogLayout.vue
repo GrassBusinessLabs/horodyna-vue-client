@@ -39,7 +39,6 @@
 
 <script lang='ts' setup>
 import AppHeader from '@/components/AppHeader.vue'
-import {onMounted, ref} from 'vue'
 import {ukrainianAlphabet} from '@/constants'
 
 // import {useAppI18n} from '@/i18n'
