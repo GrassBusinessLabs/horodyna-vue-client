@@ -8,6 +8,7 @@ import CatalogView from '@/views/CatalogView.vue'
 import ErrorView from '@/views/ErrorView.vue'
 import ProductsView from '@/views/ProductsView.vue'
 import SettingsView from '@/views/SettingsView.vue'
+import PurchaseHistoryView from '@/views/PurchaseHistoryView.vue'
 
 const toastDialog = useToastDialog()
 const authToken = authTokenService()
@@ -39,6 +40,11 @@ const routes: RouteRecordRaw[] = [
       path: '/settings',
       name: 'Settings',
       component: SettingsView,
+   },
+   {
+      path: '/purchases',
+      name: 'PurchaseHistory',
+      component: PurchaseHistoryView,
    },
    {
       path: '/:all(.*)*',

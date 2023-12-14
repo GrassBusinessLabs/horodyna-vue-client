@@ -18,11 +18,16 @@ export const useRouting = () => {
    async function toSettings() {
       return router.push('/settings')
    }
+   
+   async function toPurchases() {
+      return router.push('/purchases')
+   }
 
    return {
       toSignIn,
       toCatalog,
       toProducts,
-      toSettings
+      toSettings,
+      toPurchases
    }
 }

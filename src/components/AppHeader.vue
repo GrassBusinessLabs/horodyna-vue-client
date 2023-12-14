@@ -48,9 +48,10 @@ const routing = useRouting()
 const route = useRoute()
 
 const items = [
-   { title: 'Каталог', routing: routing.toCatalog},
-   { title: 'Налаштування', routing: routing.toSettings},
-   { title: 'Вийти', routing: userStore.logout}
+   { title: 'Каталог', routing: routing.toCatalog },
+   { title: 'Покупки', routing: routing.toPurchases},
+   { title: 'Налаштування', routing: routing.toSettings },
+   { title: 'Вийти', routing: userStore.logout },
 ]
 
 </script>
