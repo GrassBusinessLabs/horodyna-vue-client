@@ -3,15 +3,6 @@
       <app-header :header-title="'Категорії продуктів'" />
 
       <v-main>
-<!--         <v-btn-->
-<!--            class='mt-2'-->
-<!--            :block='true'-->
-<!--            type='button'-->
-<!--            variant='text'-->
-<!--            @click='logout'-->
-<!--         >-->
-<!--            {{ translate('BTNS.LOGOUT') }}-->
-<!--         </v-btn>-->
          <v-container class='py-5 pl-8 pr-9'>
             <v-row>
                <slot />
@@ -40,14 +31,6 @@
 <script lang='ts' setup>
 import AppHeader from '@/components/AppHeader.vue'
 import {ukrainianAlphabet} from '@/constants'
-
-// import {useAppI18n} from '@/i18n'
-// import {useUserStore} from '@/stores'
-//
-// const userStore = useUserStore()
-//
-// const {translate} = useAppI18n()
-// const {logout} = userStore
 
 const scrollToLetter = (letter: string) => {
    const element = document.querySelector(`.${letter}`)

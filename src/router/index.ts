@@ -14,7 +14,11 @@ const authToken = authTokenService()
 
 const routes: RouteRecordRaw[] = [
    {
-      path: '/sign-in/',
+      path: '/',
+      redirect: '/sign-in'
+   },
+   {
+      path: '/sign-in',
       name: 'SignIn',
       component: SignInView,
       alias: '/',
@@ -35,7 +39,6 @@ const routes: RouteRecordRaw[] = [
       path: '/settings',
       name: 'Settings',
       component: SettingsView,
-      meta: {auth: true}
    },
    {
       path: '/:all(.*)*',

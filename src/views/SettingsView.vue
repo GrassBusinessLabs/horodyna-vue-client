@@ -1,48 +1,64 @@
 <template>
    <settings-layout>
-      <v-card
-         class="mx-auto pa-2 rounded-lg px-7 pb-0 pt-0"
-         elevation='3'
+      <v-list
+         density="compact"
+         class="py-0 bg-transparent"
       >
-         <v-list
-            density="compact"
-            lines="two"
-            class="py-1"
+         <app-setting
+            v-for="setting in settings"
+            :setting='setting'
+            :key="setting.title"
+            @click="showSettingSheet(setting.title)"
+         ></app-setting>
+      </v-list>
+      <v-bottom-sheet v-model="sheet">
+         <v-card
+            height='475'
+            class='pa-0 rounded-t-lg bg-grey-lighten-3'
          >
-            <v-list-item
-               v-for="(setting, index) in settings"
-               :key="setting.title"
-               color="primary"
-               class="pa-0 py-5"
-               :class="{ 'border-bottom': index !== settings.length - 1 }"
+            <v-card-title class='py-7 mb-1 text-center text-white text-h5'>
+               {{ category }}
+            </v-card-title>
+            <v-list
+               class='pa-0 ma-5 bg-transparent rounded-t-lg'
             >
-               <template v-slot:prepend>
-                  <v-icon
-                     :icon="setting.icon"
-                     color="black"
-                     size="large"
-                  ></v-icon>
-               </template>
-
-               <v-list-item-title
-                  v-text="setting.title"
-               ></v-list-item-title>
-
-               <template v-slot:append>
-                  <v-icon
-                     size="large"
-                     icon="mdi-chevron-right"
-                     color="black"
-                  ></v-icon>
-               </template>
-            </v-list-item>
-         </v-list>
-      </v-card>
+               <v-list-item
+                  v-for='item in filteredItems'
+                  class='text-h6 bg-white pa-5 my-border'
+                  :class="`${item.showSwitch ? 'py-1' : 'py-4'}`"
+               >
+                  {{ item.title}} {{ item.value }}
+                  <template v-if='item.showSwitch' v-slot:append>
+                     <v-switch
+                        v-model='switchValue'
+                        hide-details
+                        :inset='true'
+                     ></v-switch>
+                  </template>
+                  <template v-if='item.icon' v-slot:append>
+                     <v-icon :icon="item.icon"></v-icon>
+                  </template>
+               </v-list-item>
+            </v-list>
+         </v-card>
+      </v-bottom-sheet>
    </settings-layout>
 </template>
 
 <script lang='ts' setup>
 import SettingsLayout from '@/layouts/SettingsLayout.vue'
+import AppSetting from '@/components/AppSetting.vue'
+import {ref} from 'vue'
+import {useUserStore} from '@/stores'
+import {storeToRefs} from 'pinia'
+
+interface SettingItem {
+   title: string
+   category: string
+   value: string
+   showSwitch: boolean
+   icon: string
+}
 
 const settings = [
    {title: 'Аккаунт', icon: 'mdi-account-outline'},
@@ -52,14 +68,41 @@ const settings = [
    {title: 'Підтримка', icon: 'mdi-face-agent'},
    {title: 'Про сайт', icon: 'mdi-information-outline'}
 ]
+
+const switchValue = ref(false)
+
+const sheet = ref(false)
+
+const category = ref('')
+
+const userStore = useUserStore()
+const {currentUser} = storeToRefs(userStore)
+const {name, email} = currentUser.value
+
+const filteredItems = ref<SettingItem[]>([])
+
+const showSettingSheet = (settingCategory: string) => {
+   category.value = settingCategory
+   sheet.value = !sheet.value
+   filteredItems.value = settingsItems.filter(item => item.category === category.value)
+}
+
+const settingsItems: SettingItem[] = [
+   {title: `Ім'я:`, category: 'Аккаунт', value: name, showSwitch: false, icon: ''},
+   {title: 'Email:', category: 'Аккаунт', value: email, showSwitch: false, icon: ''},
+   {title: 'Змінити пароль', category: 'Аккаунт', value: '', showSwitch: false, icon: 'mdi-chevron-right'},
+   {title: 'Вийти з аккаунту', category: 'Аккаунт', value: '', showSwitch: false, icon: 'mdi-chevron-right'},
+   {title: 'Сповіщати', category: 'Повідомлення', value: '', showSwitch: true, icon: ''},
+]
+
 </script>
 
 <style lang='scss' scoped>
-.border-bottom {
-   border-bottom: 1px solid rgba(128, 128, 128, 0.8);
+.my-border {
+   border-bottom: 3px solid rgba(128, 128, 128, 0.4);
 }
 
-.v-list-item-title {
-   font-size: 18px;
+.v-card-title {
+   background-color: #135DD8;
 }
 </style>
