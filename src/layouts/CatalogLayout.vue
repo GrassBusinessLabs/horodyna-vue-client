@@ -47,7 +47,7 @@ const scrollToLetter = (letter: string) => {
 }
 
 .v-container {
-   height: calc(100vh - 64px);
+   height: calc(100vh - 120px);
    width: 100%;
    overflow: auto;
 }
