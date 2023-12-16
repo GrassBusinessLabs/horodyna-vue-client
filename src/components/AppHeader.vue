@@ -1,5 +1,5 @@
 <template>
-   <v-app-bar color='primary'>
+   <v-app-bar class='position-fixed' color='primary'>
       <template v-slot:prepend>
          <v-container>
             <v-app-bar-title>{{ headerTitle }}</v-app-bar-title>
@@ -10,7 +10,7 @@
             <v-btn
                v-if="route.path !== '/sign-in'"
                dark
-               class='pa-1 w-auto h-auto'
+               class='pa-0 w-auto h-auto'
                icon='mdi mdi-cog'
                @click='routing.toSettings'
             >

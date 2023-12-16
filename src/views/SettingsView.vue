@@ -26,6 +26,7 @@
                   v-for='item in filteredItems'
                   class='text-h6 bg-white pa-5 my-border'
                   :class="`${item.showSwitch ? 'py-1' : 'py-4'}`"
+                  @click='item.routing'
                >
                   {{ item.title}} {{ item.value }}
                   <template v-if='item.showSwitch' v-slot:append>
@@ -58,6 +59,7 @@ interface SettingItem {
    value: string
    showSwitch: boolean
    icon: string
+   routing?: Function
 }
 
 const settings = [
@@ -91,7 +93,7 @@ const settingsItems: SettingItem[] = [
    {title: `Ім'я:`, category: 'Аккаунт', value: name, showSwitch: false, icon: ''},
    {title: 'Email:', category: 'Аккаунт', value: email, showSwitch: false, icon: ''},
    {title: 'Змінити пароль', category: 'Аккаунт', value: '', showSwitch: false, icon: 'mdi-chevron-right'},
-   {title: 'Вийти з аккаунту', category: 'Аккаунт', value: '', showSwitch: false, icon: 'mdi-chevron-right'},
+   {title: 'Вийти з аккаунту', category: 'Аккаунт', value: '', showSwitch: false, icon: 'mdi-chevron-right', routing: userStore.logout},
    {title: 'Сповіщати', category: 'Повідомлення', value: '', showSwitch: true, icon: ''},
 ]
 

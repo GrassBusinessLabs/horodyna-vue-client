@@ -7,8 +7,7 @@
             <v-row>
                <v-col>
                   <v-sheet
-                     class='pa-3'
-                     min-height='70vh'
+                     class='pt-5 px-2'
                      rounded='lg'
                   >
                      <slot />
@@ -22,18 +21,11 @@
 
 <script lang='ts' setup>
 import AppHeader from '@/components/AppHeader.vue'
-
-// import {storeToRefs} from 'pinia'
-//
-// import {useUserStore} from '@/stores'
-// import {useAppI18n} from '@/i18n'
-
-// const {translate} = useAppI18n()
-// const userStore = useUserStore()
-// const {logout} = userStore
-// const {currentUser} = storeToRefs(userStore)
 </script>
 
 <style scoped>
-
+.v-main {
+   padding-top: 68px;
+   padding-bottom: 70px;
+}
 </style>

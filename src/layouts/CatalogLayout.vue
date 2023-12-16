@@ -1,6 +1,6 @@
 <template>
    <v-layout class='rounded rounded-md'>
-      <app-header :header-title="'Категорії продуктів'" />
+      <app-header :header-title="'Каталог продуктів'" />
 
       <v-main>
          <v-container class='py-5 pl-8 pr-9'>
@@ -11,7 +11,7 @@
                <v-btn
                   color='primary'
                   density="comfortable"
-                  class='font-weight-bold'
+                  class='font-weight-bold w-auto h-auto'
                   variant="text"
                   size="x-small"
                   :icon="''"
@@ -42,22 +42,23 @@ const scrollToLetter = (letter: string) => {
 </script>
 
 <style lang='scss' scoped>
-.card-title {
-   font-size: 1rem;
-}
-
 .v-container {
-   height: calc(100vh - 120px);
+   height: calc(100vh - 131px);
    width: 100%;
    overflow: auto;
 }
 
 .v-sheet {
    position: fixed;
-   top: 87px;
+   top: 83px;
    right: 15px;
    display: flex;
    flex-direction: column;
+}
+
+.v-btn {
+   padding: 2.7px;
+   font-size: 10px;
 }
 </style>
 

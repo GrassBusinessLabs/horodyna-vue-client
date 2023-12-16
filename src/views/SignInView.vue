@@ -7,7 +7,7 @@
                   <v-text-field
                      v-model='username'
                      v-bind='usernameAttrs'
-                     :label='translate("INPUTS.EMAIL")'
+                     label='Email'
                      :disabled='isSubmitting'
                      :hide-details='true'
                      type='email'
@@ -18,7 +18,7 @@
                   <v-text-field
                      v-model='password'
                      v-bind='passwordAttrs'
-                     :label='translate("INPUTS.PASSWORD")'
+                     label='Пароль'
                      :disabled='isSubmitting'
                      :hide-details='true'
                      :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -35,7 +35,7 @@
                      type='submit'
                      color='primary'
                   >
-                     {{ translate('BTNS.SIGN_IN') }}
+                     Вхід
                   </v-btn>
                </v-col>
             </v-row>
@@ -53,13 +53,11 @@ import {ref} from 'vue'
 
 import type {CurrentUser, LoginBody} from '@/models'
 import {useHandleError, useRouting} from '@/composables'
-import {useAppI18n} from '@/i18n'
 import {authTokenService, formService, requestService} from '@/services'
 import {useUserStore} from '@/stores'
 import AuthLayout from '@/layouts/AuthLayout.vue'
 
 const {handleError} = useHandleError()
-const {translate} = useAppI18n()
 const routing = useRouting()
 const userStore = useUserStore()
 const {setCurrentUser} = userStore

@@ -12,7 +12,7 @@
             </v-list-item-subtitle>
          </v-col>
          <v-col cols='12' class='pt-4 pb-0'>
-            <v-list class='pa-0' max-height='268'>
+            <v-list class='pa-0' max-height='276'>
                <v-list-item
                   class='pa-0 mx-5 mb-3 pb-3 my-border-bottom'
                   v-for='product in purchase.products'
@@ -20,7 +20,7 @@
                   <template v-slot:prepend>
                      <v-avatar size="80" :image="product.img"></v-avatar>
                   </template>
-                  <v-list-item-title class='text-h6 ml-2 mb-2 pt-3'>
+                  <v-list-item-title class='text-h6 ml-2 mb-3 pt-3'>
                      {{ product.name }}
                   </v-list-item-title>
                   <v-list-item-subtitle class='text-subtitle-1 ml-2'>
@@ -28,10 +28,10 @@
                   </v-list-item-subtitle>
                   <v-list-item class='pa-0 pr-2 ml-2'>
                      <template v-slot:prepend class='h-auto'>
-                        Ціна: {{ product.price }} грн
+                        <p class='text-subtitle-2'>Ціна: {{ product.price }} грн</p>
                      </template>
                      <template v-slot:append>
-                        Кількість: {{ product.quantity }} кг
+                        <p class='text-subtitle-2'>Кількість: {{ product.quantity }} кг</p>
                      </template>
                   </v-list-item>
                </v-list-item>
@@ -70,10 +70,6 @@ defineProps<{
 </script>
 
 <style scoped>
-.v-list-item-title {
-   font-size: 18px;
-}
-
 .v-list-item-title {
    color: rgba(2, 0, 112, 0.9);
 }

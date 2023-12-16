@@ -1,22 +1,24 @@
 <template>
    <v-bottom-navigation
       v-model="value"
-      color="teal"
-      grow
+      :bg-color="'primary'"
+      :grow='true'
+      mode="shift"
+      class='rounded-t-lg custom'
    >
       <v-btn @click='routing.toCatalog'>
          <v-icon>mdi mdi-list-box</v-icon>
-         Каталог
+         <span>Каталог</span>
       </v-btn>
 
       <v-btn @click='routing.toCatalog'>
          <v-icon>mdi mdi-map</v-icon>
-         Карта
+         <span>Карта</span>
       </v-btn>
 
       <v-btn @click='routing.toPurchases'>
          <v-icon>mdi mdi-cash-clock</v-icon>
-         Покупки
+         <span>Покупки</span>
       </v-btn>
    </v-bottom-navigation>
 </template>
@@ -31,5 +33,7 @@ const value = ref(0)
 </script>
 
 <style lang='scss' scoped>
-
+.custom {
+   min-height: 67px;
+}
 </style>

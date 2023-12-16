@@ -1,11 +1,11 @@
 <template>
    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
-   <v-col cols="12">
-      <v-btn icon @click="goBack" class="back-btn">
+   <v-col cols="12" class='py-0 pb-1'>
+      <v-btn icon @click="() => sheet = false" class="back-btn">
          <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
 
-      <v-card class="rounded-lg" elevation="3">
+      <v-card class="rounded-lg mb-1" elevation="3">
          <v-img :src="product.img" height="200px" :cover="true"></v-img>
 
          <v-card-title>{{ product.name }}</v-card-title>
@@ -19,7 +19,7 @@
 
          <v-card-actions class="pa-4">
             <v-row>
-               <v-col cols="12">
+               <v-col cols="12" class='pt-1'>
                   <v-btn
                      variant="elevated"
                      color="primary"
@@ -34,9 +34,9 @@
       </v-card>
 
       <v-footer>
-         <v-bottom-sheet v-model="sheet" fullscreen="true">
+         <v-bottom-sheet v-model="sheet" :fullscreen="true">
             <v-card height="500">
-               <v-btn icon @click="goBack" class="back-btn">
+               <v-btn icon @click="() => sheet = false" class="back-btn">
                   <v-icon>mdi-chevron-left</v-icon>
                </v-btn>
 
@@ -83,7 +83,6 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useRouter } from "vue-router";
 import type { Product } from "@/models";
 import { productStore } from "@/stores/product-store.ts";
 
@@ -91,7 +90,6 @@ const props = defineProps<{
    product: Product;
 }>();
 
-const router = useRouter();
 const basketStore = productStore();
 const sheet = ref(false);
 
@@ -148,11 +146,6 @@ const removeFromBasket = (product: Product) => {
    if (index !== -1) {
       basketStore.basket.splice(index, 1);
    }
-};
-
-const goBack = () => {
-   sheet.value = false;
-   router.go(-1);
 };
 </script>
 

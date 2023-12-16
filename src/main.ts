@@ -12,9 +12,6 @@ import '@mdi/font/css/materialdesignicons.css'
 // Router
 import router from '@/router'
 
-// Internationalization
-import i18n from '@/i18n'
-
 // Toast
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
@@ -34,7 +31,6 @@ const vuetify = createVuetify({
 const app = createApp(App)
    .use(vuetify)
    .use(createPinia())
-   .use(i18n as any)
    .use(Toast, DEFAULT_TOAST_CONFIG as any)
    .use(router)
 
