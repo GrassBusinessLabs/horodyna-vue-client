@@ -1,6 +1,6 @@
 <template>
    <payment-layout>
-      <v-sheet class='mx-auto pa-2 rounded-lg border-custom'>
+      <v-sheet class='mx-auto pa-2 pb-3 rounded-lg border-custom'>
          <v-list-item>
             <template v-slot:prepend>
                <v-container class='pa-0'>
@@ -23,77 +23,37 @@
                </v-container>
             </template>
          </v-list-item>
-         <v-form @submit.prevent='submit'>
+         <v-form>
             <v-row class='ma-0 pb-0'>
-               <v-col cols='12' class='pb-2'>
-                  <v-text-field
-                     v-model='title'
-                     v-bind='titleAttrs'
-                     label='Номер карти'
-                     :disabled='isSubmitting'
-                     :hide-details='true'
-                     type='text'
-                  ></v-text-field>
-               </v-col>
-
-               <v-col cols='6' class='pr-2'>
-                  <v-text-field
-                     v-model='text'
-                     v-bind='textAttrs'
-                     label='CVC'
-                     :disabled='isSubmitting'
-                     :hide-details='true'
-                     type='text'
-                  ></v-text-field>
-               </v-col>
-
-               <v-col cols='6' class='pl-2'>
-                  <v-text-field
-                     v-model='text'
-                     v-bind='textAttrs'
-                     label='MM / YYYY'
-                     :disabled='isSubmitting'
-                     :hide-details='true'
-                     type='text'
-                  ></v-text-field>
-               </v-col>
-
-               <v-col cols='6' class='pr-2'>
-                  <v-text-field
-                     v-model='text'
-                     v-bind='textAttrs'
-                     label="Ім'я власника"
-                     :disabled='isSubmitting'
-                     :hide-details='true'
-                     type='text'
-                  ></v-text-field>
-               </v-col>
-
-               <v-col cols='6' class='pl-2'>
+               <v-col cols='12' class='pb-2 pr-2'>
                   <v-btn-toggle
                      mandatory
                      v-model="paymentMethod"
                      class='rounded-t-lg bg-grey-lighten-3 h-100'
                   >
-                     <v-btn class='border' value="googlePay">
-                        <v-icon icon="mdi mdi-google" size='25'></v-icon>
+                     <v-btn class='border pa-0' value="googlePay">
+                        <v-img class='mt-1' src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/1280px-Google_Pay_Logo.svg.png" height='55' width='90'></v-img>
                      </v-btn>
 
-                     <v-btn class='border' value="applePay">
-                        <v-icon icon="mdi mdi-apple" size='30'></v-icon>
+                     <v-btn class='border pa-0' value="applePay">
+                        <v-img class='mt-1' src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Apple_Pay_logo.svg/800px-Apple_Pay_logo.svg.png" height='35' width='90'></v-img>
                      </v-btn>
                   </v-btn-toggle>
                </v-col>
 
-               <v-col cols='12' class='pt-2'>
-                  <v-btn
-                     :block='true'
-                     :disabled='isSubmitting'
-                     type='submit'
-                     color='primary'
-                  >
-                     Сплатити
-                  </v-btn>
+               <v-col cols='12' class='pr-2 text-center'>
+                  <google-pay-button
+                     v-if="paymentMethod === 'googlePay'"
+                     environment="TEST"
+                     button-color="white"
+                     button-type="buy"
+                     :paymentRequest.prop="paymentRequest"
+                     @loadpaymentdata="onLoadPaymentData"
+                     @error="onError"
+                     button-size-mode="fill"
+                     class='w-100'
+                  ></google-pay-button>
+                  <h3 v-else>Apple Pay в розробці</h3>
                </v-col>
             </v-row>
          </v-form>
@@ -102,73 +62,51 @@
 </template>
 
 <script lang='ts' setup>
+import "@google-pay/button-element"
 import PaymentLayout from '@/layouts/PaymentLayout.vue'
-
-import type {MaybeRefOrGetter} from 'vue'
 import {ref} from 'vue'
-import {useForm} from 'vee-validate'
-import {toTypedSchema} from '@vee-validate/yup'
-import {storeToRefs} from 'pinia'
-import * as yup from 'yup'
-
-import type {AddPostBody} from '@/models'
-import {formService, requestService} from '@/services'
-import {useHandleError} from '@/composables'
-import {useUserStore} from '@/stores'
-
-const {handleError} = useHandleError()
-const userStore = useUserStore()
-const {currentUser} = storeToRefs(userStore)
-
-// const request = requestService()
-const {vuetifyConfig, titleValidator, textValidator} = formService()
-
-const form = useForm({
-   validationSchema: toTypedSchema(
-      yup.object({
-         title: titleValidator(),
-         text: textValidator()
-      })
-   ),
-   initialValues: {
-      title: '',
-      text: ''
-   }
-})
-
-const isSubmitting = ref<boolean>(false)
-const [title, titleAttrs] = form.defineField('title' as MaybeRefOrGetter, vuetifyConfig)
-const [text, textAttrs] = form.defineField('text' as MaybeRefOrGetter, vuetifyConfig)
 
 const paymentMethod = ref('googlePay')
 
-const submit = form.handleSubmit(async values => {
-   try {
-      if (isSubmitting.value) {
-         return
+const paymentRequest = {
+   apiVersion: 2,
+   apiVersionMinor: 0,
+   allowedPaymentMethods: [
+      {
+         type: "CARD",
+         parameters: {
+            allowedAuthMethods: ["PAN_ONLY", "CRYPTOGRAM_3DS"],
+            allowedCardNetworks: ["AMEX", "VISA", "MASTERCARD"]
+         },
+         tokenizationSpecification: {
+            type: "PAYMENT_GATEWAY",
+            parameters: {
+               gateway: "example",
+               gatewayMerchantId: "exampleGatewayMerchantId"
+            }
+         }
       }
-      isSubmitting.value = true
-
-      const body: AddPostBody = {
-         title: values.title,
-         body: values.text,
-         userId: currentUser.value.id
-      }
-
-      // const post: Post = await request.addPost(body)
-      // post.id = lastPostId + 1
-      // lastPostId = post.id
-      // posts.value.unshift(post)
-
-      form.resetForm()
-
-      isSubmitting.value = false
-   } catch (e) {
-      console.error(e)
-      handleError(e)
-      isSubmitting.value = false
+   ],
+   merchantInfo: {
+      merchantId: "12345678901234567890",
+      merchantName: "Demo Merchant"
+   },
+   transactionInfo: {
+      totalPriceStatus: "FINAL",
+      totalPriceLabel: "Total",
+      totalPrice: "100.00",
+      currencyCode: "USD",
+      countryCode: "US"
    }
-})
+}
+
+const onLoadPaymentData = (event: any) => {
+   console.log(event.detail)
+}
+
+const onError = (event: any) => {
+   console.error("error", event.error)
+}
 </script>
 
 <style lang='scss' scoped>
@@ -183,5 +121,9 @@ const submit = form.handleSubmit(async values => {
 
 .v-btn {
    flex: 1 0 auto;
+}
+
+.v-btn-toggle {
+   min-height: 57px;
 }
 </style>

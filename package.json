@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@google-pay/button-element": "^3.0.10",
     "@vee-validate/yup": "^4.12.2",
     "axios": "^1.6.2",
     "localforage": "^1.10.0",
