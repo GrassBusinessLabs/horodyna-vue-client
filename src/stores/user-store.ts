@@ -14,7 +14,7 @@ export const useUserStore = defineStore('user', () => {
    const authToken = authTokenService()
 
    const currentUser: Ref<CurrentUser | null> = ref<CurrentUser | null>(null)
-
+   
    function setCurrentUser(value: CurrentUser | null): void {
       currentUser.value = value
    }

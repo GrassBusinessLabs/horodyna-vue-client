@@ -40,4 +40,8 @@ const value = ref(0)
 span {
    font-size: 14px;
 }
+
+.v-bottom-navigation {
+   z-index: 1;
+}
 </style>

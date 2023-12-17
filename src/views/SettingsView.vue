@@ -67,8 +67,6 @@ const settings = [
    {title: 'Повідомлення', icon: 'mdi-bell-outline'},
    {title: 'Вигляд', icon: 'mdi-eye-outline'},
    {title: 'Приватність', icon: 'mdi-lock-outline'},
-   {title: 'Підтримка', icon: 'mdi-face-agent'},
-   {title: 'Про сайт', icon: 'mdi-information-outline'}
 ]
 
 const switchValue = ref(false)
