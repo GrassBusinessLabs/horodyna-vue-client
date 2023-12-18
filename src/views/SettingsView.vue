@@ -2,7 +2,7 @@
    <settings-layout>
       <v-list
          density="compact"
-         class="py-0 bg-transparent"
+         class="py-0 bg-transparent rounded-t-lg"
       >
          <app-setting
             v-for="setting in settings"
@@ -13,7 +13,7 @@
       </v-list>
       <v-bottom-sheet v-model="sheet">
          <v-card
-            height='475'
+            height='490'
             class='pa-0 rounded-t-lg bg-grey-lighten-3'
          >
             <v-card-title class='py-7 mb-1 text-center text-white text-h5'>
@@ -24,7 +24,7 @@
             >
                <v-list-item
                   v-for='item in filteredItems'
-                  class='text-h6 bg-white pa-5 my-border'
+                  class='text-h6 bg-white pa-5 pr-3 my-border'
                   :class="`${item.showSwitch ? 'py-1' : 'py-4'}`"
                   @click='item.routing'
                >
@@ -67,6 +67,8 @@ const settings = [
    {title: 'Повідомлення', icon: 'mdi-bell-outline'},
    {title: 'Вигляд', icon: 'mdi-eye-outline'},
    {title: 'Приватність', icon: 'mdi-lock-outline'},
+   {title: 'Написати відгук', icon: 'mdi-comment-quote-outline'},
+   {title: 'Політика', icon: 'mdi-information-slab-box-outline'},
 ]
 
 const switchValue = ref(false)

@@ -24,7 +24,7 @@
                      {{ product.name }}
                   </v-list-item-title>
                   <v-list-item-subtitle class='text-subtitle-1 ml-2'>
-                     Категорія: {{ product.category }}
+                     Продавець: {{ product.seller }}
                   </v-list-item-subtitle>
                   <v-list-item class='pa-0 pr-2 ml-2'>
                      <template v-slot:prepend class='h-auto'>
@@ -54,7 +54,7 @@ interface ProductItem {
    name: string
    price: number
    img: string
-   category: string
+   seller: string
    quantity: number
 }
 

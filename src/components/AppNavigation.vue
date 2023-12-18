@@ -11,7 +11,7 @@
          <span>Каталог</span>
       </v-btn>
 
-      <v-btn @click='routing.toCatalog'>
+      <v-btn @click='routing.toMap'>
          <v-icon size='23'>mdi mdi-map</v-icon>
          <span>Карта</span>
       </v-btn>

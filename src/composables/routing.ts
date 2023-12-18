@@ -22,12 +22,17 @@ export const useRouting = () => {
    async function toPurchases() {
       return router.push('/purchases')
    }
+   
+   async function toMap() {
+      return router.push('/map')
+   }
 
    return {
       toSignIn,
       toCatalog,
       toProducts,
       toSettings,
-      toPurchases
+      toPurchases,
+      toMap
    }
 }

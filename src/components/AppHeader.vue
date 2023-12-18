@@ -53,7 +53,7 @@
 <script lang='ts' setup>
 import { useRouting } from '@/composables'
 import { useRoute } from 'vue-router'
-import {ref} from 'vue'
+import { ref } from 'vue'
 
 defineProps<{
    headerTitle: string

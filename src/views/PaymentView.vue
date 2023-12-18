@@ -4,11 +4,33 @@
          <v-list-item>
             <template v-slot:prepend>
                <v-container class='pa-0'>
-                  <v-list-item-title class='text-h6 py-2'>
-                     Доставка
+                  <v-list-item-title class='py-2'>
+                     <v-menu>
+                        <template v-slot:activator="{ props }">
+                           <v-btn
+                              dark
+                              v-bind="props"
+                              class='pa-0 h-auto text-capitalize text-h6'
+                              elevation='0'
+                           >
+                              Доставка <v-icon size='25' icon="mdi mdi-chevron-down"></v-icon>
+                           </v-btn>
+                        </template>
+
+                        <v-list>
+                           <v-list-item
+                              v-for="(item, index) in shippingItems"
+                              :key="index"
+                              :value='item'
+                              @click='() => shippingMethod = item'
+                           >
+                              <v-list-item-title>{{ item }}</v-list-item-title>
+                           </v-list-item>
+                        </v-list>
+                     </v-menu>
                   </v-list-item-title>
                   <v-list-item-subtitle class='text-subtitle-1 pb-2'>
-                     Нова пошта
+                     {{ shippingMethod }}
                   </v-list-item-subtitle>
                </v-container>
             </template>
@@ -65,6 +87,10 @@
 import "@google-pay/button-element"
 import PaymentLayout from '@/layouts/PaymentLayout.vue'
 import {ref} from 'vue'
+
+const shippingItems = ['Нова пошта', 'Укр пошта', 'Самовивіз']
+
+const shippingMethod = ref('Нова пошта')
 
 const paymentMethod = ref('googlePay')
 
