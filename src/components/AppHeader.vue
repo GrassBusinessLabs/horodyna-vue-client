@@ -2,6 +2,7 @@
    <v-navigation-drawer
       v-model="drawer"
       :temporary='true'
+      class='position-fixed'
    >
       <v-list-item
          prepend-avatar="https://randomuser.me/api/portraits/men/78.jpg"
@@ -47,13 +48,66 @@
             <v-app-bar-title>{{ headerTitle }}</v-app-bar-title>
          </v-container>
       </template>
+      <template v-slot:append>
+         <v-btn icon="mdi-cart" @click="sheet = !sheet" v-if="route.path !== '/sign-in'">
+            <v-badge :content="getTotalItemsInBasket()" overlap>
+               <v-icon>mdi-cart</v-icon>
+            </v-badge>
+         </v-btn>
+      </template>
    </v-app-bar>
+   <v-bottom-sheet v-model="sheet">
+      <v-card height="500">
+         <v-btn icon @click="() => sheet = false" class="back-btn">
+            <v-icon>mdi-chevron-left</v-icon>
+         </v-btn>
+
+         <v-card-text>
+            <h3 class="text-center">Кошик </h3>
+            <div v-for="item in basketStore.basket" :key="item.name" class='main-basket d-flex flex-column'>
+               <div class="itemBasket">
+                  <div class="image d-flex">
+                     <img :src="item.img" alt="Image" width="80">
+                  </div>
+                  <div>
+                     <h3>{{ item.name }}</h3>
+                     <small>{{ item.category }}</small>
+                     <h5>К-сть : <i>{{ item.selectedQuantity }} кг</i></h5>
+                     <h5>Продавець: <i>{{ item.author }}</i></h5> <br>
+                  </div>
+
+                  <div class="quantity-buttons">
+                     <v-btn @click="removeFromBasket(item)" color="red" dark icon="mdi-trash-can" class="btn-basket">
+                     </v-btn>
+                     <v-btn @click="updateQuantity(item, 1)" class="btn-basket">+</v-btn>
+                     <v-btn @click="updateQuantity(item, -1)" class="btn-basket">-</v-btn>
+                  </div>
+               </div>
+               <div class='btn-price'>
+                  <h4 class='text-center'>Ціна: {{ item.price }} грн за кг</h4>
+               </div>
+            </div>
+
+            <h2 class="text-center">
+               Сума до сплати: {{ calculateTotalSum() }} грн
+            </h2>
+            <div class="d-flex align-center flex-column justify-center">
+               <v-btn @click="submitOrder" class="btn-access-shop" color="#3477eb">
+                  Оформити замовлення
+               </v-btn>
+            </div>
+         </v-card-text>
+      </v-card>
+   </v-bottom-sheet>
 </template>
 
 <script lang='ts' setup>
 import { useRouting } from '@/composables'
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
+
+import { productStore } from '@/stores/product-store.ts'
+import { Product } from '@/models'
 
 defineProps<{
    headerTitle: string
@@ -63,10 +117,121 @@ const drawer = ref(false)
 
 const routing = useRouting()
 const route = useRoute()
+
+const sheet = ref(false)
+const basketStore = productStore()
+
+const removeFromBasket = (product: Product) => {
+   const index = basketStore.basket.indexOf(product)
+   if (index !== -1) {
+      basketStore.basket.splice(index, 1)
+   }
+}
+
+let updateQuantity: (item: any, change: number) => void
+
+updateQuantity = function (item, change) {
+   item.selectedQuantity += change
+
+   if (item.selectedQuantity < 1) {
+      item.selectedQuantity = 1
+   }
+
+   item.sum = item.selectedQuantity * item.price
+}
+
+const calculateTotalSum = (): any => {
+   return basketStore.basket.reduce(function (total: any, item: any) {
+      if (!(item.sum !== undefined && item.sum !== null)) {
+         return total
+      } else {
+         return total + item.sum
+      }
+   }, 0)
+}
+
+const submitOrder = () => {
+}
+
+const getTotalItemsInBasket = (): number => {
+   return basketStore.basket.length
+   // return basketStore.basket.reduce((total: any, item: any) => total + item.selectedQuantity, 0)
+}
 </script>
 
 <style lang='scss' scoped>
 .my-padding {
    padding: 11.6px;
+}
+
+.back-btn {
+   position: absolute;
+   top: 10px;
+   left: 10px;
+   z-index: 2;
+}
+
+.btn-buy {
+   margin: 10px 0 5px 0;
+   width: 100%;
+}
+
+.itemBasket {
+   display: flex;
+   width: 100%;
+   justify-content: space-between;
+}
+
+img {
+   border-radius: 60px;
+   width: 80px;
+   height: 80px;
+   padding: 15px;
+}
+
+.image {
+   display: flex;
+   align-items: center;
+}
+
+.quantity-buttons {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-end;
+   margin-right: 10px;
+}
+
+.btn-access-shop {
+   margin: 10px 0 5px 0;
+   width: 90%;
+}
+
+.quantity-buttons {
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   align-items: center;
+}
+
+.btn-basket {
+   border-radius: 60px;
+   height: 50px;
+   width: 50px;
+}
+
+.btn-price {
+   display: flex;
+}
+
+.main-basket {
+   margin: 10px 10px;
+   outline: 1px palegreen ridge;
+   border-radius: 30px;
+   padding: 10px 30px;
+}
+
+.btn-price {
+   display: flex;
+   justify-content: center;
 }
 </style>
