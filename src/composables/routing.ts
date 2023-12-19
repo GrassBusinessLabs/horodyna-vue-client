@@ -26,6 +26,10 @@ export const useRouting = () => {
    async function toMap() {
       return router.push('/map')
    }
+   
+   async function toPayment() {
+      return router.push('/payment')
+   }
 
    return {
       toSignIn,
@@ -33,6 +37,7 @@ export const useRouting = () => {
       toProducts,
       toSettings,
       toPurchases,
-      toMap
+      toMap,
+      toPayment
    }
 }

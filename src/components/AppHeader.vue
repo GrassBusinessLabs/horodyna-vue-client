@@ -92,7 +92,7 @@
                Сума до сплати: {{ calculateTotalSum() }} грн
             </h2>
             <div class="d-flex align-center flex-column justify-center">
-               <v-btn @click="submitOrder" class="btn-access-shop" color="#3477eb">
+               <v-btn @click="routing.toPayment" class="btn-access-shop" color="#3477eb">
                   Оформити замовлення
                </v-btn>
             </div>
@@ -148,9 +148,6 @@ const calculateTotalSum = (): any => {
          return total + item.sum
       }
    }, 0)
-}
-
-const submitOrder = () => {
 }
 
 const getTotalItemsInBasket = (): number => {

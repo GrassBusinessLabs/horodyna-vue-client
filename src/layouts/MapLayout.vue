@@ -1,6 +1,6 @@
 <template>
    <v-layout class='rounded rounded-md'>
-      <app-header :header-title="'Карта'" />
+      <app-header :header-title="'Карта з фермами'" />
 
       <v-main>
          <v-container class='pa-5'>
