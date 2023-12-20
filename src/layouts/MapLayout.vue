@@ -3,7 +3,7 @@
       <app-header :header-title="'Карта з фермами'" />
 
       <v-main>
-         <v-container class='pa-2'>
+         <v-container class='pa-0'>
             <slot />
          </v-container>
       </v-main>
