@@ -15,32 +15,53 @@
       @update:modelValue='selectHandler'
       @update:search='debounceSearch'
    />
-
-   <v-chip-group
-      v-model="amenities"
-      :column='true'
-      :multiple='true'
-   >
-      <v-chip
-         v-for='category in categories'
-         :key='category'
-         :filter='true'
-         variant="outlined"
-         :value='category'
-      >
-         {{ category }}
-      </v-chip>
-   </v-chip-group>
-
-   <div>
+   <v-container class='justify-center pa-0 pb-3'>
       <v-btn
-         v-for="farm in filteredFarms"
-         :key="farm.id"
-         @click="searchAddress(farm.address)"
+         @click="() => sheet = !sheet"
+         class='w-100 mb-4'
+         color='primary'
+         prepend-icon="mdi-filter-cog"
       >
-         {{ farm.farmName }}
+         Фільтри
       </v-btn>
-   </div>
+   </v-container>
+   <v-row class='px-2'>
+      <v-col
+         v-for="farm in filteredFarms"
+         cols='4'
+      >
+         <v-btn
+            :key="farm.id"
+            @click="searchAddress(farm.address)"
+            class='rounded-lg'
+            variant='outlined'
+         >
+            {{ farm.farmName }}
+         </v-btn>
+      </v-col>
+   </v-row>
+   <v-bottom-sheet v-model="sheet">
+      <v-card
+         height='auto'
+         class='pa-4 rounded-t-lg'
+      >
+         <v-chip-group
+            v-model="amenities"
+            :column='true'
+            :multiple='true'
+         >
+            <v-chip
+               v-for='category in categories'
+               :key='category'
+               :filter='true'
+               variant="outlined"
+               :value='category'
+            >
+               {{ category }}
+            </v-chip>
+         </v-chip-group>
+      </v-card>
+   </v-bottom-sheet>
 </template>
 
 <script lang='ts' setup>
@@ -76,6 +97,8 @@ watch(amenities, () => {
 }, { immediate: true })
 
 const categories = ['Абрикос', 'Агрус', 'Баклажан', 'Диня']
+
+const sheet = ref(false)
 
 const emit = defineEmits<{
    (e: 'select', address: AddressItem): void
@@ -117,4 +140,7 @@ async function searchAddress(address: string) {
 </script>
 
 <style lang='scss' scoped>
+.v-col {
+   padding: 6px;
+}
 </style>

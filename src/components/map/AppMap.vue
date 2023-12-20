@@ -1,6 +1,6 @@
 <template>
    <div class='map-container'>
-      <div class='map-container__map' ref='mapContainer'></div>
+      <div class='map-container__map rounded-lg' ref='mapContainer'></div>
    </div>
 </template>
 
@@ -26,7 +26,7 @@ onUnmounted(() => {
 
 <style lang='scss'>
 .map-container {
-   height: 300px;
+   height: 325px;
    &__map {
       width: 100%;
       height: 100%;
