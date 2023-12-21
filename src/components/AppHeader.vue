@@ -1,11 +1,11 @@
 <template>
    <v-navigation-drawer
-      v-model="drawer"
+      v-model='drawer'
       :temporary='true'
       class='position-fixed'
    >
       <v-list-item
-         prepend-avatar="https://randomuser.me/api/portraits/men/78.jpg"
+         prepend-avatar='https://randomuser.me/api/portraits/men/78.jpg'
          class='my-padding'
       >
          <v-list-item-title class='text-h6'>User Name</v-list-item-title>
@@ -14,22 +14,22 @@
 
       <v-divider></v-divider>
 
-      <v-list density="compact" :nav='true'>
+      <v-list density='compact' :nav='true'>
          <v-list-item @click='routing.toSettings'>
             <template v-slot:prepend>
-               <v-icon icon="mdi mdi-cog"></v-icon>
+               <v-icon icon='mdi mdi-cog'></v-icon>
                <v-list-item-title class='text-subtitle-1 ml-2'>Налаштування</v-list-item-title>
             </template>
          </v-list-item>
          <v-list-item @click='routing.toSettings'>
             <template v-slot:prepend>
-               <v-icon icon="mdi-face-agent"></v-icon>
+               <v-icon icon='mdi-face-agent'></v-icon>
                <v-list-item-title class='text-subtitle-1 ml-2'>Підтримка</v-list-item-title>
             </template>
          </v-list-item>
-         <v-list-item @click=routing.toSettings>
+         <v-list-item @click='routing.toAbout'>
             <template v-slot:prepend>
-               <v-icon icon="mdi-information-outline"></v-icon>
+               <v-icon icon='mdi-information-outline'></v-icon>
                <v-list-item-title class='text-subtitle-1 ml-2'>Про сайт</v-list-item-title>
             </template>
          </v-list-item>
@@ -41,58 +41,60 @@
             <v-btn
                v-if="route.path !== '/sign-in'"
                class='pa-0 w-auto h-auto mr-4'
-               icon="mdi mdi-menu"
-               @click.stop="drawer = !drawer"
+               icon='mdi mdi-menu'
+               @click.stop='drawer = !drawer'
             >
             </v-btn>
             <v-app-bar-title>{{ headerTitle }}</v-app-bar-title>
          </v-container>
       </template>
       <template v-slot:append>
-         <v-btn icon="mdi-cart" @click="sheet = !sheet" v-if="route.path !== '/sign-in'">
-            <v-badge :content="getTotalItemsInBasket()" overlap>
+         <v-btn icon='mdi-cart' @click='sheet = !sheet' v-if="route.path !== '/sign-in'">
+            <v-badge :content='getTotalItemsInBasket()' overlap>
                <v-icon>mdi-cart</v-icon>
             </v-badge>
          </v-btn>
       </template>
    </v-app-bar>
-   <v-bottom-sheet v-model="sheet">
-      <v-card height="500">
-         <v-btn icon @click="() => sheet = false" class="back-btn">
+   <v-bottom-sheet v-model='sheet'>
+      <v-card height='500'>
+         <v-btn icon @click='() => sheet = false' class='back-btn'>
             <v-icon>mdi-chevron-left</v-icon>
          </v-btn>
 
          <v-card-text>
-            <h3 class="text-center">Кошик </h3>
-            <div v-for="item in basketStore.basket" :key="item.name" class='main-basket d-flex flex-column'>
-               <div class="itemBasket">
-                  <div class="image d-flex">
-                     <img :src="item.img" alt="Image" width="80">
+            <h3 class='text-center'>Кошик </h3>
+            <div v-for='item in basketStore.basket' :key='item.name' class='main-basket d-flex flex-column'>
+               <div class='itemBasket'>
+                  <div class = "d-flex justify-end">
+                     <v-btn @click='removeFromBasket(item)' color='red' dark icon='mdi-trash-can' class='btn-del'>
+                     </v-btn>
                   </div>
+
                   <div>
                      <h3>{{ item.name }}</h3>
                      <small>{{ item.category }}</small>
                      <h5>К-сть : <i>{{ item.selectedQuantity }} кг</i></h5>
-                     <h5>Продавець: <i>{{ item.author }}</i></h5> <br>
+                     <h5>Продавець: <i>{{ item.author }}</i></h5>
+                     <h4>Ціна: {{ item.price }} грн за кг</h4>
                   </div>
 
-                  <div class="quantity-buttons">
-                     <v-btn @click="removeFromBasket(item)" color="red" dark icon="mdi-trash-can" class="btn-basket">
-                     </v-btn>
-                     <v-btn @click="updateQuantity(item, 1)" class="btn-basket">+</v-btn>
-                     <v-btn @click="updateQuantity(item, -1)" class="btn-basket">-</v-btn>
+                  <div class='quantity-buttons'>
+                     <v-btn @click='updateQuantity(item, 1)' class='btn-basket'>+</v-btn>
+                     <v-btn @click='updateQuantity(item, -1)' class='btn-basket'>-</v-btn>
+
                   </div>
                </div>
                <div class='btn-price'>
-                  <h4 class='text-center'>Ціна: {{ item.price }} грн за кг</h4>
+                  <h4 class='text-center'>Сума: {{ item.sum }} грн</h4>
                </div>
             </div>
 
-            <h2 class="text-center">
+            <h2 class='text-center'>
                Сума до сплати: {{ calculateTotalSum() }} грн
             </h2>
-            <div class="d-flex align-center flex-column justify-center">
-               <v-btn @click="submitOrder" class="btn-access-shop" color="#3477eb">
+            <div class='d-flex align-center flex-column justify-center'>
+               <v-btn @click='submitOrder' class='btn-access-shop' color='#3477eb'>
                   Оформити замовлення
                </v-btn>
             </div>
@@ -102,12 +104,12 @@
 </template>
 
 <script lang='ts' setup>
-import { useRouting } from '@/composables'
-import { useRoute } from 'vue-router'
-import { ref } from 'vue'
+import {useRouting} from '@/composables'
+import {useRoute} from 'vue-router'
+import {ref} from 'vue'
 
-import { productStore } from '@/stores/product-store.ts'
-import { Product } from '@/models'
+import {productStore} from '@/stores/product-store.ts'
+import {Product} from '@/models'
 
 defineProps<{
    headerTitle: string
@@ -130,7 +132,7 @@ const removeFromBasket = (product: Product) => {
 
 let updateQuantity: (item: any, change: number) => void
 
-updateQuantity = function (item, change) {
+updateQuantity = function(item, change) {
    item.selectedQuantity += change
 
    if (item.selectedQuantity < 1) {
@@ -141,7 +143,7 @@ updateQuantity = function (item, change) {
 }
 
 const calculateTotalSum = (): any => {
-   return basketStore.basket.reduce(function (total: any, item: any) {
+   return basketStore.basket.reduce(function(total: any, item: any) {
       if (!(item.sum !== undefined && item.sum !== null)) {
          return total
       } else {
@@ -178,6 +180,7 @@ const getTotalItemsInBasket = (): number => {
 
 .itemBasket {
    display: flex;
+   flex-direction: column;
    width: 100%;
    justify-content: space-between;
 }
@@ -194,12 +197,6 @@ img {
    align-items: center;
 }
 
-.quantity-buttons {
-   display: flex;
-   flex-direction: column;
-   align-items: flex-end;
-   margin-right: 10px;
-}
 
 .btn-access-shop {
    margin: 10px 0 5px 0;
@@ -208,9 +205,9 @@ img {
 
 .quantity-buttons {
    display: flex;
-   flex-direction: column;
-   justify-content: space-between;
+   justify-content: space-around;
    align-items: center;
+   margin: 15px 0;
 }
 
 .btn-basket {
@@ -233,5 +230,10 @@ img {
 .btn-price {
    display: flex;
    justify-content: center;
+}
+.btn-del{
+   height: 30px;
+   width: 30px;
+   margin: 10px 0 0 0;
 }
 </style>
