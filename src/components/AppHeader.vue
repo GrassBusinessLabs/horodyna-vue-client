@@ -93,11 +93,8 @@
             <h2 class='text-center'>
                Сума до сплати: {{ calculateTotalSum() }} грн
             </h2>
-            <div class='d-flex align-center flex-column justify-center'>
-               <v-btn @click='submitOrder' class='btn-access-shop' color='#3477eb'>
                   Оформити замовлення
-               </v-btn>
-            </div>
+
          </v-card-text>
       </v-card>
    </v-bottom-sheet>
@@ -150,9 +147,6 @@ const calculateTotalSum = (): any => {
          return total + item.sum
       }
    }, 0)
-}
-
-const submitOrder = () => {
 }
 
 const getTotalItemsInBasket = (): number => {

@@ -12,6 +12,7 @@
     "@google-pay/button-element": "^3.0.10",
     "@tomtom-international/web-sdk-maps": "^6.25.0",
     "@tomtom-international/web-sdk-services": "^6.25.0",
+    "@types/lodash.debounce": "^4.0.9",
     "@vee-validate/yup": "^4.12.2",
     "axios": "^1.6.2",
     "localforage": "^1.10.0",
