@@ -93,7 +93,11 @@
             <h2 class='text-center'>
                Сума до сплати: {{ calculateTotalSum() }} грн
             </h2>
-                  Оформити замовлення
+
+            <div class="d-flex align-center flex-column justify-center">
+               <v-btn @click="routing.toPayment" class="btn-access-shop" color="#3477eb">
+               </v-btn>
+            </div>
 
          </v-card-text>
       </v-card>
@@ -128,7 +132,7 @@ const removeFromBasket = (product: Product) => {
 }
 
 let updateQuantity: (item: any, change: number) => void
-
+//
 updateQuantity = function(item, change) {
    item.selectedQuantity += change
 

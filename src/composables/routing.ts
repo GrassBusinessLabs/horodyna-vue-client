@@ -14,7 +14,10 @@ export const useRouting = () => {   const router = useRouter()
       return router.push('/map')   }
    async function toPayment() {
       return router.push('/payment')   }
+   async function toAbout() {
+      return router.push('/about')   }
    return {
+      toAbout,
       toSignIn,
       toCatalog,
       toProducts,
