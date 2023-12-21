@@ -58,7 +58,7 @@ const scrollToLetter = (letter: string) => {
 
 .v-btn {
    padding: 2.7px;
-   font-size: 10px;
+   font-size: 3vw;
 }
 </style>
 

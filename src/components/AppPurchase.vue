@@ -28,10 +28,10 @@
                   </v-list-item-subtitle>
                   <v-list-item class='pa-0 pr-2 ml-2'>
                      <template v-slot:prepend class='h-auto'>
-                        <p class='text-subtitle-2'>Ціна: {{ product.price }} грн</p>
+                        <p>Ціна: {{ product.price }} грн</p>
                      </template>
                      <template v-slot:append>
-                        <p class='text-subtitle-2'>Кількість: {{ product.quantity }} кг</p>
+                        <p>Кількість: {{ product.quantity }} кг</p>
                      </template>
                   </v-list-item>
                </v-list-item>
@@ -67,6 +67,14 @@ interface Purchase {
 defineProps<{
    purchase: Purchase
 }>()
+
+const emit = defineEmits<{
+   (e: 'purchaseDetails', address: Purchase): void
+}>()
+
+function emitDetails(event: Purchase): void {
+   emit('purchaseDetails', event)
+}
 </script>
 
 <style scoped>
@@ -80,5 +88,9 @@ defineProps<{
 
 .my-border-bottom {
    border-bottom: 2px solid rgba(128, 128, 128, 0.3);
+}
+
+p {
+   font-size: 3.8vw;
 }
 </style>

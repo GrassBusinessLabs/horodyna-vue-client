@@ -126,7 +126,7 @@ export const mapService = () => {
       return map!.getZoom()
    }
    
-   function createMarker(id: string, coords: LngLatLike, options?: Partial<CreateMarkerOptions>): Marker | null {
+   function createMarker(id: string, coords: LngLatLike, onClick: () => void, options?: Partial<CreateMarkerOptions>): Marker | null {
       if (markers[id]) {
          changeMarkerLocation(id, coords)
          return null
@@ -134,8 +134,10 @@ export const mapService = () => {
       
       const markerElement: HTMLDivElement = document.createElement('div')
       markerElement.setAttribute('id', id)
-      markerElement.classList.add('map-marker', `map-marker_${id}`)
+      markerElement.classList.add('map-marker', 'map-marker_${id}')
       markerElement.style.setProperty('background-image', `url('${mapMarker}')`)
+      
+      markerElement.addEventListener('click', onClick)
       
       const marker: Marker = new tt.Marker({
          element: markerElement,

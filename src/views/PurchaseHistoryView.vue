@@ -10,12 +10,43 @@
             :key="purchase.purchaseId"
          ></app-purchase>
       </v-list>
+      <v-bottom-sheet v-model="sheet">
+         <v-card
+            height='550'
+            class='pa-0 rounded-t-lg'
+         >
+            <v-card-title class='py-7 text-center text-white text-h5'>
+               Фільтри
+            </v-card-title>
+            <v-list lines="two" class='pa-0 pt-1 px-4'>
+               <v-list-item
+                  v-for="product in sortedCategory"
+                  :key="product.id"
+                  :title="product.name"
+                  :prepend-avatar="product.img"
+                  class='pa-0 my-border'
+               >
+                  <template v-slot:append>
+                     <v-checkbox
+                        v-model="filters"
+                        :value="product.name"
+                        hide-details
+                        color='primary'
+                     ></v-checkbox>
+                  </template>
+               </v-list-item>
+            </v-list>
+         </v-card>
+      </v-bottom-sheet>
    </purchase-history-layout>
 </template>
 
 <script lang='ts' setup>
 import AppPurchase from '@/components/AppPurchase.vue'
 import PurchaseHistoryLayout from '@/layouts/PurchaseHistoryLayout.vue'
+import {ref} from 'vue'
+
+const sheet = ref(false)
 
 const purchases = [
    {purchaseId: 351, date: '12 грудня 2023, 17:54', products: [
