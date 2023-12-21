@@ -1,21 +1,21 @@
-import type {RouteRecordRaw, RouterOptions} from 'vue-router'
-import {createRouter, createWebHistory, RouteLocationNormalized} from 'vue-router'
+import { createRouter, createWebHistory, RouteLocationNormalized } from 'vue-router';
+import { authTokenService } from '@/services';
+import { useToastDialog } from '@/composables';
+import SignInView from '@/views/SignInView.vue';
+import CatalogView from '@/views/CatalogView.vue';
+import ErrorView from '@/views/ErrorView.vue';
+import ProductsView from '@/views/ProductsView.vue';
+import SettingsView from '@/views/SettingsView.vue';
+import PurchaseHistoryView from '@/views/PurchaseHistoryView.vue';
+import PaymentView from '@/views/PaymentView.vue';
+import MapView from '@/views/MapView.vue';
+import AboutPage from '@/components/AboutPage.vue'
 
-import {authTokenService} from '@/services'
-import {useToastDialog} from '@/composables'
-import SignInView from '@/views/SignInView.vue'
-import CatalogView from '@/views/CatalogView.vue'
-import ErrorView from '@/views/ErrorView.vue'
-import ProductsView from '@/views/ProductsView.vue'
-import SettingsView from '@/views/SettingsView.vue'
-import PurchaseHistoryView from '@/views/PurchaseHistoryView.vue'
-import PaymentView from '@/views/PaymentView.vue'
-import MapView from '@/views/MapView.vue'
 
-const toastDialog = useToastDialog()
-const authToken = authTokenService()
+const toastDialog = useToastDialog();
+const authToken = authTokenService();
 
-const routes: RouteRecordRaw[] = [
+const routes = [
    {
       path: '/',
       redirect: '/sign-in'
@@ -25,13 +25,13 @@ const routes: RouteRecordRaw[] = [
       name: 'SignIn',
       component: SignInView,
       alias: '/',
-      meta: {auth: false}
+      meta: { auth: false }
    },
    {
       path: '/Catalog',
       name: 'Catalog',
       component: CatalogView,
-      meta: {auth: true}
+      meta: { auth: true }
    },
    {
       path: '/products',
@@ -59,33 +59,34 @@ const routes: RouteRecordRaw[] = [
       component: MapView,
    },
    {
+      path: '/about',
+      name: 'About',
+      component: AboutPage,
+   },
+   {
       path: '/:all(.*)*',
       name: 'all',
       component: ErrorView
-   }
-] as RouteRecordRaw[]
+   },
+];
 
 const router = createRouter({
    history: createWebHistory(),
    routes
-} as RouterOptions)
+});
 
 router.beforeEach(async (to: RouteLocationNormalized) => {
    try {
       const metaAuth: boolean = (to.meta as any).auth as boolean
       const authTokenValue: string | null = await authToken.get()
 
-      if (typeof metaAuth as any !== 'boolean') {
+      if (typeof metaAuth !== 'boolean') {
          return true
       }
 
       if (!authTokenValue && metaAuth) {
-         return {name: 'SignIn'}
+         return { name: 'SignIn' }
       }
-
-      // if (authTokenValue && !metaAuth) {
-      //    return {name: 'Posts'}
-      // }
 
       return true
    } catch (e) {
@@ -93,6 +94,6 @@ router.beforeEach(async (to: RouteLocationNormalized) => {
       toastDialog.error(e)
       return false
    }
-})
+});
 
-export default router
+export default router;
