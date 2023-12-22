@@ -55,6 +55,13 @@
                   <v-list-item-subtitle class='text-subtitle-1'>
                      {{ `Ціна: ${product.price} грн за кг` }}
                   </v-list-item-subtitle>
+                  <template v-slot:append>
+                     <v-icon
+                        icon="mdi-plus-box-outline"
+                        size='large'
+                        color='black'
+                     ></v-icon>
+                  </template>
                </v-list-item>
             </v-list>
          </v-card>

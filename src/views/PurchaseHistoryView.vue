@@ -8,6 +8,7 @@
             v-for="purchase in purchases"
             :purchase='purchase'
             :key="purchase.purchaseId"
+            @purchase-details='showDetails(purchase)'
          ></app-purchase>
       </v-list>
       <v-bottom-sheet v-model="sheet">
@@ -16,24 +17,16 @@
             class='pa-0 rounded-t-lg'
          >
             <v-card-title class='py-7 text-center text-white text-h5'>
-               Фільтри
+               Деталі покупки #{{ selectedPurchase.purchaseId }}
             </v-card-title>
             <v-list lines="two" class='pa-0 pt-1 px-4'>
                <v-list-item
-                  v-for="product in sortedCategory"
-                  :key="product.id"
+                  v-for="product in selectedPurchase.products"
+                  :key="product.name"
                   :title="product.name"
                   :prepend-avatar="product.img"
                   class='pa-0 my-border'
                >
-                  <template v-slot:append>
-                     <v-checkbox
-                        v-model="filters"
-                        :value="product.name"
-                        hide-details
-                        color='primary'
-                     ></v-checkbox>
-                  </template>
                </v-list-item>
             </v-list>
          </v-card>
@@ -67,11 +60,17 @@ const purchases = [
    }
 ]
 
+const selectedPurchase = ref({})
+
+const showDetails = (purchase) => {
+   selectedPurchase.value = purchase
+   sheet.value = true
+}
 </script>
 
 <style lang='scss' scoped>
 .my-border {
-   border-bottom: 3px solid rgba(128, 128, 128, 0.4);
+   border-bottom: 2px solid rgba(128, 128, 128, 0.4);
 }
 
 .v-card-title {
