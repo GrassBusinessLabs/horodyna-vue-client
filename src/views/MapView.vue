@@ -40,8 +40,9 @@
             height='550'
             class='pa-0 rounded-t-lg'
          >
-            <v-card-title class='py-7 text-center text-white text-h5'>
+            <v-card-title class='py-4 text-center text-white text-h5'>
                {{ selectedFarm.name }}
+               <p class='text-h6 text-grey-lighten-2'>Адреса: {{ selectedFarm.address }}</p>
             </v-card-title>
             <v-list lines="two" class='pa-0 pt-1 px-4'>
                <v-list-item
@@ -117,7 +118,7 @@ const selectedFarm = ref()
 watch(filters, async () => {
    map.removeAllMarkers()
    for (const farm of farms.value) {
-      if (filters.value.length === 0 || filters.value.includes(farm.category)) {
+      if (filters.value.length === 0 || farm.products.some(product => filters.value.some(filter => product.name.includes(filter)))) {
          const addressItems = await map.searchAddresses(farm.address)
          if (addressItems.length > 0) {
             const onClick = () => {

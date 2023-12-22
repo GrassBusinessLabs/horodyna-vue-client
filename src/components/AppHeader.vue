@@ -96,6 +96,7 @@
 
             <div class="d-flex align-center flex-column justify-center">
                <v-btn @click="routing.toPayment" class="btn-access-shop" color="#3477eb">
+                  Оформити замовлення
                </v-btn>
             </div>
 
@@ -132,7 +133,7 @@ const removeFromBasket = (product: Product) => {
 }
 
 let updateQuantity: (item: any, change: number) => void
-//
+
 updateQuantity = function(item, change) {
    item.selectedQuantity += change
 
