@@ -24,19 +24,7 @@
 </template>
 
 <script setup lang='ts'>
-interface ProductItem {
-   name: string
-   price: number
-   img: string
-   seller: string
-   quantity: number
-}
-
-interface Purchase {
-   purchaseId: number
-   date: string
-   products: ProductItem[]
-}
+import {Purchase} from '@/models'
 
 defineProps<{
    purchase: Purchase

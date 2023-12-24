@@ -12,23 +12,24 @@
             height='550'
             class='pa-0 rounded-t-lg'
          >
-            <v-card-title class='py-7 text-center text-white text-h5'>
+            <v-card-title class='py-6 text-center my-border card-title'>
                Фільтри
+               <v-icon size='27' icon="mdi-filter-cog"></v-icon>
             </v-card-title>
-            <v-list lines="two" class='pa-0 pt-1 px-4'>
+            <v-list :lines="'two'" class='pa-5 pb-2'>
                <v-list-item
                   v-for="product in sortedCategory"
                   :key="product.id"
                   :title="product.name"
                   :prepend-avatar="product.img"
-                  class='pa-0 my-border'
+                  class='pa-0 pl-4 pr-2 bg-grey-lighten-4 rounded-xl mb-3'
                >
                   <template v-slot:append>
                      <v-checkbox
                         v-model="filters"
                         :value="product.name"
                         hide-details
-                        color='primary'
+                        color='indigo'
                      ></v-checkbox>
                   </template>
                </v-list-item>
@@ -37,29 +38,45 @@
       </v-bottom-sheet>
       <v-bottom-sheet v-model="showFarmDetails">
          <v-card
-            height='550'
+            height='560'
             class='pa-0 rounded-t-lg'
          >
-            <v-card-title class='py-4 text-center text-white text-h5'>
+            <v-card-title class='py-4 text-center my-border my-title'>
                {{ selectedFarm.name }}
-               <p class='text-h6 text-grey-lighten-2'>Адреса: {{ selectedFarm.address }}</p>
+               <v-list-item-subtitle class='price-title pt-2 pb-1'>
+                  Адреса: {{ selectedFarm.address }}
+               </v-list-item-subtitle>
             </v-card-title>
-            <v-list lines="two" class='pa-0 pt-1 px-4'>
+            <v-list :lines="'two'" class='pa-5 pb-2'>
                <v-list-item
                   v-for="product in selectedFarm.products"
-                  :key="product.id"
-                  :title="product.name"
-                  :prepend-avatar="product.img"
-                  class='pa-0 my-border'
+                  :key="product.productId"
+                  class='pa-3 bg-grey-lighten-4 rounded-xl mb-3'
                >
-                  <v-list-item-subtitle class='text-subtitle-1'>
-                     {{ `Ціна: ${product.price} грн за кг` }}
+                  <template v-slot:prepend>
+                     <v-avatar size="50" :image="product.img"></v-avatar>
+                  </template>
+                  <v-list-item-title class='my-font-size my-color mb-1'>
+                     {{ product.name }}
+                  </v-list-item-title>
+                  <v-list-item-subtitle class='text-subtitle-1 my-color'>
+                     {{ `Ціна: ${product.price}.00 грн` }}
                   </v-list-item-subtitle>
                   <template v-slot:append>
                      <v-icon
-                        icon="mdi-plus-box-outline"
-                        size='large'
+                        icon="mdi-minus-circle-outline"
+                        size='x-large'
                         color='black'
+                        @click='store.decreaseProductQuantity(product)'
+                     ></v-icon>
+                     <v-list-item-subtitle class='text-h6 mx-2 font-weight-bold'>
+                        {{ store.getCurrentProductQuantity(product) ? `${store.getCurrentProductQuantity(product)} кг` : 0 }}
+                     </v-list-item-subtitle>
+                     <v-icon
+                        icon="mdi-plus-circle-outline"
+                        size='x-large'
+                        color='black'
+                        @click='addProduct(product)'
                      ></v-icon>
                   </template>
                </v-list-item>
@@ -76,23 +93,12 @@ import MapLayout from '@/layouts/MapLayout.vue'
 import AppMap from '@/components/AppMap.vue'
 import {ref, watch} from 'vue'
 import {productsData} from '@/constants/products.ts'
+import { productStore } from '@/stores/product-store.ts'
+import {Farm, FarmProduct} from '@/models'
+
+const store = productStore()
 
 const map = mapService()
-
-interface Location {
-   id: number,
-   name: string,
-   address: string,
-   category: string,
-   products: Product[]
-}
-
-interface Product {
-   productId: string,
-   name: string,
-   price: number,
-   img: string,
-}
 
 const sortedCategory = productsData.sort((a, b) => a.name.localeCompare(b.name))
 
@@ -102,30 +108,30 @@ const showFarmDetails = ref(false)
 
 const filters = ref<string[]>([])
 
-const farms = ref<Location[]>([
-   {id: 1, name: 'Ферма 1', address: 'Рєпіна 1', category: 'Абрикос', products: [
-         {productId: 'p1', name: 'Абрикос 1', price: 50, img: 'https://knip.com.ua/content/images/1/480x463l50nn0/abrikos-viroslava-96346870734276.png'},
-         {productId: 'p2', name: 'Агрус 1', price: 40, img: 'https://images.unian.net/photos/2023_07/thumb_files/1000_545_1689936883-1538.jpg?1'}
+const farms = ref<Farm[]>([
+   {id: 'f1', name: 'Ферма 1', address: 'Рєпіна 1', category: 'Абрикос', products: [
+         {productId: 'p1', name: 'Абрикос 1', price: 50, img: 'https://knip.com.ua/content/images/1/480x463l50nn0/abrikos-viroslava-96346870734276.png', category: 'Фрукти', author: 'Андрій'},
+         {productId: 'p2', name: 'Агрус 1', price: 40, img: 'https://images.unian.net/photos/2023_07/thumb_files/1000_545_1689936883-1538.jpg?1', category: 'Ягоди', author: 'Андрій'}
       ]
    },
-   {id: 2, name: 'Ферма 2', address: 'Рєпіна 5', category: 'Баклажан', products: [
-         {productId: 'p3', name: 'Груша 1', price: 30, img: 'https://klopotenko.com/wp-content/uploads/2022/08/fruits-ga2c37054b_1920.jpg'},
-         {productId: 'p4', name: 'Баклажан 1', price: 60, img: 'https://ss.sport-express.ru/userfiles/materials/189/1899896/volga.jpg'}
+   {id: 'f2', name: 'Ферма 2', address: 'Рєпіна 5', category: 'Баклажан', products: [
+         {productId: 'p3', name: 'Груша 1', price: 30, img: 'https://klopotenko.com/wp-content/uploads/2022/08/fruits-ga2c37054b_1920.jpg', category: 'Фрукти', author: 'Андрій'},
+         {productId: 'p4', name: 'Баклажан 1', price: 60, img: 'https://ss.sport-express.ru/userfiles/materials/189/1899896/volga.jpg', category: 'Овочі', author: 'Андрій'}
       ]
    },
-   {id: 3, name: 'Ферма 3', address: 'Рєпіна 6', category: 'Диня', products: [
-         {productId: 'p5', name: 'Диня 1', price: 70, img: 'https://dobrodar.ua/uploads/files/Products/Product_images_40452/4e5ff2.jpg'},
-         {productId: 'p6', name: 'Груша 2', price: 40, img: 'https://gradinamax.com.ua/uploads/catalog_products/grusha-medovaya_1.jpg'}
+   {id: 'f3', name: 'Ферма 3', address: 'Рєпіна 6', category: 'Диня', products: [
+         {productId: 'p5', name: 'Диня 1', price: 70, img: 'https://dobrodar.ua/uploads/files/Products/Product_images_40452/4e5ff2.jpg', category: 'Фрукти', author: 'Андрій'},
+         {productId: 'p6', name: 'Груша 2', price: 40, img: 'https://gradinamax.com.ua/uploads/catalog_products/grusha-medovaya_1.jpg', category: 'Фрукти', author: 'Андрій'}
       ]
    },
 ])
 
-const selectedFarm = ref()
+const selectedFarm = ref<Partial<Farm>>({})
 
 watch(filters, async () => {
    map.removeAllMarkers()
    for (const farm of farms.value) {
-      if (filters.value.length === 0 || farm.products.some(product => filters.value.some(filter => product.name.includes(filter)))) {
+      if (filters.value.length === 0 || farm.products.some((product: FarmProduct) => filters.value.some(filter => product.name.includes(filter)))) {
          const addressItems = await map.searchAddresses(farm.address)
          if (addressItems.length > 0) {
             const onClick = () => {
@@ -140,6 +146,15 @@ watch(filters, async () => {
       }
    }
 }, { immediate: true })
+
+const addProduct = (product: FarmProduct) => {
+   const productCart = {
+      ...product,
+      selectedQuantity: 1,
+      sum: product.price
+   }
+   store.addProductToCart(productCart)
+}
 </script>
 
 <style lang='scss' scoped>
@@ -156,7 +171,23 @@ watch(filters, async () => {
    border: none;
 }
 
-.v-card-title {
-   background-color: #135DD8;
+.my-title {
+   font-size: 27px;
+}
+
+.price-title {
+   font-size: 21px;
+}
+
+.my-font-size {
+   font-size: 17.8px;
+}
+
+.my-color {
+   color: #000099;
+}
+
+.card-title {
+   font-size: 28px;
 }
 </style>
