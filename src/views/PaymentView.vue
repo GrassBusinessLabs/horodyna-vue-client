@@ -38,21 +38,13 @@
             <template v-slot:append>
                <v-container class='pa-0'>
                   <v-list-item-title class='text-h6 py-2 text-end'>
-                     Вартість
+                     Сума до сплати
                   </v-list-item-title>
                   <v-list-item-subtitle class='text-subtitle-1 pb-2 text-end'>
-                     {{ totalPrice }} грн
+                     {{ totalPrice + product.total}} грн
                   </v-list-item-subtitle>
                </v-container>
             </template>
-         </v-list-item>
-         <v-list-item>
-            <v-list-item-title class='text-h6 py-2 text-end'>
-               Сума до сплати
-            </v-list-item-title>
-            <v-list-item-subtitle class='text-subtitle-1 pb-2 text-end'>
-               {{ totalPrice + product.total}} грн
-            </v-list-item-subtitle>
          </v-list-item>
          <v-form>
             <v-row class='ma-0 pb-0'>

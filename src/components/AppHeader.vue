@@ -50,56 +50,98 @@
       </template>
       <template v-slot:append>
          <v-btn icon='mdi-cart' @click='sheet = !sheet' v-if="route.path !== '/sign-in'">
-            <v-badge :content='getTotalItemsInBasket()' overlap>
+            <v-badge :content='cartStore.getCartLength()' overlap>
                <v-icon>mdi-cart</v-icon>
             </v-badge>
          </v-btn>
       </template>
    </v-app-bar>
    <v-bottom-sheet v-model='sheet'>
-      <v-card height='500'>
-         <v-btn icon @click='() => sheet = false' class='back-btn'>
-            <v-icon>mdi-chevron-left</v-icon>
+      <v-card
+         height='570'
+         class='pa-0 rounded-t-lg'
+      >
+         <v-card-title class='py-4 text-center my-border my-title'>
+            Кошик
+            <v-list-item-subtitle
+               v-if='cartStore.getCartLength() !== 0'
+               class='my-subtitle pt-2 pb-1'
+            >
+               Сума: {{ cartStore.getTotalSum() }}.00 грн
+            </v-list-item-subtitle>
+         </v-card-title>
+
+         <v-list
+            v-if='cartStore.getCartLength() !== 0'
+            class='pa-5 pb-0'
+         >
+            <v-list-item
+               class='pa-4 bg-grey-lighten-4 rounded-xl product-item'
+               v-for="product in cartStore.basket"
+               :key="product.productId"
+            >
+               <template v-slot:prepend>
+                  <v-avatar size="95" :image="product.img" class='mx-1'></v-avatar>
+               </template>
+
+               <v-list-item-title class='my-font-size'>
+                  {{ product.name }}
+               </v-list-item-title>
+               <v-list-item-subtitle class='text-subtitle-1 pt-2'>
+                  Продавець: {{ product.author }}
+               </v-list-item-subtitle>
+               <v-list-item-subtitle class='text-subtitle-1 py-2'>
+                  Адреса: {{ product.address }}
+               </v-list-item-subtitle>
+               <v-list-item-title class='my-color my-font-size'>
+                  Ціна: {{ product.price }}.00 грн
+               </v-list-item-title>
+
+               <template v-slot:append>
+                  <v-container class='pa-0 d-flex flex-column'>
+                     <v-icon
+                        icon="mdi-minus-circle-outline"
+                        size='32'
+                        class='text-grey-darken-1'
+                        @click='cartStore.decreaseProductQuantity(product)'
+                     ></v-icon>
+                     <v-list-item-subtitle
+                        class='my-item-subtitle py-4 font-weight-bold text-center text-grey-darken-4'
+                     >
+                        {{ cartStore.getCurrentProductQuantity(product) ? cartStore.getCurrentProductQuantity(product) : 0 }}
+                     </v-list-item-subtitle>
+                     <v-icon
+                        icon="mdi-plus-circle-outline"
+                        size='32'
+                        class='text-grey-darken-1'
+                        @click='addProduct(product)'
+                     ></v-icon>
+                  </v-container>
+               </template>
+            </v-list-item>
+         </v-list>
+         <v-btn
+            v-if='cartStore.getCartLength() !== 0'
+            color='orange'
+            class='text-white mx-5 my-5 text-h6'
+            @click='routing.toPayment'
+         >
+            Оформити замовлення
          </v-btn>
-
-         <v-card-text>
-            <h3 class='text-center'>Кошик </h3>
-            <div v-for='item in basketStore.basket' :key='item.name' class='main-basket d-flex flex-column'>
-               <div class='itemBasket'>
-                  <div class = "d-flex justify-end">
-                     <v-btn @click='removeFromBasket(item)' color='red' dark icon='mdi-trash-can' class='btn-del'>
-                     </v-btn>
-                  </div>
-
-                  <div>
-                     <h3>{{ item.name }}</h3>
-                     <small>{{ item.category }}</small>
-                     <h5>К-сть : <i>{{ item.selectedQuantity }} кг</i></h5>
-                     <h5>Продавець: <i>{{ item.author }}</i></h5>
-                     <h4>Ціна: {{ item.price }} грн за кг</h4>
-                  </div>
-
-                  <div class='quantity-buttons'>
-                     <v-btn @click='updateQuantity(item, 1)' class='btn-basket'>+</v-btn>
-                     <v-btn @click='updateQuantity(item, -1)' class='btn-basket'>-</v-btn>
-
-                  </div>
-               </div>
-               <div class='btn-price'>
-                  <h4 class='text-center'>Сума: {{ item.sum }} грн</h4>
-               </div>
-            </div>
-
-            <h2 class='text-center'>
-               Сума до сплати: {{ calculateTotalSum() }} грн
-            </h2>
-
-            <div class="d-flex align-center flex-column justify-center">
-               <v-btn @click="routing.toPayment" class="btn-access-shop" color="#3477eb">
-               </v-btn>
-            </div>
-
-         </v-card-text>
+         <template v-else>
+            <v-list-item-title
+            class='mx-5 pt-5 pb-2 mt-7 text-h4 text-center'
+         >
+            Немає жодного товару
+         </v-list-item-title>
+            <v-btn
+               color='orange'
+               class='text-white mx-5 my-5 text-h6'
+               @click='goToCatalog'
+            >
+               Перейти в каталог
+            </v-btn>
+         </template>
       </v-card>
    </v-bottom-sheet>
 </template>
@@ -116,124 +158,31 @@ defineProps<{
    headerTitle: string
 }>()
 
+const cartStore = productStore();
+
 const drawer = ref(false)
 
 const routing = useRouting()
 const route = useRoute()
 
 const sheet = ref(false)
-const basketStore = productStore()
 
-const removeFromBasket = (product: Product) => {
-   const index = basketStore.basket.indexOf(product)
-   if (index !== -1) {
-      basketStore.basket.splice(index, 1)
-   }
+const addProduct = (product: Product) => {
+   cartStore.addProductToCart({
+      ...product,
+      selectedQuantity: 1,
+      sum: product.price
+   })
 }
 
-let updateQuantity: (item: any, change: number) => void
-//
-updateQuantity = function(item, change) {
-   item.selectedQuantity += change
-
-   if (item.selectedQuantity < 1) {
-      item.selectedQuantity = 1
-   }
-
-   item.sum = item.selectedQuantity * item.price
-}
-
-const calculateTotalSum = (): any => {
-   return basketStore.basket.reduce(function(total: any, item: any) {
-      if (!(item.sum !== undefined && item.sum !== null)) {
-         basketStore.total=total
-         return total
-      } else {
-         basketStore.total=total+item.sum
-         return total + item.sum
-      }
-   }, 0)
-}
-
-const getTotalItemsInBasket = (): number => {
-   return basketStore.basket.length
-   // return basketStore.basket.reduce((total: any, item: any) => total + item.selectedQuantity, 0)
+const goToCatalog = () => {
+   sheet.value = false
+   routing.toCatalog()
 }
 </script>
 
 <style lang='scss' scoped>
 .my-padding {
    padding: 11.6px;
-}
-
-.back-btn {
-   position: absolute;
-   top: 10px;
-   left: 10px;
-   z-index: 2;
-}
-
-.btn-buy {
-   margin: 10px 0 5px 0;
-   width: 100%;
-}
-
-.itemBasket {
-   display: flex;
-   flex-direction: column;
-   width: 100%;
-   justify-content: space-between;
-}
-
-img {
-   border-radius: 60px;
-   width: 80px;
-   height: 80px;
-   padding: 15px;
-}
-
-.image {
-   display: flex;
-   align-items: center;
-}
-
-
-.btn-access-shop {
-   margin: 10px 0 5px 0;
-   width: 90%;
-}
-
-.quantity-buttons {
-   display: flex;
-   justify-content: space-around;
-   align-items: center;
-   margin: 15px 0;
-}
-
-.btn-basket {
-   border-radius: 60px;
-   height: 50px;
-   width: 50px;
-}
-
-.btn-price {
-   display: flex;
-}
-
-.main-basket {
-   margin: 10px 10px;
-   outline: 1px palegreen ridge;
-   border-radius: 30px;
-   padding: 10px 30px;
-}
-
-.btn-price {
-   display: flex;
-   justify-content: center;
-}
-.btn-del{
-   height: 30px;
-   width: 30px;
-   margin: 10px 0 0 0;
 }
 </style>

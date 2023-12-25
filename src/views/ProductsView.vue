@@ -1,12 +1,12 @@
 <template>
    <products-layout>
-      <v-row class='ma-0' >
+      <v-list class='pa-0 bg-transparent'>
          <app-product
             v-for='product in filteredProducts'
-            :key='product.id'
+            :key='product.productId'
             :product='product'
          />
-      </v-row>
+      </v-list>
    </products-layout>
 </template>
 

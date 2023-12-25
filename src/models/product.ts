@@ -5,6 +5,7 @@ export interface Product {
    img: string,
    category: string,
    author: string,
-   selectedQuantity: number,
-   sum: number
+   selectedQuantity?: number,
+   sum?: number,
+   address: string
 }
