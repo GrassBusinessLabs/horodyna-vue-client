@@ -146,8 +146,10 @@ updateQuantity = function(item, change) {
 const calculateTotalSum = (): any => {
    return basketStore.basket.reduce(function(total: any, item: any) {
       if (!(item.sum !== undefined && item.sum !== null)) {
+         basketStore.total=total
          return total
       } else {
+         basketStore.total=total+item.sum
          return total + item.sum
       }
    }, 0)

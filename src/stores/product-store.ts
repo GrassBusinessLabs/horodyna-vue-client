@@ -1,9 +1,10 @@
 import {defineStore} from 'pinia'
 import type {FarmProduct, Product} from '@/models'
 
+
 export const productStore = defineStore("productStore", {
    state: () => ({
-      basket: [] as Product[]
+      basket: [] as Product[], total:0
    }),
    actions: {
       addProductToCart(product: Product) {
