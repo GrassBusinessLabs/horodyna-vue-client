@@ -21,7 +21,8 @@
                <v-list-item-title class='text-subtitle-1 ml-2'>Налаштування</v-list-item-title>
             </template>
          </v-list-item>
-         <v-list-item @click='routing.toSettings'>
+
+         gi<v-list-item @click='routing.toSettings'>
             <template v-slot:prepend>
                <v-icon icon='mdi-face-agent'></v-icon>
                <v-list-item-title class='text-subtitle-1 ml-2'>Підтримка</v-list-item-title>
