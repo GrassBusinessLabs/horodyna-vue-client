@@ -79,12 +79,8 @@
                      <h4>Ціна: {{ item.price }} грн за кг</h4>
                   </div>
 
-                  <div class='quantity-buttons'>
-                     <v-btn @click='updateQuantity(item, 1)' class='btn-basket'>+</v-btn>
-                     <v-btn @click='updateQuantity(item, -1)' class='btn-basket'>-</v-btn>
-
-                  </div>
                </div>
+
                <div class='btn-price'>
                   <h4 class='text-center'>Сума: {{ item.sum }} грн</h4>
                </div>
@@ -95,7 +91,8 @@
             </h2>
 
             <div class="d-flex align-center flex-column justify-center">
-               <v-btn @click="routing.toPayment" class="btn-access-shop" color="#3477eb">
+               <v-btn @click="routing.toPayment" class="btn-access-shop" color="#3477eb" >
+                  <h3>Оформити замовлення</h3>
                </v-btn>
             </div>
 
@@ -131,23 +128,15 @@ const removeFromBasket = (product: Product) => {
    }
 }
 
-let updateQuantity: (item: any, change: number) => void
-//
-updateQuantity = function(item, change) {
-   item.selectedQuantity += change
-
-   if (item.selectedQuantity < 1) {
-      item.selectedQuantity = 1
-   }
-
-   item.sum = item.selectedQuantity * item.price
-}
 
 const calculateTotalSum = (): any => {
    return basketStore.basket.reduce(function(total: any, item: any) {
       if (!(item.sum !== undefined && item.sum !== null)) {
+         basketStore.total=total
+
          return total
       } else {
+         basketStore.total = total + item.sum
          return total + item.sum
       }
    }, 0)

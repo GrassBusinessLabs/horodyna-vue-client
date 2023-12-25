@@ -1,10 +1,13 @@
 import {defineStore} from 'pinia'
 interface State {
-   basket: any
+   basket: any,
+   total:number,
 }
 export const productStore=defineStore("productStore",{
    state:():State =>({
-      basket:[]
+      basket:[],
+      total:0,
+
    }),
 
 
