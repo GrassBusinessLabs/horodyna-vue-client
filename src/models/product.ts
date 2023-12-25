@@ -1,8 +1,10 @@
 export interface Product {
-   id: number,
+   productId: number | string,
    name: string,
-   price: number
+   price: number,
    img: string,
    category: string,
-   author: string
+   author: string,
+   selectedQuantity: number,
+   sum: number
 }

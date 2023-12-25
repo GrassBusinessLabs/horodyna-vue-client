@@ -1,14 +1,32 @@
 import {defineStore} from 'pinia'
-interface State {
-   basket: any,
-   total:number,
-}
-export const productStore=defineStore("productStore",{
-   state:():State =>({
-      basket:[],
-      total:0,
-//
+import type {FarmProduct, Product} from '@/models'
+
+export const productStore = defineStore("productStore", {
+   state: () => ({
+      basket: [] as Product[]
    }),
-
-
+   actions: {
+      addProductToCart(product: Product) {
+         const currentProduct = this.basket.find(item => item.name === product.name)
+         
+         if (currentProduct) {
+            currentProduct.selectedQuantity += 1
+            currentProduct.sum = currentProduct.selectedQuantity * currentProduct.price
+         } else {
+            this.basket.push(product)
+         }
+      },
+      decreaseProductQuantity(product: FarmProduct) {
+         const currentProduct = this.basket.find(item => item.name === product.name)
+         
+         if (currentProduct && currentProduct.selectedQuantity > 1) {
+            currentProduct.selectedQuantity -= 1
+            currentProduct.sum = currentProduct.selectedQuantity * currentProduct.price
+         }
+      },
+      getCurrentProductQuantity (product: FarmProduct) {
+         const currentProduct = this.basket.find(item => item.name === product.name)
+         return currentProduct?.selectedQuantity
+      }
+   }
 })

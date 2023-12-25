@@ -88,6 +88,7 @@ const addToBasket = () => {
       existingProduct.sum = existingProduct.selectedQuantity * existingProduct.price;
    } else {
       basketStore.basket.push({
+         productId: Date.now(),
          name: props.product.name,
          img: props.product.img,
          price: props.product.price,
