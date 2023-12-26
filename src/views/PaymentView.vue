@@ -1,18 +1,18 @@
 <template>
    <payment-layout>
-      <v-sheet class='mx-auto pa-2 pb-3 rounded-lg border-custom'>
+      <v-sheet class="mx-auto pa-2 pb-3 rounded-lg border-custom">
          <v-list-item>
-            <v-container class='pa-0'>
-               <v-list-item-title class='py-2'>
+            <v-container class="pa-0">
+               <v-list-item-title class="py-2">
                   <v-menu>
                      <template v-slot:activator="{ props }">
                         <v-btn
                            dark
                            v-bind="props"
-                           class='pa-0 h-auto text-capitalize text-h6'
-                           elevation='0'
+                           class="pa-0 h-auto  text-h6"
+                           elevation="0"
                         >
-                           Доставка <v-icon size='25' icon="mdi mdi-chevron-down"></v-icon>
+                          <h5>Доставка</h5> <v-icon size="25" icon="mdi mdi-chevron-down"></v-icon>
                         </v-btn>
                      </template>
 
@@ -20,50 +20,61 @@
                         <v-list-item
                            v-for="(item, index) in shippingItems"
                            :key="index"
-                           :value='item'
-                           @click='() => {
-                     shippingMethod = item;
-                     updateTotalPrice();
-                  }'
+                           :value="item"
+                           @click="updateShippingMethod(item)"
                         >
                            <v-list-item-title>{{ item }}</v-list-item-title>
                         </v-list-item>
                      </v-list>
                   </v-menu>
                </v-list-item-title>
-               <v-list-item-subtitle class='text-subtitle-1 pb-2'>
+               <v-list-item-subtitle class="text-subtitle-6 pb-2">
                   {{ shippingMethod }}
+               </v-list-item-subtitle>
+               <v-list-item-subtitle class="text-subtitle-6 pb-2">
+                 <h4>Статус замовлення: {{ orderStatus }}</h4>
                </v-list-item-subtitle>
             </v-container>
             <template v-slot:append>
-               <v-container class='pa-0'>
-                  <v-list-item-title class='text-h6 py-2 text-end'>
-                     Сума до сплати
+
+               <v-container class="pa-0">
+                  <div class ="stat-1">
+                  <v-list-item-title class="text-h6 py-2 text-end">
+                     <h5>Сума до сплати:</h5><h5>{{ totalAmountToPay }} грн</h5>
                   </v-list-item-title>
-                  <v-list-item-subtitle class='text-subtitle-1 pb-2 text-end'>
-                     {{ totalPrice + product.total}} грн
+                  <v-list-item-subtitle class="text-h6 pb-2 text-end">
+
                   </v-list-item-subtitle>
+                  </div>
                </v-container>
+
             </template>
          </v-list-item>
+
          <v-form>
-            <v-row class='ma-0 pb-0'>
-               <v-col cols='12' class='pb-2 pr-2'>
-                  <v-btn-toggle
-                     mandatory
-                     v-model="paymentMethod"
-                     class='rounded-t-lg bg-grey-lighten-3 h-100'
-                  >
-                     <v-btn class='border pa-0' value="googlePay">
-                        <v-img class='mt-1' src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/1280px-Google_Pay_Logo.svg.png" height='55' width='90'></v-img>
+            <v-row class="ma-0 pb-0">
+               <v-col cols="12" class="pb-2 pr-2">
+                  <v-btn-toggle mandatory v-model="paymentMethod" class="rounded-t-lg bg-black-lighten-3 h-100">
+                     <v-btn class="border pa-0" value="googlePay">
+                        <v-img
+                           class="mt-1"
+                           src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/1280px-Google_Pay_Logo.svg.png"
+                           height="55"
+                           width="90"
+                        ></v-img>
                      </v-btn>
-                     <v-btn class='border pa-0' value="applePay">
-                        <v-img class='mt-1' src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Apple_Pay_logo.svg/800px-Apple_Pay_logo.svg.png" height='35' width='90'></v-img>
+                     <v-btn class="border pa-0" value="applePay">
+                        <v-img
+                           class="mt-1"
+                           src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Apple_Pay_logo.svg/800px-Apple_Pay_logo.svg.png"
+                           height="35"
+                           width="90"
+                        ></v-img>
                      </v-btn>
                   </v-btn-toggle>
                </v-col>
 
-               <v-col cols='12' class='pr-2 text-center'>
+               <v-col cols="12" class="pr-2 text-center">
                   <google-pay-button
                      v-if="paymentMethod === 'googlePay'"
                      environment="TEST"
@@ -73,7 +84,7 @@
                      @loadpaymentdata="onLoadPaymentData"
                      @error="onError"
                      button-size-mode="fill"
-                     class='w-100'
+                     class="w-100"
                   ></google-pay-button>
                   <h3 v-else>Apple Pay в розробці</h3>
                </v-col>
@@ -83,19 +94,18 @@
    </payment-layout>
 </template>
 
-<script lang='ts' setup>
-import "@google-pay/button-element"
-import PaymentLayout from '@/layouts/PaymentLayout.vue'
-import { ref } from 'vue'
-import {productStore} from '@/stores/product-store.ts'
+<script setup>
+import "@google-pay/button-element";
+import PaymentLayout from "@/layouts/PaymentLayout.vue";
+import { ref } from "vue";
+import { productStore } from "@/stores/product-store.ts";
 
-const shippingItems = ['Нова пошта', 'Укр пошта', 'Самовивіз']
-const product = productStore()
-const shippingMethod = ref('Нова пошта')
-
-const paymentMethod = ref('googlePay')
-
-const totalPrice = ref(0)
+const shippingItems = ["Нова пошта", "Укр пошта", "Самовивіз"];
+const product = productStore();
+const shippingMethod = ref("Нова пошта");
+const paymentMethod = ref("googlePay");
+const totalAmountToPay = ref(0);
+const orderStatus = ref("Очікує підтвердження");
 
 const paymentRequest = {
    apiVersion: 2,
@@ -105,63 +115,74 @@ const paymentRequest = {
          type: "CARD",
          parameters: {
             allowedAuthMethods: ["PAN_ONLY", "CRYPTOGRAM_3DS"],
-            allowedCardNetworks: ["AMEX", "VISA", "MASTERCARD"]
+            allowedCardNetworks: ["AMEX", "VISA", "MASTERCARD"],
          },
          tokenizationSpecification: {
             type: "PAYMENT_GATEWAY",
             parameters: {
                gateway: "example",
-               gatewayMerchantId: "exampleGatewayMerchantId"
-            }
-         }
-      }
+               gatewayMerchantId: "exampleGatewayMerchantId",
+            },
+         },
+      },
    ],
    merchantInfo: {
       merchantId: "12345678901234567890",
-      merchantName: "Demo Merchant"
+      merchantName: "Demo Merchant",
    },
    transactionInfo: {
       totalPriceStatus: "FINAL",
       totalPriceLabel: "Total",
       totalPrice: "100.00",
       currencyCode: "USD",
-      countryCode: "US"
-   }
-}
+      countryCode: "US",
+   },
+};
 
-const onLoadPaymentData = (event: any) => {
-   console.log(event.detail)
-}
+const onLoadPaymentData = (event) => {
+   console.log(event.detail);
+};
 
-const onError = (event: any) => {
-   console.error("error", event.error)
-}
+const onError = (event) => {
+   console.error("error", event.error);
+};
 
 const updateTotalPrice = () => {
    const productTotal = calculateTotalSum();
    const shippingCost = getShippingCost(shippingMethod.value);
-   totalPrice.value = (productTotal as number) + shippingCost;
-}
+   totalAmountToPay.value = productTotal + shippingCost;
+};
 
-const calculateTotalSum = (): number => {
-   return 0;
-}
+const calculateTotalSum = () => {
+   return product.getTotalSum();
+};
 
-const getShippingCost = (method: string) => {
+const getShippingCost = (method) => {
    switch (method) {
-      case 'Нова пошта':
+      case "Нова пошта":
          return 150;
-      case 'Укр пошта':
+      case "Укр пошта":
          return 50;
-      case 'Самовивіз':
+      case "Самовивіз":
          return 100;
       default:
          return 0;
    }
-}
+};
+
+const updateShippingMethod = (method) => {
+   shippingMethod.value = method;
+   updateTotalPrice();
+   updateOrderStatus("Очікує підтвердження оплати");
+};
+
+const updateOrderStatus = (status) => {
+   orderStatus.value = status;
+};
+
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .border-custom {
    border: 2px solid rgba(128, 128, 128, 0.3);
 }
@@ -177,5 +198,9 @@ const getShippingCost = (method: string) => {
 
 .v-btn-toggle {
    min-height: 57px;
+}
+.stat-1{
+   margin-top: -50px;
+   font-weight: bold;
 }
 </style>

@@ -9,7 +9,7 @@
       </v-list>
    </products-layout>
 </template>
-
+<!--go-->
 <script setup lang='ts'>
 
 import ProductsLayout from '@/layouts/ProductsLayout.vue'
