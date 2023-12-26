@@ -10,7 +10,10 @@
       <v-list-item-subtitle class='text-subtitle-1 pt-2'>
          Продавець: {{ product.author }}
       </v-list-item-subtitle>
-      <v-list-item-subtitle class='text-subtitle-1 py-2'>
+      <v-list-item-subtitle
+         class='text-subtitle-1 py-2'
+         @click='showProductOnMap(product)'
+      >
          Адреса: {{ product.address }}
       </v-list-item-subtitle>
       <v-list-item-title class='my-color my-font-size'>
@@ -44,10 +47,13 @@
 <script lang="ts" setup>
 import type { Product } from "@/models";
 import { productStore } from "@/stores/product-store.ts";
+import {useRouting} from '@/composables'
 
 defineProps<{
    product: Product;
 }>();
+
+const routing = useRouting()
 
 const cartStore = productStore();
 
@@ -57,6 +63,11 @@ const addProduct = (product: Product) => {
       selectedQuantity: 1,
       sum: product.price
    })
+}
+
+const showProductOnMap = (product: Product) => {
+   cartStore.setSelectedProduct(product)
+   routing.toMap()
 }
 </script>
 

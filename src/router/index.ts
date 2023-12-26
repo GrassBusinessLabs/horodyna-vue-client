@@ -9,8 +9,7 @@ import SettingsView from '@/views/SettingsView.vue';
 import PurchaseHistoryView from '@/views/PurchaseHistoryView.vue';
 import PaymentView from '@/views/PaymentView.vue';
 import MapView from '@/views/MapView.vue';
-import AboutPage from '@/components/AboutPage.vue'
-
+import AboutPage from '@/components/AboutPage.vue';
 
 const toastDialog = useToastDialog();
 const authToken = authTokenService();
@@ -37,31 +36,37 @@ const routes = [
       path: '/products',
       name: 'Products',
       component: ProductsView,
+      meta: { auth: true }
    },
    {
       path: '/settings',
       name: 'Settings',
       component: SettingsView,
+      meta: { auth: true }
    },
    {
       path: '/purchases',
       name: 'PurchaseHistory',
       component: PurchaseHistoryView,
+      meta: { auth: true }
    },
    {
       path: '/payment',
       name: 'Payment',
       component: PaymentView,
+      meta: { auth: true }
    },
    {
       path: '/map',
       name: 'Map',
       component: MapView,
+      meta: { auth: true }
    },
    {
       path: '/about',
       name: 'About',
       component: AboutPage,
+      meta: { auth: true }
    },
    {
       path: '/:all(.*)*',
