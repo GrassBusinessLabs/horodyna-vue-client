@@ -1,6 +1,6 @@
 <template>
    <v-bottom-navigation
-      v-model="value"
+      v-model="number"
       :bg-color="'primary'"
       :grow='true'
       mode="shift"
@@ -24,12 +24,23 @@
 </template>
 
 <script lang='ts' setup>
-import {ref} from 'vue'
+import {ref, watch} from 'vue'
 import {useRouting} from '@/composables'
+import {useRoute} from 'vue-router'
 
+const route = useRoute()
 const routing = useRouting()
 
-const value = ref(0)
+const number = ref(0)
+
+watch(route, () => {
+   if(route.path === '/map') {
+      number.value = 1
+   }
+   else if (route.path === '/purchases') {
+      number.value = 2
+   }
+})
 </script>
 
 <style lang='scss' scoped>

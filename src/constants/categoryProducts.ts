@@ -1,5 +1,5 @@
 export const categoryProducts = [
-   {productId: 1, name: 'Абрикос 1', price: 50, img: 'https://knip.com.ua/content/images/1/480x463l50nn0/abrikos-viroslava-96346870734276.png', category: 'Абрикос', author: 'Антон', address: 'Рєпіна 6'},
+   {productId: 'p1', name: 'Абрикос 1', price: 50, img: 'https://knip.com.ua/content/images/1/480x463l50nn0/abrikos-viroslava-96346870734276.png', category: 'Абрикос', author: 'Андрій', address: 'Рєпіна 7'},
    {productId: 2, name: 'Абрикос 2', price: 60, img: 'https://plod.net.ua/upload/iblock/77a/77ab952ffd42c00377f96bad2bbe85f5.jpg', category: 'Абрикос', author: 'Степан', address: 'Рєпіна 1'},
    {productId: 3, name: 'Агрус 1', price: 50, img: 'https://images.unian.net/photos/2023_07/thumb_files/1000_545_1689936883-1538.jpg?1', category: `Агрус`, author: 'Антон', address: 'Рєпіна 5'},
    {productId: 4, name: 'Агрус 2', price: 60, img: 'https://static.wixstatic.com/media/80dbdc_b8c70ccdde6a45d68293bac7ad26e37a~mv2.jpg/v1/fill/w_594,h_402,al_c,lg_1,q_80,enc_auto/%D0%BA%D1%80%D1%8B%D0%B6%D0%BE%D0%B2%D0%BD%D0%B8%D0%BA.jpg', category: 'Агрус', author: 'Степан', address: 'Рєпіна 1'},

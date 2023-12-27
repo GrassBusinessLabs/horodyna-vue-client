@@ -43,8 +43,8 @@
          >
             <v-card-title class='py-4 text-center my-border my-title'>
                {{ selectedFarm.name }}
-               <v-list-item-subtitle class='price-title pt-2 pb-1'>
-                  Адреса: {{ selectedFarm.address }}
+               <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
+                  Адреса: {{ selectedFarm.farmAddress }}
                </v-list-item-subtitle>
             </v-card-title>
             <v-list :lines="'two'" class='pa-5 pb-2'>
@@ -67,10 +67,10 @@
                         icon="mdi-minus-circle-outline"
                         size='x-large'
                         color='black'
-                        @click='store.decreaseProductQuantity(product)'
+                        @click='cartStore.decreaseProductQuantity(product)'
                      ></v-icon>
                      <v-list-item-subtitle class='text-h6 mx-2 font-weight-bold'>
-                        {{ store.getCurrentProductQuantity(product) ? `${store.getCurrentProductQuantity(product)} кг` : 0 }}
+                        {{ cartStore.getCurrentProductQuantity(product) ? `${cartStore.getCurrentProductQuantity(product)} кг` : 0 }}
                      </v-list-item-subtitle>
                      <v-icon
                         icon="mdi-plus-circle-outline"
@@ -96,7 +96,7 @@ import {productsData} from '@/constants/products.ts'
 import { productStore } from '@/stores/product-store.ts'
 import {Farm, Product} from '@/models'
 
-const store = productStore()
+const cartStore = productStore()
 
 const map = mapService()
 
@@ -109,19 +109,19 @@ const showFarmDetails = ref(false)
 const filters = ref<string[]>([])
 
 const farms = ref<Farm[]>([
-   {id: 'f1', name: 'Ферма 1', address: 'Рєпіна 1', category: 'Абрикос', products: [
-         {productId: 'p1', name: 'Абрикос 1', price: 50, img: 'https://knip.com.ua/content/images/1/480x463l50nn0/abrikos-viroslava-96346870734276.png', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 1'},
-         {productId: 'p2', name: 'Агрус 1', price: 40, img: 'https://images.unian.net/photos/2023_07/thumb_files/1000_545_1689936883-1538.jpg?1', category: 'Ягоди', author: 'Андрій', address: 'Рєпіна 2'}
+   {id: 'f1', name: 'Ферма 1', farmAddress: 'Рєпіна 7', category: 'Абрикос', products: [
+         {productId: 'p1', name: 'Абрикос 1', price: 50, img: 'https://knip.com.ua/content/images/1/480x463l50nn0/abrikos-viroslava-96346870734276.png', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 7'},
+         {productId: 'p2', name: 'Агрус 1', price: 40, img: 'https://images.unian.net/photos/2023_07/thumb_files/1000_545_1689936883-1538.jpg?1', category: 'Ягоди', author: 'Андрій', address: 'Рєпіна 7'}
       ]
    },
-   {id: 'f2', name: 'Ферма 2', address: 'Рєпіна 5', category: 'Баклажан', products: [
-         {productId: 'p3', name: 'Груша 1', price: 30, img: 'https://klopotenko.com/wp-content/uploads/2022/08/fruits-ga2c37054b_1920.jpg', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 6'},
-         {productId: 'p4', name: 'Баклажан 1', price: 60, img: 'https://ss.sport-express.ru/userfiles/materials/189/1899896/volga.jpg', category: 'Овочі', author: 'Андрій', address: 'Рєпіна 1'}
+   {id: 'f2', name: 'Ферма 2', farmAddress: 'Рєпіна 9', category: 'Баклажан', products: [
+         {productId: 'p3', name: 'Груша 1', price: 30, img: 'https://klopotenko.com/wp-content/uploads/2022/08/fruits-ga2c37054b_1920.jpg', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 9'},
+         {productId: 'p4', name: 'Баклажан 1', price: 60, img: 'https://ss.sport-express.ru/userfiles/materials/189/1899896/volga.jpg', category: 'Овочі', author: 'Андрій', address: 'Рєпіна 9'}
       ]
    },
-   {id: 'f3', name: 'Ферма 3', address: 'Рєпіна 6', category: 'Диня', products: [
-         {productId: 'p5', name: 'Диня 1', price: 70, img: 'https://dobrodar.ua/uploads/files/Products/Product_images_40452/4e5ff2.jpg', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 5'},
-         {productId: 'p6', name: 'Груша 2', price: 40, img: 'https://gradinamax.com.ua/uploads/catalog_products/grusha-medovaya_1.jpg', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 1'}
+   {id: 'f3', name: 'Ферма 3', farmAddress: 'Рєпіна 8', category: 'Диня', products: [
+         {productId: 'p5', name: 'Диня 1', price: 70, img: 'https://dobrodar.ua/uploads/files/Products/Product_images_40452/4e5ff2.jpg', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 8'},
+         {productId: 'p6', name: 'Груша 2', price: 40, img: 'https://gradinamax.com.ua/uploads/catalog_products/grusha-medovaya_1.jpg', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 8'}
       ]
    },
 ])
@@ -132,7 +132,7 @@ watch(filters, async () => {
    map.removeAllMarkers()
    for (const farm of farms.value) {
       if (filters.value.length === 0 || farm.products.some((product: Product) => filters.value.some(filter => product.name.includes(filter)))) {
-         const addressItems = await map.searchAddresses(farm.address)
+         const addressItems = await map.searchAddresses(farm.farmAddress)
          if (addressItems.length > 0) {
             const onClick = () => {
                selectedFarm.value = farm
@@ -148,42 +148,33 @@ watch(filters, async () => {
 }, { immediate: true })
 
 const addProduct = (product: Product) => {
-   store.addProductToCart({
+   cartStore.addProductToCart({
       ...product,
       selectedQuantity: 1,
       sum: product.price
    })
 }
+
+const selectedProduct = cartStore.selectedProduct
+
+watch(selectedProduct, () => {
+   if(Object.keys(selectedProduct).length) {
+      for (const farm of farms.value) {
+         if (farm.products.some(product => product.name === selectedProduct.name)) {
+            selectedFarm.value = farm
+            break
+         }
+      }
+      showFarmDetails.value = true
+   }
+   cartStore.selectedProduct = {}
+}, { immediate: true })
 </script>
 
 <style lang='scss' scoped>
 .filter-btn {
    bottom: 80px;
    right: 12px;
-}
-
-.my-border {
-   border-bottom: 2px solid rgba(128, 128, 128, 0.4);
-}
-
-.my-border:last-child {
-   border: none;
-}
-
-.my-title {
-   font-size: 27px;
-}
-
-.price-title {
-   font-size: 21px;
-}
-
-.my-font-size {
-   font-size: 17.8px;
-}
-
-.my-color {
-   color: #000099;
 }
 
 .card-title {
