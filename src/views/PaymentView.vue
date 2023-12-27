@@ -40,7 +40,7 @@
                <v-container class="pa-0">
                   <div class ="stat-1">
                   <v-list-item-title class="text-h6 py-2 text-end">
-                     <h5>Сума до сплати:</h5><h5>{{ totalAmountToPay }} грн</h5>
+                     <h5>Сума до сплати:</h5><h5>{{ product.getTotalSum() + getShippingCost(shippingMethod) }} грн</h5>
                   </v-list-item-title>
                   <v-list-item-subtitle class="text-h6 pb-2 text-end">
 

@@ -3,7 +3,7 @@
       <app-header :header-title="'Каталог продуктів'" />
 
       <v-main>
-         <v-container class='py-5 pl-8 pr-9'>
+         <v-container class='py-5 pt-4 pl-6 pr-9'>
             <v-row>
                <slot />
             </v-row>

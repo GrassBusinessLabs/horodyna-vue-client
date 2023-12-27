@@ -1,7 +1,6 @@
 <template>
    <v-list-item
       class="pa-5 py-4 rounded-xl bg-white mb-5"
-      @click='detailsHandler(purchase)'
    >
       <template v-slot:prepend>
          <v-badge color='indigo' :content='purchase.products.length'>
@@ -14,11 +13,15 @@
       <v-list-item-subtitle class='text-subtitle-1 py-1'>
          {{ purchase.date }}
       </v-list-item-subtitle>
-      <v-list-item-title class='pt-1 my-color my-font-size'>
+      <v-list-item-title class='my-margin my-color my-font-size'>
          Сума: {{ purchase.products.reduce((accumulator, currentValue) => accumulator + currentValue.price * currentValue.quantity, 0) }}.00 грн
       </v-list-item-title>
       <template v-slot:append >
-         <v-icon icon="mdi-information-outline" size='35'></v-icon>
+         <v-icon
+            icon="mdi-information-outline"
+            size='39'
+            @click='detailsHandler(purchase)'
+         ></v-icon>
       </template>
    </v-list-item>
 </template>
@@ -58,5 +61,9 @@ p {
 
 .my-color {
    color: #000099;
+}
+
+.my-margin {
+   margin-top: 4px;
 }
 </style>

@@ -4,25 +4,23 @@
           class='pa-2'
           v-if='filteredProducts.length !== 0'
    >
-      <v-btn
+      <v-avatar
          color='primary'
-         density="comfortable"
-         class='font-weight-bold'
-         variant="flat"
-         size="small"
-         :icon="''"
+         size="27"
+         class='text-subtitle-2'
       >
          {{ letter }}
-      </v-btn>
+      </v-avatar>
    </v-col>
 
    <v-col
       cols='10'
       v-if='filteredProducts.length !== 0'
       :class='`${letter}`'
+      class='pl-2'
    >
 
-      <v-list lines="two" class='mt-2'>
+      <v-list :lines="'two'" class='mt-2'>
          <v-list-item
             v-for="product in filteredProducts"
             :key="product.id"

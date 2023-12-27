@@ -88,7 +88,7 @@
 
 <script lang='ts' setup>
 import {LngLatLike, Marker} from '@tomtom-international/web-sdk-maps'
-import {mapService} from '@/services/map'
+import {AddressItem, mapService} from '@/services/map'
 import MapLayout from '@/layouts/MapLayout.vue'
 import AppMap from '@/components/AppMap.vue'
 import {ref, watch} from 'vue'
@@ -111,11 +111,11 @@ const filters = ref<string[]>([])
 const farms = ref<Farm[]>([
    {id: 'f1', name: 'Ферма 1', farmAddress: 'Рєпіна 7', category: 'Абрикос', products: [
          {productId: 'p1', name: 'Абрикос 1', price: 50, img: 'https://knip.com.ua/content/images/1/480x463l50nn0/abrikos-viroslava-96346870734276.png', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 7'},
-         {productId: 'p2', name: 'Агрус 1', price: 40, img: 'https://images.unian.net/photos/2023_07/thumb_files/1000_545_1689936883-1538.jpg?1', category: 'Ягоди', author: 'Андрій', address: 'Рєпіна 7'}
+         {productId: 'p3', name: 'Агрус 1', price: 40, img: 'https://images.unian.net/photos/2023_07/thumb_files/1000_545_1689936883-1538.jpg?1', category: 'Ягоди', author: 'Андрій', address: 'Рєпіна 7'}
       ]
    },
    {id: 'f2', name: 'Ферма 2', farmAddress: 'Рєпіна 9', category: 'Баклажан', products: [
-         {productId: 'p3', name: 'Груша 1', price: 30, img: 'https://klopotenko.com/wp-content/uploads/2022/08/fruits-ga2c37054b_1920.jpg', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 9'},
+         {productId: 'p2', name: 'Груша 1', price: 30, img: 'https://klopotenko.com/wp-content/uploads/2022/08/fruits-ga2c37054b_1920.jpg', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 9'},
          {productId: 'p4', name: 'Баклажан 1', price: 60, img: 'https://ss.sport-express.ru/userfiles/materials/189/1899896/volga.jpg', category: 'Овочі', author: 'Андрій', address: 'Рєпіна 9'}
       ]
    },
@@ -155,17 +155,32 @@ const addProduct = (product: Product) => {
    })
 }
 
+const mapZoom: number = 15
+const duration: number = 500
+
+async function selectAddress(address: AddressItem): Promise<void> {
+   map.setMapCenter(address.details.position as LngLatLike, {duration})
+
+   if (mapZoom !== map.getMapZoom()) {
+      await new Promise(resolve => setTimeout(resolve, duration))
+      map.setZoom(15, {duration})
+   }
+}
+
 const selectedProduct = cartStore.selectedProduct
 
-watch(selectedProduct, () => {
+watch(selectedProduct, async () => {
    if(Object.keys(selectedProduct).length) {
       for (const farm of farms.value) {
          if (farm.products.some(product => product.name === selectedProduct.name)) {
             selectedFarm.value = farm
+            const addressItems = await map.searchAddresses(selectedProduct.address)
+            if (addressItems.length > 0) {
+               await selectAddress(addressItems[0])
+            }
             break
          }
       }
-      showFarmDetails.value = true
    }
    cartStore.selectedProduct = {}
 }, { immediate: true })

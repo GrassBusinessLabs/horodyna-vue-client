@@ -4,7 +4,7 @@ import type {Product} from '@/models'
 export const productStore = defineStore("productStore", {
    state: () => ({
       basket: [] as Product[],
-      selectedProduct: {} as Product | {},
+      selectedProduct: {} as Product,
       total: 0
    }),
    actions: {

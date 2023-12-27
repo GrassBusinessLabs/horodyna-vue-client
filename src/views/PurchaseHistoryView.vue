@@ -22,34 +22,14 @@
                   Сума: {{ selectedPurchase.products?.reduce((accumulator, currentValue) => accumulator + currentValue.price * currentValue.quantity, 0) }}.00 грн
                </v-list-item-subtitle>
             </v-card-title>
-            <v-list class='pa-5'>
-               <v-list-item
-                  class='pa-4 bg-grey-lighten-4 rounded-xl product-item'
+            <v-list class='pa-5 h-100'>
+               <app-product
                   v-for="product in selectedPurchase.products"
-                  :key="product.name"
-               >
-                  <template v-slot:prepend>
-                     <v-avatar size="75" :image="product.img" class='mx-1'></v-avatar>
-                  </template>
-                  <v-list-item-title class='mb-2 my-font-size'>
-                     {{ product.name }}
-                  </v-list-item-title>
-                  <v-list-item-subtitle class='text-subtitle-1 mb-1'>
-                     Продавець: {{ product.author }}
-                  </v-list-item-subtitle>
-                  <v-list-item-title class='my-font-size mt-2 my-color'>
-                     Ціна: {{ product.price }}.00 грн
-                  </v-list-item-title>
-                  <template v-slot:append >
-                     <v-list-item-title class='my-title mr-2 text-grey-darken-3'>{{ product.quantity }} кг</v-list-item-title>
-                  </template>
-               </v-list-item>
+                  :key='product.name'
+                  :product='product'
+                  class='bg-grey-lighten-4'
+               />
             </v-list>
-            <v-btn
-               color='orange'
-               class='text-white mx-5 mb-5 text-h6'
-               @click='repeatPurchase'
-            >Повторити</v-btn>
          </v-card>
       </v-bottom-sheet>
    </purchase-history-layout>
@@ -59,28 +39,25 @@
 import AppPurchase from '@/components/AppPurchase.vue'
 import PurchaseHistoryLayout from '@/layouts/PurchaseHistoryLayout.vue'
 import {ref} from 'vue'
-import {productStore} from '@/stores/product-store.ts'
 import {Purchase} from '@/models'
-
-const store = productStore()
+import AppProduct from '@/components/AppProduct.vue'
 
 const sheet = ref(false)
 
 const purchases = [
    {purchaseId: 351, date: '12 грудня 2023', products: [
-         {name: 'Абрикос 1', price: 50, img: 'https://knip.com.ua/content/images/1/480x463l50nn0/abrikos-viroslava-96346870734276.png', author: 'Антон', quantity: 2, category: 'Фрукти', address: 'Рєпіна 1'},
-         {name: 'Агрус 1', price: 40, img: 'https://images.unian.net/photos/2023_07/thumb_files/1000_545_1689936883-1538.jpg?1', author: 'Степан', quantity: 3, category: 'Ягоди', address: 'Рєпіна 6'}
+         {productId: 'p1', name: 'Абрикос 1', price: 50, img: 'https://knip.com.ua/content/images/1/480x463l50nn0/abrikos-viroslava-96346870734276.png', category: 'Абрикос', author: 'Андрій', address: 'Рєпіна 7', quantity: 2},
+         {productId: 'p3', name: 'Агрус 1', price: 40, img: 'https://images.unian.net/photos/2023_07/thumb_files/1000_545_1689936883-1538.jpg?1', category: 'Агрус', author: 'Андрій', address: 'Рєпіна 7', quantity: 1},
       ]
    },
    {purchaseId: 352, date: '13 грудня 2023', products: [
-         {name: 'Груша 1', price: 30, img: 'https://klopotenko.com/wp-content/uploads/2022/08/fruits-ga2c37054b_1920.jpg', author: 'Антон', quantity: 5, category: 'Фрукти', address: 'Рєпіна 1'},
-         {name: 'Баклажан 1', price: 70, img: 'https://ss.sport-express.ru/userfiles/materials/189/1899896/volga.jpg', author: 'Степан', quantity: 2, category: 'Овочі', address: 'Рєпіна 5'},
-         {name: 'Абрикос 2', price: 50, img: 'https://plod.net.ua/upload/iblock/77a/77ab952ffd42c00377f96bad2bbe85f5.jpg', author: 'Степан', quantity: 4, category: 'Фрукти', address: 'Рєпіна 1'},
+         {productId: 'p2', name: 'Груша 1', price: 30, img: 'https://klopotenko.com/wp-content/uploads/2022/08/fruits-ga2c37054b_1920.jpg', category: 'Груша', author: 'Андрій', address: 'Рєпіна 9', quantity: 4},
+         {productId: 'p4', name: 'Баклажан 1', price: 60, img: 'https://ss.sport-express.ru/userfiles/materials/189/1899896/volga.jpg', category: 'Баклажан', author: 'Андрій', address: 'Рєпіна 9', quantity: 2},
       ]
    },
    {purchaseId: 353, date: '14 грудня 2023', products: [
-         {name: 'Диня 1', price: 60, img: 'https://dobrodar.ua/uploads/files/Products/Product_images_40452/4e5ff2.jpg', author: 'Антон', quantity: 3, category: 'Фрукти', address: 'Рєпіна 6'},
-         {name: 'Груша 2', price: 30, img: 'https://gradinamax.com.ua/uploads/catalog_products/grusha-medovaya_1.jpg', author: 'Степан', quantity: 6, category: 'Фрукти', address: 'Рєпіна 1'}
+         {productId: 'p5', name: 'Диня 1', price: 70, img: 'https://dobrodar.ua/uploads/files/Products/Product_images_40452/4e5ff2.jpg', category: 'Диня', author: 'Андрій', address: 'Рєпіна 8', quantity: 3},
+         {productId: 'p6', name: 'Груша 2', price: 40, img: 'https://gradinamax.com.ua/uploads/catalog_products/grusha-medovaya_1.jpg', category: 'Груша', author: 'Андрій', address: 'Рєпіна 8', quantity: 2}
       ]
    }
 ]
@@ -90,19 +67,6 @@ const selectedPurchase = ref<Partial<Purchase>>({})
 const showDetails = (purchase: Purchase) => {
    selectedPurchase.value = purchase
    sheet.value = true
-}
-
-const repeatPurchase = () => {
-   if(selectedPurchase.value.products) {
-      for (const product of selectedPurchase.value.products) {
-         const productCart = {
-            ...product,
-            selectedQuantity: product.quantity,
-            sum: product.price * product.quantity
-         }
-         store.addProductToCart(productCart)
-      }
-   }
 }
 </script>
 
