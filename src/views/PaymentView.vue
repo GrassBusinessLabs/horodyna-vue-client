@@ -147,7 +147,7 @@ const paymentRequest = {
 const onLoadPaymentData = (event) => {
    console.log(event.detail);
 };
-//
+// fs
 const onError = (event) => {
    console.error("error", event.error);
 };
