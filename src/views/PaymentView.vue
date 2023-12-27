@@ -9,11 +9,13 @@
                         <v-btn
                            dark
                            v-bind="props"
-                           class="pa-0 h-auto  text-h6"
+                           class="pa-0 h-auto text-h6"
                            elevation="0"
                         >
-                          <h5>Доставка</h5> <v-icon size="25" icon="mdi mdi-chevron-down"></v-icon>
+                           <h5>Доставка</h5>
+                           <v-icon size="25" icon="mdi mdi-chevron-down"></v-icon>
                         </v-btn>
+<!--                        с-->
                      </template>
 
                      <v-list>
@@ -28,68 +30,65 @@
                      </v-list>
                   </v-menu>
                </v-list-item-title>
-               <v-list-item-subtitle class="text-subtitle-6 pb-2">
-                  {{ shippingMethod }}
+               <v-list-item-subtitle class="text-subtitle-6 pb-2 text-center">
+                  <h4>{{ shippingMethod }}</h4>
                </v-list-item-subtitle>
                <v-list-item-subtitle class="text-subtitle-6 pb-2">
-                 <h4>Статус замовлення: {{ orderStatus }}</h4>
+                  <h4 v-if="isOrderConfirmed"> </h4>
                </v-list-item-subtitle>
             </v-container>
             <template v-slot:append>
-
                <v-container class="pa-0">
-                  <div class ="stat-1">
-                  <v-list-item-title class="text-h6 py-2 text-end">
-                     <h5>Сума до сплати:</h5><h5>{{ totalAmountToPay }} грн</h5>
-                  </v-list-item-title>
-                  <v-list-item-subtitle class="text-h6 pb-2 text-end">
-
-                  </v-list-item-subtitle>
+                  <div class="stat-1">
+                     <v-list-item-title class="text-h6 py-2 text-end">
+                        <h5>Сума до сплати:</h5>
+                        <h5>{{ totalAmountToPay }} грн</h5>
+                     </v-list-item-title>
                   </div>
                </v-container>
-
             </template>
          </v-list-item>
+         <v-list-item-subtitle class="text-h6 pb-2 text-center">
+            <v-btn
+               @click="buyButtonClicked"
+               class="rounded-lg bg-primary white--text"
+            >
+               Купити
+            </v-btn>
+         </v-list-item-subtitle>
 
-         <v-form>
+         <div v-if="isOrderConfirmed" class="order-confirmation">
+            Статус замовлення:
+            <h4>{{ orderStatus }}</h4>
+         </div>
+
+         <v-form v-show="isOrderConfirmed">
             <v-row class="ma-0 pb-0">
-               <v-col cols="12" class="pb-2 pr-2">
-                  <v-btn-toggle mandatory v-model="paymentMethod" class="rounded-t-lg bg-black-lighten-3 h-100">
-                     <v-btn class="border pa-0" value="googlePay">
-                        <v-img
-                           class="mt-1"
-                           src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/1280px-Google_Pay_Logo.svg.png"
-                           height="55"
-                           width="90"
-                        ></v-img>
-                     </v-btn>
-                     <v-btn class="border pa-0" value="applePay">
-                        <v-img
-                           class="mt-1"
-                           src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Apple_Pay_logo.svg/800px-Apple_Pay_logo.svg.png"
-                           height="35"
-                           width="90"
-                        ></v-img>
-                     </v-btn>
-                  </v-btn-toggle>
-               </v-col>
-
-               <v-col cols="12" class="pr-2 text-center">
-                  <google-pay-button
-                     v-if="paymentMethod === 'googlePay'"
-                     environment="TEST"
-                     button-color="white"
-                     button-type="buy"
-                     :paymentRequest.prop="paymentRequest"
-                     @loadpaymentdata="onLoadPaymentData"
-                     @error="onError"
-                     button-size-mode="fill"
-                     class="w-100"
-                  ></google-pay-button>
-                  <h3 v-else>Apple Pay в розробці</h3>
+               <v-col cols="5" class="text-center">
+                  <div class="google-pay-button-container">
+                     <google-pay-button
+                        v-if="paymentMethod === 'googlePay'"
+                        environment="TEST"
+                        button-color="white"
+                        button-type="buy"
+                        :paymentRequest.prop="paymentRequest"
+                        @loadpaymentdata="onLoadPaymentData"
+                        @error="onError"
+                        button-size-mode="fill"
+                        class="google-pay-button"
+                     ></google-pay-button>
+                  </div>
                </v-col>
             </v-row>
          </v-form>
+<div class ="exit">
+         <v-btn
+            class="exit"
+            @click="goToPurchase"
+         >
+            Перейти до покупок
+         </v-btn>
+</div>
       </v-sheet>
    </payment-layout>
 </template>
@@ -97,15 +96,21 @@
 <script setup>
 import "@google-pay/button-element";
 import PaymentLayout from "@/layouts/PaymentLayout.vue";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { productStore } from "@/stores/product-store.ts";
+import { useRouter, useRoute } from "vue-router";
+
+const router = useRouter(); // Додано
 
 const shippingItems = ["Нова пошта", "Укр пошта", "Самовивіз"];
-const product = productStore();
+const cartStore = productStore();
 const shippingMethod = ref("Нова пошта");
 const paymentMethod = ref("googlePay");
 const totalAmountToPay = ref(0);
 const orderStatus = ref("Очікує підтвердження");
+const isOrderConfirmed = ref(false);
+
+
 
 const paymentRequest = {
    apiVersion: 2,
@@ -154,7 +159,7 @@ const updateTotalPrice = () => {
 };
 
 const calculateTotalSum = () => {
-   return product.getTotalSum();
+   return cartStore.getTotalSum();
 };
 
 const getShippingCost = (method) => {
@@ -180,7 +185,21 @@ const updateOrderStatus = (status) => {
    orderStatus.value = status;
 };
 
+const buyButtonClicked = () => {
+   const orderId = generateOrderId();
+   updateOrderStatus(`Очікує підтвердження, ID замовлення: ${orderId}`);
+   isOrderConfirmed.value = true;
+};
+
+const generateOrderId = () => {
+   return Math.floor(Math.random() * 1000000) + 1;
+};
+const goToPurchase = () => {
+   router.push("/catalog");
+};
+
 </script>
+
 
 <style lang="scss" scoped>
 .border-custom {
@@ -188,19 +207,61 @@ const updateOrderStatus = (status) => {
 }
 
 .v-btn-toggle {
-   display: flex;
-   flex-wrap: wrap;
+   justify-content: space-between;
 }
 
 .v-btn {
-   flex: 1 0 auto;
+   text-align: center;
+   width: 200px;
 }
 
 .v-btn-toggle {
-   min-height: 57px;
+   width: 200px;
 }
-.stat-1{
-   margin-top: -50px;
+
+.stat-1 {
+   margin-top: -10px;
    font-weight: bold;
+}
+
+.order-confirmation {
+   margin-top: 40px;
+   font-weight: bold;
+}
+
+.google-pay-logo {
+   max-width: 100%;
+}
+
+.apple-pay-logo {
+   max-width: 100%;
+}
+
+.google-pay-button-container {
+   justify-content: center;
+   align-items: center;
+   height: 100%;
+}
+
+.google-pay-button {
+   width: 305px;
+   height: 40px;
+   border: 1px solid #4CAF50;
+   border-radius: 4px;
+   color: white;
+   font-size: 16px;
+   cursor: pointer;
+   transition: background-color 0.3s;
+}
+
+.google-pay-button:hover {
+   background-color: #45a049;
+}
+.exit{
+   width: 330px;
+   text-align: center;
+   color: chocolate;
+   margin-top: 10px;
+
 }
 </style>
