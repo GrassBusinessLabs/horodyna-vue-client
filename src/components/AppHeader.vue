@@ -39,7 +39,7 @@
       <template v-slot:prepend>
          <v-container class='d-flex'>
             <v-btn
-               v-if="route.path !== '/sign-in'"
+               v-if="route.path !== '/sign-in' && route.path !== '/register'"
                class='pa-0 w-auto h-auto mr-4'
                icon='mdi mdi-menu'
                @click.stop='drawer = !drawer'
@@ -49,7 +49,7 @@
          </v-container>
       </template>
       <template v-slot:append>
-         <v-btn icon='mdi-cart' @click='sheet = !sheet' v-if="route.path !== '/sign-in'">
+         <v-btn icon='mdi-cart' @click='sheet = !sheet' v-if="route.path !== '/sign-in' && route.path !== '/register'">
             <v-badge :content='cartStore.getCartLength()' overlap>
                <v-icon>mdi-cart</v-icon>
             </v-badge>

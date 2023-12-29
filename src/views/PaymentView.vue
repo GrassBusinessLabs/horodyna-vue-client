@@ -15,7 +15,7 @@
                            <h5>Доставка</h5>
                            <v-icon size="25" icon="mdi mdi-chevron-down"></v-icon>
                         </v-btn>
-<!--                        с-->
+
                      </template>
 
                      <v-list>
@@ -100,7 +100,7 @@ import { ref, onMounted } from "vue";
 import { productStore } from "@/stores/product-store.ts";
 import { useRouter, useRoute } from "vue-router";
 
-const router = useRouter(); // Додано
+const router = useRouter();
 
 const shippingItems = ["Нова пошта", "Укр пошта", "Самовивіз"];
 const cartStore = productStore();
@@ -109,8 +109,6 @@ const paymentMethod = ref("googlePay");
 const totalAmountToPay = ref(0);
 const orderStatus = ref("Очікує підтвердження");
 const isOrderConfirmed = ref(false);
-
-
 
 const paymentRequest = {
    apiVersion: 2,
@@ -147,7 +145,7 @@ const paymentRequest = {
 const onLoadPaymentData = (event) => {
    console.log(event.detail);
 };
-// fs
+
 const onError = (event) => {
    console.error("error", event.error);
 };

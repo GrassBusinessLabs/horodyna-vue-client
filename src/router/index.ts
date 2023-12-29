@@ -10,6 +10,7 @@ import PurchaseHistoryView from '@/views/PurchaseHistoryView.vue';
 import PaymentView from '@/views/PaymentView.vue';
 import MapView from '@/views/MapView.vue';
 import AboutPage from '@/components/AboutPage.vue';
+import RegistrationView from '@/views/RegistrationView.vue'
 
 const toastDialog = useToastDialog();
 const authToken = authTokenService();
@@ -23,6 +24,13 @@ const routes = [
       path: '/sign-in',
       name: 'SignIn',
       component: SignInView,
+      alias: '/',
+      meta: { auth: false }
+   },
+   {
+      path: '/register',
+      name: 'Register',
+      component: RegistrationView,
       alias: '/',
       meta: { auth: false }
    },

@@ -1,45 +1,49 @@
 <template>
    <v-list-item class='pa-4 bg-white rounded-xl product-item'>
       <template v-slot:prepend>
-         <v-avatar size="93" :image="product.img"></v-avatar>
+         <v-avatar size="80" :image="product.img"></v-avatar>
       </template>
 
-      <v-list-item-title class='my-font-size'>
+      <v-list-item-title class='my-font-size my-color my-sub-margin'>
          {{ product.name }}
+      </v-list-item-title>
+      <v-list-item-subtitle
+         class='text-subtitle-1 my-margin'
+         @click='showProductOnMap(product)'
+      >
+         {{ product.author }}
+      </v-list-item-subtitle>
+      <v-list-item-subtitle
+         class='text-subtitle-1'
+         @click='showProductOnMap(product)'
+      >
+         {{ product.address }}
          <v-icon
             icon="mdi-map-marker"
-            size='27'
-            class='text-grey-darken-3 mb-1'
-            @click='showProductOnMap(product)'
+            size='15'
+            class='text-black my-margin'
          ></v-icon>
-      </v-list-item-title>
-      <v-list-item-subtitle class='text-subtitle-1 mt-1'>
-         Продавець: {{ product.author }}
       </v-list-item-subtitle>
-      <v-list-item-title class='my-color my-font-size my-margin'>
-         Ціна: {{ product.price }}.00 грн
+      <v-list-item-title class='text-subtitle-1 my-color my-height'>
+         {{ product.price }} грн за кг
       </v-list-item-title>
 
       <template v-slot:append>
-         <v-container class='pa-0 d-flex flex-column'>
-            <v-icon
-               icon="mdi-minus-circle-outline"
-               size='29'
-               class='text-grey-darken-2'
-               @click='cartStore.decreaseProductQuantity(product)'
-            ></v-icon>
-            <v-list-item-subtitle
-               class='product-counter py-3 font-weight-bold text-center text-grey-darken-5'
-            >
-               {{ cartStore.getCurrentProductQuantity(product) ? cartStore.getCurrentProductQuantity(product) : 0 }}
-            </v-list-item-subtitle>
-            <v-icon
-               icon="mdi-plus-circle-outline"
-               size='29'
-               class='text-grey-darken-2'
-               @click='addProduct(product)'
-            ></v-icon>
-         </v-container>
+         <v-icon
+            icon="mdi-minus-circle-outline"
+            size='34'
+            color='black'
+            @click='cartStore.decreaseProductQuantity(product)'
+         ></v-icon>
+         <v-list-item-subtitle class='text-h6 mx-2 font-weight-bold'>
+            {{ cartStore.getCurrentProductQuantity(product) ? `${cartStore.getCurrentProductQuantity(product)} кг` : 0 }}
+         </v-list-item-subtitle>
+         <v-icon
+            icon="mdi-plus-circle-outline"
+            size='34'
+            color='black'
+            @click='addProduct(product)'
+         ></v-icon>
       </template>
    </v-list-item>
 </template>
@@ -73,10 +77,14 @@ const showProductOnMap = (product: Product) => {
 
 <style scoped>
 .my-margin {
-   margin-top: 9px;
+   margin-bottom: 2px;
 }
 
-.product-counter {
-   font-size: 22px;
+.my-sub-margin {
+   margin-bottom: 3px;
+}
+
+.my-height {
+   height: 18.5px;
 }
 </style>

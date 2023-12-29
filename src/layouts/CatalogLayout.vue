@@ -2,14 +2,13 @@
    <v-layout class='rounded rounded-md'>
       <app-header :header-title="'Каталог продуктів'" />
 
-      <v-main>
-         <v-container class='py-5 pt-4 pl-6 pr-9'>
+      <v-main class='bg-grey-lighten-4'>
+         <v-container class='py-5 pt-2 pl-5 pr-6'>
             <v-row>
                <slot />
             </v-row>
-            <v-sheet>
+            <v-sheet class='bg-transparent'>
                <v-btn
-                  color='primary'
                   density="comfortable"
                   class='font-weight-bold w-auto h-auto'
                   variant="text"
@@ -50,8 +49,8 @@ const scrollToLetter = (letter: string) => {
 
 .v-sheet {
    position: fixed;
-   top: 83px;
-   right: 15px;
+   top: 79px;
+   right: 10px;
    display: flex;
    flex-direction: column;
 }
@@ -59,6 +58,7 @@ const scrollToLetter = (letter: string) => {
 .v-btn {
    padding: 2.7px;
    font-size: 3vw;
+   color: #135DD8;
 }
 </style>
 

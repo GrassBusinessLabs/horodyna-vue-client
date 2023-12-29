@@ -47,7 +47,7 @@
                   Адреса: {{ selectedFarm.farmAddress }}
                </v-list-item-subtitle>
             </v-card-title>
-            <v-list :lines="'two'" class='pa-5 pb-2'>
+            <v-list class='pa-5 pb-2'>
                <v-list-item
                   v-for="product in selectedFarm.products"
                   :key="product.productId"
@@ -60,7 +60,7 @@
                      {{ product.name }}
                   </v-list-item-title>
                   <v-list-item-subtitle class='text-subtitle-1 my-color'>
-                     {{ `Ціна: ${product.price}.00 грн` }}
+                     {{ product.price }} грн за кг
                   </v-list-item-subtitle>
                   <template v-slot:append>
                      <v-icon

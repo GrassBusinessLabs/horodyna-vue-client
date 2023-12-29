@@ -35,6 +35,10 @@ export const useRouting = () => {
       return router.push('/about')
    }
    
+   async function toRegister() {
+      return router.push('/register')
+   }
+   
    return {
       toSignIn,
       toCatalog,
@@ -43,5 +47,6 @@ export const useRouting = () => {
       toPurchases,
       toMap,
       toPayment,
-      toAbout
+      toAbout,
+      toRegister
    }}

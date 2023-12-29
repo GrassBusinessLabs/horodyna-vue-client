@@ -1,10 +1,11 @@
 <template>
    <catalog-layout>
-         <app-category
-            v-for='letter in ukrainianAlphabet'
-            :key='letter'
-            :letter='letter'
-         />
+      <app-category
+         v-for='(letter, index) in ukrainianAlphabet'
+         :key='letter'
+         :letter='letter'
+         :isFirst='index === 0'
+      />
    </catalog-layout>
 </template>
 

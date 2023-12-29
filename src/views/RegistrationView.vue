@@ -1,5 +1,5 @@
 <template>
-   <auth-layout>
+   <registration-layout>
       <v-sheet class='mx-auto' width='320'>
          <v-form @submit.prevent='submit'>
             <v-row>
@@ -7,6 +7,17 @@
                   <v-text-field
                      v-model='username'
                      v-bind='usernameAttrs'
+                     label="Ім'я"
+                     :disabled='isSubmitting'
+                     :hide-details='true'
+                     type='text'
+                  ></v-text-field>
+               </v-col>
+
+               <v-col cols='12'>
+                  <v-text-field
+                     v-model='email'
+                     v-bind='emailAttrs'
                      label='Email'
                      :disabled='isSubmitting'
                      :hide-details='true'
@@ -34,20 +45,20 @@
                      type='submit'
                      color='primary'
                   >
-                     Вхід
+                     Зареєструватися
                   </v-btn>
                </v-col>
                <v-col
                   cols='12'
                   class='text-center'
-                  @click='routing.toRegister'
+                  @click='routing.toSignIn'
                >
-                  У мене немає аккаунту
+                  У мене вже є аккаунт
                </v-col>
             </v-row>
          </v-form>
       </v-sheet>
-   </auth-layout>
+   </registration-layout>
 </template>
 
 <script lang='ts' setup>
@@ -57,18 +68,18 @@ import * as yup from 'yup'
 import type {MaybeRefOrGetter} from 'vue'
 import {ref} from 'vue'
 
-import type {CurrentUser, LoginBody} from '@/models'
+import type {CurrentUser, RegisterBody} from '@/models'
 import {useHandleError, useRouting} from '@/composables'
 import {authTokenService, formService, requestService} from '@/services'
 import {useUserStore} from '@/stores'
-import AuthLayout from '@/layouts/AuthLayout.vue'
+import RegistrationLayout from '@/layouts/RegistrationLayout.vue'
 
 const {handleError} = useHandleError()
 const routing = useRouting()
 const userStore = useUserStore()
 const {setCurrentUser} = userStore
 
-const {vuetifyConfig, usernameValidator, passwordValidator} = formService()
+const {vuetifyConfig, usernameValidator, passwordValidator, emailValidator} = formService()
 const request = requestService()
 const authToken = authTokenService()
 
@@ -76,17 +87,20 @@ const form = useForm({
    validationSchema: toTypedSchema(
       yup.object({
          username: usernameValidator(),
+         email: emailValidator(),
          password: passwordValidator()
       })
    ),
    initialValues: {
-      username: 'sa@test.com',
-      password: '12345678'
+      username: '',
+      email: '',
+      password: ''
    }
 })
 
 const isSubmitting = ref<boolean>(false)
 const [username, usernameAttrs] = form.defineField('username' as MaybeRefOrGetter, vuetifyConfig)
+const [email, emailAttrs] = form.defineField('email' as MaybeRefOrGetter, vuetifyConfig)
 const [password, passwordAttrs] = form.defineField('password' as MaybeRefOrGetter, vuetifyConfig)
 
 const showPassword = ref<boolean>(false)
@@ -98,18 +112,20 @@ const submit = form.handleSubmit(async values => {
       }
       isSubmitting.value = true
 
-      const body: LoginBody = {
-         email: values.username,
+      const body: RegisterBody = {
+         name: values.username,
+         email: values.email,
          password: values.password
       }
 
-      const currentUser: CurrentUser = await request.login(body)
+      const currentUser: CurrentUser = await request.register(body)
       setCurrentUser(currentUser)
       await authToken.set(currentUser.token)
 
       await routing.toCatalog()
 
       isSubmitting.value = false
+      console.log(body)
    } catch (e) {
       console.error(e)
       handleError(e)

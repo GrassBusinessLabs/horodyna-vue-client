@@ -1,7 +1,7 @@
 <template>
    <v-app>
       <router-view></router-view>
-      <app-navigation mandatory v-if="route.path !== '/sign-in'"></app-navigation>
+      <app-navigation mandatory v-if="route.path !== '/sign-in' && route.path !== '/register'"></app-navigation>
    </v-app>
 </template>
 
