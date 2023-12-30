@@ -1,10 +1,10 @@
 <template>
    <v-bottom-navigation
       v-model="number"
-      :bg-color="'primary'"
       :grow='true'
       mode="shift"
-      class='rounded-t-lg custom'
+      class='rounded-t-lg my-min-height app-color'
+      elevation='1'
    >
       <v-btn @click='routing.toCatalog'>
          <v-icon size='23'>mdi mdi-list-box</v-icon>
@@ -44,7 +44,7 @@ watch(route, () => {
 </script>
 
 <style lang='scss' scoped>
-.custom {
+.my-min-height {
    min-height: 67px;
 }
 

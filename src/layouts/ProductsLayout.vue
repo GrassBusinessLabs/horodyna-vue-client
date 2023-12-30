@@ -2,7 +2,7 @@
    <v-layout class='rounded rounded-md'>
       <app-header :header-title="'Список продуктів'" />
 
-      <v-main class='bg-grey-lighten-4'>
+      <v-main class='app-bg-color'>
          <v-container class='pa-5 pt-5 pb-4'>
             <slot />
          </v-container>

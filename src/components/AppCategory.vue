@@ -4,7 +4,7 @@
           class='pa-2 pr-1'
           v-if='filteredProducts.length !== 0'
    >
-      <div class='letter-block rounded-lg d-flex justify-center align-center text-white'>
+      <div class='letter-block rounded-lg d-flex justify-center align-center app-color'>
          {{ letter }}
       </div>
    </v-col>
@@ -20,7 +20,7 @@
             v-for="product in filteredProducts"
             :key="product.id"
             @click='setCategory(product.name)'
-            class='pa-3 pl-4 bg-white rounded-xl mb-3'
+            class='pa-3 pl-4 rounded-xl mb-3 app-item-color'
          >
             <template v-slot:prepend>
                <v-avatar size="40" :image="product.img"></v-avatar>
@@ -32,7 +32,7 @@
                {{ product.category }}
             </v-list-item-subtitle>
             <template v-slot:append>
-               <v-icon class='text-grey-darken-4' size='27' icon="mdi-chevron-right"></v-icon>
+               <v-icon size='27' icon="mdi-chevron-right"></v-icon>
             </template>
          </v-list-item>
       </v-list>
@@ -74,7 +74,10 @@ v-col {
 .letter-block {
    height: 23px;
    width: 23px;
-   background-color: #135DD8;
    font-size: 13px;
+}
+
+.v-icon {
+   color: black;
 }
 </style>

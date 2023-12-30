@@ -1,12 +1,12 @@
 <template>
    <auth-layout>
-      <v-sheet class='mx-auto' width='320'>
+      <v-sheet class='mx-auto pa-6 rounded-lg' width='350'>
          <v-form @submit.prevent='submit'>
             <v-row>
                <v-col cols='12'>
                   <v-text-field
-                     v-model='username'
-                     v-bind='usernameAttrs'
+                     v-model='email'
+                     v-bind='emailAttrs'
                      label='Email'
                      :disabled='isSubmitting'
                      :hide-details='true'
@@ -32,17 +32,22 @@
                      :block='true'
                      :disabled='isSubmitting'
                      type='submit'
-                     color='primary'
+                     class='app-color'
                   >
                      Вхід
                   </v-btn>
                </v-col>
                <v-col
                   cols='12'
-                  class='text-center'
+                  class='d-flex justify-center pb-0'
                   @click='routing.toRegister'
                >
-                  У мене немає аккаунту
+                  Немає аккаунту?
+                  <v-list-item-title
+                     class='pa-0 ml-1 h-auto w-auto text-capitalize text-blue-accent-4'
+                  >
+                     Реєстрація
+                  </v-list-item-title>
                </v-col>
             </v-row>
          </v-form>
@@ -75,18 +80,18 @@ const authToken = authTokenService()
 const form = useForm({
    validationSchema: toTypedSchema(
       yup.object({
-         username: usernameValidator(),
+         email: usernameValidator(),
          password: passwordValidator()
       })
    ),
    initialValues: {
-      username: 'sa@test.com',
-      password: '12345678'
+      email: 'sa@test.com',
+      password: '222222'
    }
 })
 
 const isSubmitting = ref<boolean>(false)
-const [username, usernameAttrs] = form.defineField('username' as MaybeRefOrGetter, vuetifyConfig)
+const [email, emailAttrs] = form.defineField('email' as MaybeRefOrGetter, vuetifyConfig)
 const [password, passwordAttrs] = form.defineField('password' as MaybeRefOrGetter, vuetifyConfig)
 
 const showPassword = ref<boolean>(false)
@@ -99,7 +104,7 @@ const submit = form.handleSubmit(async values => {
       isSubmitting.value = true
 
       const body: LoginBody = {
-         email: values.username,
+         email: values.email,
          password: values.password
       }
 
@@ -119,5 +124,4 @@ const submit = form.handleSubmit(async values => {
 </script>
 
 <style lang='scss' scoped>
-
 </style>

@@ -2,15 +2,15 @@
    <v-layout class='rounded rounded-md'>
       <app-header :header-title="'Каталог продуктів'" />
 
-      <v-main class='bg-grey-lighten-4'>
-         <v-container class='py-5 pt-2 pl-5 pr-6'>
+      <v-main class='app-bg-color'>
+         <v-container class='py-5 pt-2 pl-5 pr-3'>
             <v-row>
                <slot />
             </v-row>
-            <v-sheet class='bg-transparent'>
+            <v-list class='rounded bg-transparent'>
                <v-btn
                   density="comfortable"
-                  class='font-weight-bold w-auto h-auto'
+                  class='w-auto h-auto font-weight-bold'
                   variant="text"
                   size="x-small"
                   :icon="''"
@@ -21,7 +21,7 @@
                >
                   {{ letter }}
                </v-btn>
-            </v-sheet>
+            </v-list>
          </v-container>
       </v-main>
    </v-layout>
@@ -47,18 +47,19 @@ const scrollToLetter = (letter: string) => {
    overflow: auto;
 }
 
-.v-sheet {
+.v-list {
    position: fixed;
-   top: 79px;
-   right: 10px;
+   top: 69px;
+   right: 0;
    display: flex;
    flex-direction: column;
+   padding-right: 4px;
 }
 
 .v-btn {
-   padding: 2.7px;
+   padding: 2.9px;
    font-size: 3vw;
-   color: #135DD8;
+   color: #3b43d1;
 }
 </style>
 

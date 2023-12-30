@@ -35,11 +35,11 @@
          </v-list-item>
       </v-list>
    </v-navigation-drawer>
-   <v-app-bar class='position-fixed' color='primary'>
+   <v-app-bar class='position-fixed text-white' elevation='1'>
       <template v-slot:prepend>
          <v-container class='d-flex'>
             <v-btn
-               v-if="route.path !== '/sign-in' && route.path !== '/register'"
+               v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change'"
                class='pa-0 w-auto h-auto mr-4'
                icon='mdi mdi-menu'
                @click.stop='drawer = !drawer'
@@ -49,7 +49,7 @@
          </v-container>
       </template>
       <template v-slot:append>
-         <v-btn icon='mdi-cart' @click='sheet = !sheet' v-if="route.path !== '/sign-in' && route.path !== '/register'">
+         <v-btn icon='mdi-cart' @click='sheet = !sheet' v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change'">
             <v-badge :content='cartStore.getCartLength()' overlap>
                <v-icon>mdi-cart</v-icon>
             </v-badge>
@@ -59,7 +59,7 @@
    <v-bottom-sheet v-model='sheet'>
       <v-card
          height='570'
-         class='pa-0 rounded-t-lg'
+         class='pa-0 rounded-t-lg app-item-color'
       >
          <v-card-title class='py-4 text-center my-border my-title'>
             Кошик
@@ -73,13 +73,13 @@
 
          <v-list
             v-if='cartStore.getCartLength() !== 0'
-            class='pa-5 pb-0'
+            class='pa-5 pb-0 bg-transparent'
          >
             <app-product
                v-for="product in cartStore.basket"
                :key="product.productId"
                :product='product'
-               class='bg-grey-lighten-4'
+               class='app-bg-color-form'
             />
          </v-list>
          <v-btn
@@ -147,5 +147,9 @@ const goToCatalog = () => {
 <style lang='scss' scoped>
 .my-padding {
    padding: 11.6px;
+}
+
+.v-app-bar {
+   background-color: #6168DB;
 }
 </style>

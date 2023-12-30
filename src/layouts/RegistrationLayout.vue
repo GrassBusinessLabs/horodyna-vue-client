@@ -2,7 +2,7 @@
    <v-layout class='rounded rounded-md'>
       <app-header :header-title="'Реєстрація'" />
 
-      <v-main class='d-flex align-center justify-center'>
+      <v-main class='d-flex align-center justify-center app-bg-color-form'>
          <slot />
       </v-main>
    </v-layout>

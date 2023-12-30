@@ -2,7 +2,7 @@
    <settings-layout>
       <v-list
          density="compact"
-         class="py-0 bg-transparent rounded-t-lg"
+         class="py-0 bg-transparent"
       >
          <app-setting
             v-for="setting in settings"
@@ -13,18 +13,18 @@
       </v-list>
       <v-bottom-sheet v-model="sheet">
          <v-card
-            height='490'
-            class='pa-0 rounded-t-lg bg-grey-lighten-3'
+            height='560'
+            class='pa-0 rounded-t-lg app-item-color'
          >
-            <v-card-title class='py-7 mb-1 text-center text-white text-h5'>
+            <v-card-title class='py-6 mb-1 text-center my-border my-title'>
                {{ category }}
             </v-card-title>
             <v-list
-               class='pa-0 ma-5 bg-transparent rounded-t-lg'
+               class='pa-0 ma-5 bg-transparent'
             >
                <v-list-item
                   v-for='item in filteredItems'
-                  class='text-h6 bg-white pa-5 pr-3 my-border'
+                  class='text-h6 pa-5 app-bg-color-form rounded-xl mb-3'
                   :class="`${item.showSwitch ? 'py-1' : 'py-4'}`"
                   @click='item.routing'
                >
@@ -37,7 +37,7 @@
                      ></v-switch>
                   </template>
                   <template v-if='item.icon' v-slot:append>
-                     <v-icon :icon="item.icon"></v-icon>
+                     <v-icon size='25' :icon="item.icon"></v-icon>
                   </template>
                </v-list-item>
             </v-list>
@@ -52,6 +52,7 @@ import AppSetting from '@/components/AppSetting.vue'
 import {ref} from 'vue'
 import {useUserStore} from '@/stores'
 import {storeToRefs} from 'pinia'
+import {useRouting} from '@/composables'
 
 interface SettingItem {
    title: string
@@ -61,6 +62,8 @@ interface SettingItem {
    icon: string
    routing?: Function
 }
+
+const routing = useRouting()
 
 const settings = [
    {title: 'Аккаунт', icon: 'mdi-account-outline'},
@@ -92,7 +95,7 @@ const showSettingSheet = (settingCategory: string) => {
 const settingsItems: SettingItem[] = [
    {title: `Ім'я:`, category: 'Аккаунт', value: name, showSwitch: false, icon: ''},
    {title: 'Email:', category: 'Аккаунт', value: email, showSwitch: false, icon: ''},
-   {title: 'Змінити пароль', category: 'Аккаунт', value: '', showSwitch: false, icon: 'mdi-chevron-right'},
+   {title: 'Змінити пароль', category: 'Аккаунт', value: '', showSwitch: false, icon: 'mdi-chevron-right', routing: routing.toPasswordChange},
    {title: 'Вийти з аккаунту', category: 'Аккаунт', value: '', showSwitch: false, icon: 'mdi-chevron-right', routing: userStore.logout},
    {title: 'Сповіщати', category: 'Повідомлення', value: '', showSwitch: true, icon: ''},
 ]
@@ -100,11 +103,4 @@ const settingsItems: SettingItem[] = [
 </script>
 
 <style lang='scss' scoped>
-.my-border {
-   border-bottom: 3px solid rgba(128, 128, 128, 0.4);
-}
-
-.v-card-title {
-   background-color: #135DD8;
-}
 </style>

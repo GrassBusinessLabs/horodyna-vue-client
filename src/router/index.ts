@@ -11,6 +11,7 @@ import PaymentView from '@/views/PaymentView.vue';
 import MapView from '@/views/MapView.vue';
 import AboutPage from '@/components/AboutPage.vue';
 import RegistrationView from '@/views/RegistrationView.vue'
+import PasswordChangeView from '@/views/PasswordChangeView.vue'
 
 const toastDialog = useToastDialog();
 const authToken = authTokenService();
@@ -35,7 +36,7 @@ const routes = [
       meta: { auth: false }
    },
    {
-      path: '/Catalog',
+      path: '/catalog',
       name: 'Catalog',
       component: CatalogView,
       meta: { auth: true }
@@ -74,6 +75,12 @@ const routes = [
       path: '/about',
       name: 'About',
       component: AboutPage,
+      meta: { auth: true }
+   },
+   {
+      path: '/password-change',
+      name: 'PasswordChange',
+      component: PasswordChangeView,
       meta: { auth: true }
    },
    {

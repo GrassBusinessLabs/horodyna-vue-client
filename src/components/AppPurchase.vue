@@ -1,6 +1,6 @@
 <template>
    <v-list-item
-      class="pa-5 py-4 rounded-xl bg-white mb-5"
+      class="pa-5 py-4 rounded-xl app-item-color mb-5"
    >
       <template v-slot:prepend>
          <v-badge color='indigo' :content='purchase.products.length'>

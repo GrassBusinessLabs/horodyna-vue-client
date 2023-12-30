@@ -1,11 +1,9 @@
 <template>
    <v-layout class='rounded rounded-md'>
-      <app-header :header-title="'Оплата товарів'" />
+      <app-header :header-title="'Зміна паролю'" />
 
-      <v-main class='app-bg-color'>
-         <v-container class='pa-5 pt-6'>
-            <slot />
-         </v-container>
+      <v-main class='d-flex align-center justify-center app-bg-color-form'>
+         <slot />
       </v-main>
    </v-layout>
 </template>
@@ -15,4 +13,5 @@ import AppHeader from '@/components/AppHeader.vue'
 </script>
 
 <style lang='scss' scoped>
+
 </style>

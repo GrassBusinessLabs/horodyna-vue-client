@@ -1,6 +1,6 @@
 <template>
    <registration-layout>
-      <v-sheet class='mx-auto' width='320'>
+      <v-sheet class='mx-auto pa-6 rounded-lg' width='350'>
          <v-form @submit.prevent='submit'>
             <v-row>
                <v-col cols='12'>
@@ -43,17 +43,22 @@
                      :block='true'
                      :disabled='isSubmitting'
                      type='submit'
-                     color='primary'
+                     class='app-color'
                   >
                      Зареєструватися
                   </v-btn>
                </v-col>
                <v-col
                   cols='12'
-                  class='text-center'
+                  class='pb-0 d-flex justify-center'
                   @click='routing.toSignIn'
                >
-                  У мене вже є аккаунт
+                  Вже є аккаунт?
+                  <v-list-item-title
+                     class='pa-0 ml-1 h-auto w-auto text-capitalize text-blue-accent-4'
+                  >
+                     Вхід
+                  </v-list-item-title>
                </v-col>
             </v-row>
          </v-form>

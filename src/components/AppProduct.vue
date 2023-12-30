@@ -1,5 +1,5 @@
 <template>
-   <v-list-item class='pa-4 bg-white rounded-xl product-item'>
+   <v-list-item class='pa-4 rounded-xl product-item app-item-color'>
       <template v-slot:prepend>
          <v-avatar size="80" :image="product.img"></v-avatar>
       </template>

@@ -10,19 +10,19 @@
       <v-bottom-sheet v-model="sheet">
          <v-card
             height='550'
-            class='pa-0 rounded-t-lg'
+            class='pa-0 rounded-t-lg app-item-color'
          >
             <v-card-title class='py-6 text-center my-border card-title'>
                Фільтри
                <v-icon size='27' icon="mdi-filter-cog"></v-icon>
             </v-card-title>
-            <v-list :lines="'two'" class='pa-5 pb-2'>
+            <v-list :lines="'two'" class='pa-5 pb-2 bg-transparent'>
                <v-list-item
                   v-for="product in sortedCategory"
                   :key="product.id"
                   :title="product.name"
                   :prepend-avatar="product.img"
-                  class='pa-0 pl-4 pr-2 bg-grey-lighten-4 rounded-xl mb-3'
+                  class='pa-0 pl-4 pr-2 rounded-xl mb-3 app-bg-color-form'
                >
                   <template v-slot:append>
                      <v-checkbox
@@ -39,7 +39,7 @@
       <v-bottom-sheet v-model="showFarmDetails">
          <v-card
             height='560'
-            class='pa-0 rounded-t-lg'
+            class='pa-0 rounded-t-lg app-item-color'
          >
             <v-card-title class='py-4 text-center my-border my-title'>
                {{ selectedFarm.name }}
@@ -47,11 +47,11 @@
                   Адреса: {{ selectedFarm.farmAddress }}
                </v-list-item-subtitle>
             </v-card-title>
-            <v-list class='pa-5 pb-2'>
+            <v-list class='pa-5 pb-2 bg-transparent'>
                <v-list-item
                   v-for="product in selectedFarm.products"
                   :key="product.productId"
-                  class='pa-3 bg-grey-lighten-4 rounded-xl mb-3'
+                  class='pa-3 app-bg-color-form rounded-xl mb-3'
                >
                   <template v-slot:prepend>
                      <v-avatar size="50" :image="product.img"></v-avatar>

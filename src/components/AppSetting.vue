@@ -1,6 +1,6 @@
 <template>
    <v-list-item
-      class="pa-0 py-5 px-4 bg-white my-border"
+      class="pa-0 py-5 pl-5 pr-4 app-item-color setting-item rounded-xl"
    >
       <v-row>
          <v-col cols='auto' class='pr-4'>
@@ -18,7 +18,7 @@
          </v-col>
       </v-row>
       <template v-slot:append>
-         <v-icon icon="mdi-chevron-right"></v-icon>
+         <v-icon size='25' icon="mdi-chevron-right"></v-icon>
       </template>
    </v-list-item>
 </template>
@@ -39,7 +39,11 @@ defineProps<{
    font-size: 18px;
 }
 
-.my-border {
-   border-bottom: 3px solid rgba(128, 128, 128, 0.4);
+.setting-item {
+   margin-bottom: 14px;
+}
+
+.setting-item:last-child {
+   margin-bottom: 0;
 }
 </style>
