@@ -8,19 +8,15 @@
                <slot />
             </v-row>
             <v-list class='rounded bg-transparent'>
-               <v-btn
-                  density="comfortable"
-                  class='w-auto h-auto font-weight-bold'
-                  variant="text"
-                  size="x-small"
-                  :icon="''"
+               <div
+                  class='letter-block rounded-lg d-flex justify-center align-center'
                   v-for='letter in ukrainianAlphabet'
                   :key='letter'
                   :letter='letter'
                   @click='scrollToLetter(letter)'
                >
                   {{ letter }}
-               </v-btn>
+               </div>
             </v-list>
          </v-container>
       </v-main>
@@ -57,9 +53,17 @@ const scrollToLetter = (letter: string) => {
 }
 
 .v-btn {
-   padding: 2.9px;
-   font-size: 3vw;
+   height: 19.5px;
+
+   font-family: "Roboto", sans-serif;
+}
+
+.letter-block {
+   height: 19.7px;
+   width: 19.7px;
+   font-size: 13px;
    color: #3b43d1;
+   font-weight: 500;
 }
 </style>
 

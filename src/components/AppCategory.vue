@@ -28,12 +28,9 @@
             <v-list-item-title class='my-font-size my-color'>
                {{ product.name }}
             </v-list-item-title>
-            <v-list-item-subtitle class='text-subtitle-1 my-color'>
+            <v-list-item-subtitle class='my-subtitle-fs my-color'>
                {{ product.category }}
             </v-list-item-subtitle>
-            <template v-slot:append>
-               <v-icon size='27' icon="mdi-chevron-right"></v-icon>
-            </template>
          </v-list-item>
       </v-list>
 
@@ -75,9 +72,5 @@ v-col {
    height: 23px;
    width: 23px;
    font-size: 13px;
-}
-
-.v-icon {
-   color: black;
 }
 </style>

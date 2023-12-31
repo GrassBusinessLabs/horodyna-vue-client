@@ -59,7 +59,7 @@
                   <v-list-item-title class='my-font-size my-color mb-1'>
                      {{ product.name }}
                   </v-list-item-title>
-                  <v-list-item-subtitle class='text-subtitle-1 my-color'>
+                  <v-list-item-subtitle class='my-subtitle-fs my-color'>
                      {{ product.price }} грн за кг
                   </v-list-item-subtitle>
                   <template v-slot:append>
@@ -69,7 +69,7 @@
                         color='black'
                         @click='cartStore.decreaseProductQuantity(product)'
                      ></v-icon>
-                     <v-list-item-subtitle class='text-h6 mx-2 font-weight-bold'>
+                     <v-list-item-subtitle class='my-font-size mx-2 font-weight-bold'>
                         {{ cartStore.getCurrentProductQuantity(product) ? `${cartStore.getCurrentProductQuantity(product)} кг` : 0 }}
                      </v-list-item-subtitle>
                      <v-icon

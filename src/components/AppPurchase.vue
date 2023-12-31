@@ -10,7 +10,7 @@
       <v-list-item-title class='py-1 my-font-size'>
          Покупка #{{ purchase.purchaseId }}
       </v-list-item-title>
-      <v-list-item-subtitle class='text-subtitle-1 py-1'>
+      <v-list-item-subtitle class='my-subtitle-fs py-1'>
          {{ purchase.date }}
       </v-list-item-subtitle>
       <v-list-item-title class='my-margin my-color my-font-size'>

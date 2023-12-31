@@ -8,13 +8,13 @@
          {{ product.name }}
       </v-list-item-title>
       <v-list-item-subtitle
-         class='text-subtitle-1 my-margin'
+         class='my-subtitle-fs my-margin'
          @click='showProductOnMap(product)'
       >
          {{ product.author }}
       </v-list-item-subtitle>
       <v-list-item-subtitle
-         class='text-subtitle-1'
+         class='my-subtitle-fs'
          @click='showProductOnMap(product)'
       >
          {{ product.address }}
@@ -24,7 +24,7 @@
             class='text-black my-margin'
          ></v-icon>
       </v-list-item-subtitle>
-      <v-list-item-title class='text-subtitle-1 my-color my-height'>
+      <v-list-item-title class='my-subtitle-fs my-color my-height'>
          {{ product.price }} грн за кг
       </v-list-item-title>
 
@@ -35,7 +35,7 @@
             color='black'
             @click='cartStore.decreaseProductQuantity(product)'
          ></v-icon>
-         <v-list-item-subtitle class='text-h6 mx-2 font-weight-bold'>
+         <v-list-item-subtitle class='my-font-size mx-2 font-weight-bold'>
             {{ cartStore.getCurrentProductQuantity(product) ? `${cartStore.getCurrentProductQuantity(product)} кг` : 0 }}
          </v-list-item-subtitle>
          <v-icon
@@ -82,9 +82,5 @@ const showProductOnMap = (product: Product) => {
 
 .my-sub-margin {
    margin-bottom: 3px;
-}
-
-.my-height {
-   height: 18.5px;
 }
 </style>

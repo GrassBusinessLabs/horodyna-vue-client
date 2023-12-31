@@ -1,5 +1,5 @@
 import {apiService} from '@/services/api'
-import type {CurrentUser, LoginBody, PasswordChangeBody, RegisterBody} from '@/models'
+import type {CurrentUser, CurrentUserData, LoginBody, PasswordChangeBody, RegisterBody} from '@/models'
 
 export const requestService = () => {
    const api = apiService()
@@ -16,7 +16,7 @@ export const requestService = () => {
       return api.post('/auth/change-pwd', body)
    }
 
-   async function getCurrentUser(): Promise<CurrentUser> {
+   async function getCurrentUser(): Promise<CurrentUserData> {
       return api.get('users')
    }
 

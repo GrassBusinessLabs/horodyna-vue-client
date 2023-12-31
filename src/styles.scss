@@ -1,4 +1,10 @@
 @import "@tomtom-international/web-sdk-maps/dist/maps.css";
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap');
+
+* {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+}
 
 .Vue-Toastification__container.toast-dialog-container {
   width: 300px;
@@ -22,6 +28,10 @@
 
 .my-font-size {
   font-size: 16.5px;
+}
+
+.my-subtitle-fs {
+  font-size: 15px;
 }
 
 .my-color {

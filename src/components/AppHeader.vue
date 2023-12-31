@@ -3,34 +3,51 @@
       v-model='drawer'
       :temporary='true'
       class='position-fixed'
+      width='290'
    >
       <v-list-item
          prepend-avatar='https://randomuser.me/api/portraits/men/78.jpg'
          class='my-padding'
       >
-         <v-list-item-title class='text-h6'>User Name</v-list-item-title>
-         <v-list-item-subtitle class='text-subtitle-1'>sa@test.com</v-list-item-subtitle>
+         <v-list-item-title class='my-subtitle app-font-regular'>{{ currentUser?.name }}</v-list-item-title>
+         <v-list-item-subtitle class='my-font-size'>{{ currentUser?.email }}</v-list-item-subtitle>
+         <template v-slot:append>
+            <v-icon size='27' icon="mdi-chevron-left" @click='drawer = false'></v-icon>
+         </template>
       </v-list-item>
-
       <v-divider></v-divider>
 
-      <v-list density='compact' :nav='true'>
-         <v-list-item @click='routing.toSettings'>
+      <v-list density='compact' :nav='true' class='mt-2'>
+         <v-list-item-subtitle class='my-font-size ml-2 mb-2 mt-1'>
+            ОГЛЯД
+         </v-list-item-subtitle>
+         <v-list-item
+            v-for="item in menuOverviewItems"
+            :key="item.name"
+            @click="item.routing"
+            class='pl-0 pt-0 mb-0'
+         >
             <template v-slot:prepend>
-               <v-icon icon='mdi mdi-cog'></v-icon>
-               <v-list-item-title class='text-subtitle-1 ml-2'>Налаштування</v-list-item-title>
+               <v-icon size='27' icon="mdi-chevron-right"></v-icon>
+               <v-icon class='mx-1' :icon='item.icon'></v-icon>
+               <p class='my-font-size ml-2'>{{ item.name }}</p>
             </template>
          </v-list-item>
-         <v-list-item @click='routing.toSettings'>
+      </v-list>
+      <v-list density='compact' :nav='true' class='mt-2'>
+         <v-list-item-subtitle class='my-font-size ml-2 mb-2 mt-1'>
+            АККАУНТ
+         </v-list-item-subtitle>
+         <v-list-item
+            v-for="item in menuAccountItems"
+            :key="item.name"
+            @click="item.routing"
+            class='pl-0 pt-0 mb-0'
+         >
             <template v-slot:prepend>
-               <v-icon icon='mdi-face-agent'></v-icon>
-               <v-list-item-title class='text-subtitle-1 ml-2'>Підтримка</v-list-item-title>
-            </template>
-         </v-list-item>
-         <v-list-item @click='routing.toAbout'>
-            <template v-slot:prepend>
-               <v-icon icon='mdi-information-outline'></v-icon>
-               <v-list-item-title class='text-subtitle-1 ml-2'>Про сайт</v-list-item-title>
+               <v-icon size='27' icon="mdi-chevron-right"></v-icon>
+               <v-icon class='mx-1' :icon='item.icon'></v-icon>
+               <p class='my-font-size ml-2'>{{ item.name }}</p>
             </template>
          </v-list-item>
       </v-list>
@@ -41,7 +58,7 @@
             <v-btn
                v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change'"
                class='pa-0 w-auto h-auto mr-4'
-               icon='mdi mdi-menu'
+               icon='mdi-menu'
                @click.stop='drawer = !drawer'
             >
             </v-btn>
@@ -85,21 +102,23 @@
          <v-btn
             v-if='cartStore.getCartLength() !== 0'
             color='orange'
-            class='text-white mx-5 my-5 text-h6'
+            class='text-white mx-5 my-5'
             @click='routing.toPayment'
+            variant='flat'
          >
             Оформити замовлення
          </v-btn>
          <template v-else>
             <v-list-item-title
-            class='mx-5 pt-5 pb-2 mt-7 text-h4 text-center'
+            class='mx-5 pt-5 pb-2 mt-7 no-item-title text-center'
          >
             Немає жодного товару
          </v-list-item-title>
             <v-btn
                color='orange'
-               class='text-white mx-5 my-5 text-h6'
+               class='text-white mx-5 my-5'
                @click='goToCatalog'
+               variant='flat'
             >
                Перейти в каталог
             </v-btn>
@@ -114,29 +133,36 @@ import {useRoute} from 'vue-router'
 import {ref} from 'vue'
 
 import {productStore} from '@/stores/product-store.ts'
-import {Product} from '@/models'
 import AppProduct from '@/components/AppProduct.vue'
+import {storeToRefs} from 'pinia'
+import {useUserStore} from '@/stores'
 
 defineProps<{
    headerTitle: string
 }>()
 
-const cartStore = productStore();
+const userStore = useUserStore()
+const {currentUser} = storeToRefs(userStore)
 
-const drawer = ref(false)
+const cartStore = productStore()
 
 const routing = useRouting()
 const route = useRoute()
 
-const sheet = ref(false)
+const drawer = ref(false)
 
-const addProduct = (product: Product) => {
-   cartStore.addProductToCart({
-      ...product,
-      selectedQuantity: 1,
-      sum: product.price
-   })
-}
+const menuOverviewItems = [
+   {name: 'Замовлення', icon: 'mdi-wallet-bifold-outline', routing: routing.toSettings},
+   {name: 'Підтримка', icon: 'mdi-face-agent', routing: routing.toSettings},
+   {name: 'Про сайт', icon: 'mdi-information-outline', routing: routing.toAbout}
+]
+
+const menuAccountItems = [
+   {name: 'Налаштування', icon: 'mdi-cog', routing: routing.toSettings},
+   {name: 'Вихід', icon: 'mdi-logout-variant', routing: userStore.logout}
+]
+
+const sheet = ref(false)
 
 const goToCatalog = () => {
    sheet.value = false
@@ -151,5 +177,9 @@ const goToCatalog = () => {
 
 .v-app-bar {
    background-color: #6168DB;
+}
+
+.no-item-title {
+   font-size: 33px;
 }
 </style>
