@@ -46,18 +46,18 @@ const sheet = ref(false)
 
 const purchases = [
    {purchaseId: 351, date: '12 грудня 2023', products: [
-         {productId: 'p1', name: 'Абрикос 1', price: 50, img: 'https://knip.com.ua/content/images/1/480x463l50nn0/abrikos-viroslava-96346870734276.png', category: 'Абрикос', author: 'Андрій', address: 'Рєпіна 7', quantity: 2},
-         {productId: 'p3', name: 'Агрус 1', price: 40, img: 'https://images.unian.net/photos/2023_07/thumb_files/1000_545_1689936883-1538.jpg?1', category: 'Агрус', author: 'Андрій', address: 'Рєпіна 7', quantity: 1},
+         {id: 'p1', title: 'Абрикос 1', price: 50, image: 'https://knip.com.ua/content/images/1/480x463l50nn0/abrikos-viroslava-96346870734276.png', category: 'Абрикос', seller: 'Андрій', address: 'Рєпіна 7', quantity: 2, unit: 'кг'},
+         {id: 'p3', title: 'Агрус 1', price: 40, image: 'https://images.unian.net/photos/2023_07/thumb_files/1000_545_1689936883-1538.jpg?1', category: 'Агрус', seller: 'Андрій', address: 'Рєпіна 7', quantity: 1, unit: 'кг'},
       ]
    },
    {purchaseId: 352, date: '13 грудня 2023', products: [
-         {productId: 'p2', name: 'Груша 1', price: 30, img: 'https://klopotenko.com/wp-content/uploads/2022/08/fruits-ga2c37054b_1920.jpg', category: 'Груша', author: 'Андрій', address: 'Рєпіна 9', quantity: 4},
-         {productId: 'p4', name: 'Баклажан 1', price: 60, img: 'https://ss.sport-express.ru/userfiles/materials/189/1899896/volga.jpg', category: 'Баклажан', author: 'Андрій', address: 'Рєпіна 9', quantity: 2},
+         {id: 'p2', title: 'Груша 1', price: 30, image: 'https://klopotenko.com/wp-content/uploads/2022/08/fruits-ga2c37054b_1920.jpg', category: 'Груша', seller: 'Андрій', address: 'Рєпіна 9', quantity: 4, unit: 'кг'},
+         {id: 'p4', title: 'Баклажан 1', price: 60, image: 'https://ss.sport-express.ru/userfiles/materials/189/1899896/volga.jpg', category: 'Баклажан', seller: 'Андрій', address: 'Рєпіна 9', quantity: 2, unit: 'кг'},
       ]
    },
    {purchaseId: 353, date: '14 грудня 2023', products: [
-         {productId: 'p5', name: 'Диня 1', price: 70, img: 'https://dobrodar.ua/uploads/files/Products/Product_images_40452/4e5ff2.jpg', category: 'Диня', author: 'Андрій', address: 'Рєпіна 8', quantity: 3},
-         {productId: 'p6', name: 'Груша 2', price: 40, img: 'https://gradinamax.com.ua/uploads/catalog_products/grusha-medovaya_1.jpg', category: 'Груша', author: 'Андрій', address: 'Рєпіна 8', quantity: 2}
+         {id: 'p5', title: 'Диня 1', price: 70, image: 'https://dobrodar.ua/uploads/files/Products/Product_images_40452/4e5ff2.jpg', category: 'Диня', seller: 'Андрій', address: 'Рєпіна 8', quantity: 3, unit: 'кг'},
+         {id: 'p6', title: 'Груша 2', price: 40, image: 'https://gradinamax.com.ua/uploads/catalog_products/grusha-medovaya_1.jpg', category: 'Груша', seller: 'Андрій', address: 'Рєпіна 8', quantity: 2, unit: 'кг'}
       ]
    }
 ]

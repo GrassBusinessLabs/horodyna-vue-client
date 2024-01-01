@@ -1,9 +1,13 @@
-import {Product} from '@/models/product.ts'
-
 export interface Farm {
-   id: string,
+   id: number,
    name: string,
-   farmAddress: string,
-   category: string,
-   products: Product[],
+   city: string,
+   address: string,
+   latitude: number,
+   longitude: number,
+   user: {
+      id: number,
+      name: string,
+      email: string
+   }
 }

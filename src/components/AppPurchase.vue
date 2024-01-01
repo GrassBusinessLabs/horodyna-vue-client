@@ -4,7 +4,7 @@
    >
       <template v-slot:prepend>
          <v-badge color='indigo' :content='purchase.products.length'>
-            <v-avatar size="70" :image="purchase.products[0].img"></v-avatar>
+            <v-avatar size="70" :image="purchase.products[0].image"></v-avatar>
          </v-badge>
       </template>
       <v-list-item-title class='py-1 my-font-size'>

@@ -44,6 +44,7 @@
                      :disabled='isSubmitting'
                      type='submit'
                      class='app-color'
+                     variant='flat'
                   >
                      Зареєструватися
                   </v-btn>

@@ -1,17 +1,17 @@
 <template>
-   <v-list-item class='pa-4 rounded-xl product-item app-item-color'>
+   <v-list-item class='px-4 rounded-xl product-item app-item-color'>
       <template v-slot:prepend>
-         <v-avatar size="80" :image="product.img"></v-avatar>
+         <v-avatar size="80" :image="product.image"></v-avatar>
       </template>
 
       <v-list-item-title class='my-font-size my-color my-sub-margin'>
-         {{ product.name }}
+         {{ product.title }}
       </v-list-item-title>
       <v-list-item-subtitle
          class='my-subtitle-fs my-margin'
          @click='showProductOnMap(product)'
       >
-         {{ product.author }}
+         {{ product.seller }}
       </v-list-item-subtitle>
       <v-list-item-subtitle
          class='my-subtitle-fs'
@@ -25,7 +25,7 @@
          ></v-icon>
       </v-list-item-subtitle>
       <v-list-item-title class='my-subtitle-fs my-color my-height'>
-         {{ product.price }} грн за кг
+         {{ product.price }} грн за {{ product.unit }}
       </v-list-item-title>
 
       <template v-slot:append>
@@ -36,7 +36,7 @@
             @click='cartStore.decreaseProductQuantity(product)'
          ></v-icon>
          <v-list-item-subtitle class='my-font-size mx-2 font-weight-bold'>
-            {{ cartStore.getCurrentProductQuantity(product) ? `${cartStore.getCurrentProductQuantity(product)} кг` : 0 }}
+            {{ cartStore.getCurrentProductQuantity(product) ? `${cartStore.getCurrentProductQuantity(product)} ${product.unit}` : 0 }}
          </v-list-item-subtitle>
          <v-icon
             icon="mdi-plus-circle-outline"
@@ -65,7 +65,6 @@ const addProduct = (product: Product) => {
    cartStore.addProductToCart({
       ...product,
       selectedQuantity: 1,
-      sum: product.price
    })
 }
 
@@ -82,5 +81,10 @@ const showProductOnMap = (product: Product) => {
 
 .my-sub-margin {
    margin-bottom: 3px;
+}
+
+.v-list-item {
+   padding-top: 14px;
+   padding-bottom: 14px;
 }
 </style>

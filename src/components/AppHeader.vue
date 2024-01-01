@@ -15,7 +15,7 @@
             <v-icon size='27' icon="mdi-chevron-left" @click='drawer = false'></v-icon>
          </template>
       </v-list-item>
-      <v-divider></v-divider>
+      <v-divider thickness='2'></v-divider>
 
       <v-list density='compact' :nav='true' class='mt-2'>
          <v-list-item-subtitle class='my-font-size ml-2 mb-2 mt-1'>
@@ -52,7 +52,7 @@
          </v-list-item>
       </v-list>
    </v-navigation-drawer>
-   <v-app-bar class='position-fixed text-white' elevation='1'>
+   <v-app-bar class='position-fixed text-white' elevation='0'>
       <template v-slot:prepend>
          <v-container class='d-flex'>
             <v-btn
@@ -75,7 +75,7 @@
    </v-app-bar>
    <v-bottom-sheet v-model='sheet'>
       <v-card
-         height='570'
+         height='586'
          class='pa-0 rounded-t-lg app-item-color'
       >
          <v-card-title class='py-4 text-center my-border my-title'>
@@ -94,7 +94,7 @@
          >
             <app-product
                v-for="product in cartStore.basket"
-               :key="product.productId"
+               :key="product.id"
                :product='product'
                class='app-bg-color-form'
             />

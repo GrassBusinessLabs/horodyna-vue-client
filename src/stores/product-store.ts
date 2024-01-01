@@ -4,26 +4,23 @@ import type {Product} from '@/models'
 export const productStore = defineStore("productStore", {
    state: () => ({
       basket: [] as Product[],
-      selectedProduct: {} as Product,
-      total: 0
+      selectedProduct: {} as Product
    }),
    actions: {
       addProductToCart(product: Product) {
-         const currentProduct = this.basket.find(item => item.name === product.name)
+         const currentProduct = this.basket.find(item => item.title === product.title)
          
          if (currentProduct?.selectedQuantity) {
             currentProduct.selectedQuantity += 1
-            currentProduct.sum = currentProduct.selectedQuantity * currentProduct.price
          } else {
             this.basket.push(product)
          }
       },
       decreaseProductQuantity(product: Product) {
-         const currentProduct = this.basket.find(item => item.name === product.name)
+         const currentProduct = this.basket.find(item => item.title === product.title)
          
          if (currentProduct?.selectedQuantity && currentProduct.selectedQuantity > 1) {
             currentProduct.selectedQuantity -= 1
-            currentProduct.sum = currentProduct.selectedQuantity * currentProduct.price
          } else {
             const index = currentProduct ? this.basket.indexOf(currentProduct) : false
             if (index || index === 0) {
@@ -35,7 +32,7 @@ export const productStore = defineStore("productStore", {
          this.selectedProduct = product
       },
       getCurrentProductQuantity (product: Product) {
-         const currentProduct = this.basket.find(item => item.name === product.name)
+         const currentProduct = this.basket.find(item => item.title === product.title)
          return currentProduct?.selectedQuantity
       },
       getCartLength(): number {

@@ -33,6 +33,7 @@
                      :disabled='isSubmitting'
                      type='submit'
                      class='app-color'
+                     variant='flat'
                   >
                      Вхід
                   </v-btn>
@@ -85,8 +86,8 @@ const form = useForm({
       })
    ),
    initialValues: {
-      email: 'sa@test.com',
-      password: '222222'
+      email: 'user@test.com',
+      password: '111111'
    }
 })
 

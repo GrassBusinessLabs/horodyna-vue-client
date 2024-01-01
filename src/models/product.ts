@@ -1,11 +1,17 @@
 export interface Product {
-   productId: number | string,
-   name: string,
-   price: number,
-   img: string,
+   id: number,
+   title: string,
+   description: string,
    category: string,
-   author: string,
+   price: number,
+   unit: string,
+   stock: number,
+   status: boolean,
+   image: string,
+   user_id: number,
+   farm_id: number,
+   
+   seller: string,
    selectedQuantity?: number,
-   sum?: number,
    address: string
 }

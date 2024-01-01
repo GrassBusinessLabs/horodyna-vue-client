@@ -14,6 +14,7 @@
          >
             <v-card-title class='py-6 text-center my-border card-title'>
                Фільтри
+               {{ farms }}
                <v-icon size='27' icon="mdi-filter-cog"></v-icon>
             </v-card-title>
             <v-list :lines="'two'" class='pa-5 pb-2 bg-transparent'>
@@ -44,20 +45,20 @@
             <v-card-title class='py-4 text-center my-border my-title'>
                {{ selectedFarm.name }}
                <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
-                  Адреса: {{ selectedFarm.farmAddress }}
+                  Адреса: {{ selectedFarm.address }}
                </v-list-item-subtitle>
             </v-card-title>
             <v-list class='pa-5 pb-2 bg-transparent'>
                <v-list-item
                   v-for="product in selectedFarm.products"
-                  :key="product.productId"
+                  :key="product.id"
                   class='pa-3 app-bg-color-form rounded-xl mb-3'
                >
                   <template v-slot:prepend>
-                     <v-avatar size="50" :image="product.img"></v-avatar>
+                     <v-avatar size="50" :image="product.image"></v-avatar>
                   </template>
                   <v-list-item-title class='my-font-size my-color mb-1'>
-                     {{ product.name }}
+                     {{ product.title }}
                   </v-list-item-title>
                   <v-list-item-subtitle class='my-subtitle-fs my-color'>
                      {{ product.price }} грн за кг
@@ -92,9 +93,22 @@ import {AddressItem, mapService} from '@/services/map'
 import MapLayout from '@/layouts/MapLayout.vue'
 import AppMap from '@/components/AppMap.vue'
 import {ref, watch} from 'vue'
-import {productsData} from '@/constants/products.ts'
 import { productStore } from '@/stores/product-store.ts'
 import {Farm, Product} from '@/models'
+import {categoryProducts} from '@/constants/categoryProducts.ts'
+import {productsData} from '@/constants/products.ts'
+import {storeToRefs} from 'pinia'
+import {useFarmStore} from '@/stores'
+
+interface SelectedFarm extends Farm {
+   products: Product[]
+}
+
+const farmStore = useFarmStore()
+const {populateFarms} = farmStore
+const {farms} = storeToRefs(farmStore)
+
+populateFarms()
 
 const cartStore = productStore()
 
@@ -108,34 +122,44 @@ const showFarmDetails = ref(false)
 
 const filters = ref<string[]>([])
 
-const farms = ref<Farm[]>([
-   {id: 'f1', name: 'Ферма 1', farmAddress: 'Рєпіна 7', category: 'Абрикос', products: [
-         {productId: 'p1', name: 'Абрикос 1', price: 50, img: 'https://knip.com.ua/content/images/1/480x463l50nn0/abrikos-viroslava-96346870734276.png', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 7'},
-         {productId: 'p3', name: 'Агрус 1', price: 40, img: 'https://images.unian.net/photos/2023_07/thumb_files/1000_545_1689936883-1538.jpg?1', category: 'Ягоди', author: 'Андрій', address: 'Рєпіна 7'}
-      ]
+const farms2 = ref<Farm[]>([
+   {id: 1, name: 'Ферма 1', address: 'Рєпіна 7', latitude: 12.21, longitude: 12.21, city: 'Полтава',
+      "user": {
+         "id": 1,
+         "name": "User Name",
+         "email": "sa@test.com"
+      }
    },
-   {id: 'f2', name: 'Ферма 2', farmAddress: 'Рєпіна 9', category: 'Баклажан', products: [
-         {productId: 'p2', name: 'Груша 1', price: 30, img: 'https://klopotenko.com/wp-content/uploads/2022/08/fruits-ga2c37054b_1920.jpg', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 9'},
-         {productId: 'p4', name: 'Баклажан 1', price: 60, img: 'https://ss.sport-express.ru/userfiles/materials/189/1899896/volga.jpg', category: 'Овочі', author: 'Андрій', address: 'Рєпіна 9'}
-      ]
+   {id: 2, name: 'Ферма 2', address: 'Рєпіна 9', latitude: 12.21, longitude: 12.21, city: 'Полтава',
+      "user": {
+         "id": 1,
+         "name": "User Name",
+         "email": "sa@test.com"
+      }
    },
-   {id: 'f3', name: 'Ферма 3', farmAddress: 'Рєпіна 8', category: 'Диня', products: [
-         {productId: 'p5', name: 'Диня 1', price: 70, img: 'https://dobrodar.ua/uploads/files/Products/Product_images_40452/4e5ff2.jpg', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 8'},
-         {productId: 'p6', name: 'Груша 2', price: 40, img: 'https://gradinamax.com.ua/uploads/catalog_products/grusha-medovaya_1.jpg', category: 'Фрукти', author: 'Андрій', address: 'Рєпіна 8'}
-      ]
+   {id: 3, name: 'Ферма 3', address: 'Рєпіна 8', latitude: 12.21, longitude: 12.21, city: 'Полтава',
+      "user": {
+         "id": 1,
+         "name": "User Name",
+         "email": "sa@test.com"
+      }
    },
 ])
 
-const selectedFarm = ref<Partial<Farm>>({})
+const selectedFarm = ref<Partial<SelectedFarm>>({})
 
 watch(filters, async () => {
    map.removeAllMarkers()
-   for (const farm of farms.value) {
-      if (filters.value.length === 0 || farm.products.some((product: Product) => filters.value.some(filter => product.name.includes(filter)))) {
-         const addressItems = await map.searchAddresses(farm.farmAddress)
+   for (const farm of farms2.value) {
+      const farmProducts = categoryProducts.filter(product => product.farm_id === farm.id)
+      if (filters.value.length === 0 || farmProducts.some((product: Product) => filters.value.some(filter => product.title.includes(filter)))) {
+         const addressItems = await map.searchAddresses(farm.address)
          if (addressItems.length > 0) {
             const onClick = () => {
-               selectedFarm.value = farm
+               selectedFarm.value = {
+                  ...farm,
+                  products: farmProducts
+               }
                showFarmDetails.value = true
             }
             const marker: Marker | null = map.createMarker(farm.id, addressItems[0].details.position as LngLatLike, onClick)
@@ -151,7 +175,6 @@ const addProduct = (product: Product) => {
    cartStore.addProductToCart({
       ...product,
       selectedQuantity: 1,
-      sum: product.price
    })
 }
 
@@ -171,8 +194,8 @@ const selectedProduct = cartStore.selectedProduct
 
 watch(selectedProduct, async () => {
    if(Object.keys(selectedProduct).length) {
-      for (const farm of farms.value) {
-         if (farm.products.some(product => product.name === selectedProduct.name)) {
+      for (const farm of farms2.value) {
+         if (farm.products.some(product => product.title === selectedProduct.title)) {
             selectedFarm.value = farm
             const addressItems = await map.searchAddresses(selectedProduct.address)
             if (addressItems.length > 0) {

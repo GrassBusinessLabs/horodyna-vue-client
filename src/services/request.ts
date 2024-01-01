@@ -1,5 +1,5 @@
 import {apiService} from '@/services/api'
-import type {CurrentUser, CurrentUserData, LoginBody, PasswordChangeBody, RegisterBody} from '@/models'
+import type {CurrentUser, CurrentUserData, Farm, LoginBody, PasswordChangeBody, RegisterBody} from '@/models'
 
 export const requestService = () => {
    const api = apiService()
@@ -19,6 +19,10 @@ export const requestService = () => {
    async function getCurrentUser(): Promise<CurrentUserData> {
       return api.get('users')
    }
+   
+   async function getFarms(): Promise<Farm[]> {
+      return api.get('farms')
+   }
 
    async function logout(): Promise<void> {
       return api.post('/auth/logout')
@@ -29,6 +33,7 @@ export const requestService = () => {
       register,
       changePassword,
       getCurrentUser,
+      getFarms,
       logout
    }
 }

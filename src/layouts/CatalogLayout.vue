@@ -12,7 +12,6 @@
                   class='letter-block rounded-lg d-flex justify-center align-center'
                   v-for='letter in ukrainianAlphabet'
                   :key='letter'
-                  :letter='letter'
                   @click='scrollToLetter(letter)'
                >
                   {{ letter }}
@@ -38,7 +37,7 @@ const scrollToLetter = (letter: string) => {
 
 <style lang='scss' scoped>
 .v-container {
-   height: calc(100vh - 131px);
+   height: calc(100vh - 130px);
    width: 100%;
    overflow: auto;
 }
@@ -46,22 +45,16 @@ const scrollToLetter = (letter: string) => {
 .v-list {
    position: fixed;
    top: 69px;
-   right: 0;
+   right: 1.3px;
    display: flex;
    flex-direction: column;
    padding-right: 4px;
 }
 
-.v-btn {
-   height: 19.5px;
-
-   font-family: "Roboto", sans-serif;
-}
-
 .letter-block {
-   height: 19.7px;
-   width: 19.7px;
-   font-size: 13px;
+   height: 19.8px;
+   width: 19.8px;
+   font-size: 14px;
    color: #3b43d1;
    font-weight: 500;
 }

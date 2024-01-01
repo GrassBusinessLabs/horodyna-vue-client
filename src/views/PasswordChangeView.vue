@@ -35,6 +35,7 @@
                      :disabled='isSubmitting'
                      type='submit'
                      class='app-color pb-0'
+                     variant='flat'
                   >
                      Змінити
                   </v-btn>

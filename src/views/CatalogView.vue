@@ -13,7 +13,12 @@
 import CatalogLayout from '@/layouts/CatalogLayout.vue'
 import AppCategory from '@/components/AppCategory.vue'
 import {ukrainianAlphabet} from '@/constants'
+import {useUserStore} from '@/stores'
 
+const userStore = useUserStore()
+const {populate} = userStore
+
+populate()
 </script>
 
 <style lang='scss' scoped>
