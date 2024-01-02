@@ -1,6 +1,20 @@
 <template>
    <map-layout>
       <app-map />
+      <v-slide-group
+         v-if='filters.length'
+         class='px-2 align-center position-fixed filters-block rounded-xl'
+      >
+         <v-chip
+            v-for="(filter, index) in filters"
+            :key="filter"
+            :closable='true'
+            class='mr-2'
+            @click:close="removeFilter(index)"
+         >
+            {{ filter }}
+         </v-chip>
+      </v-slide-group>
       <v-btn
          @click="() => sheet = !sheet"
          icon="mdi-filter-cog"
@@ -14,10 +28,27 @@
          >
             <v-card-title class='py-6 text-center my-border card-title'>
                Фільтри
-               {{ farms }}
                <v-icon size='27' icon="mdi-filter-cog"></v-icon>
             </v-card-title>
-            <v-list :lines="'two'" class='pa-5 pb-2 bg-transparent'>
+            <v-slide-group
+               v-if='filters.length'
+               class='px-5 pt-5 pb-3 align-center'
+            >
+               <v-chip
+                  v-for="(filter, index) in filters"
+                  :key="filter"
+                  :closable='true'
+                  class='mr-2'
+                  @click:close="removeFilter(index)"
+               >
+                  {{ filter }}
+               </v-chip>
+            </v-slide-group>
+            <v-list
+               :lines="'two'"
+               class='pa-5 pb-2 bg-transparent'
+               :class="{'pt-0': filters.length}"
+            >
                <v-list-item
                   v-for="product in sortedCategory"
                   :key="product.id"
@@ -97,7 +128,7 @@ import { productStore } from '@/stores/product-store.ts'
 import {Farm, Product} from '@/models'
 import {categoryProducts} from '@/constants/categoryProducts.ts'
 import {productsData} from '@/constants/products.ts'
-import {storeToRefs} from 'pinia'
+// import {storeToRefs} from 'pinia'
 import {useFarmStore} from '@/stores'
 
 interface SelectedFarm extends Farm {
@@ -106,7 +137,7 @@ interface SelectedFarm extends Farm {
 
 const farmStore = useFarmStore()
 const {populateFarms} = farmStore
-const {farms} = storeToRefs(farmStore)
+// const {farms} = storeToRefs(farmStore)
 
 populateFarms()
 
@@ -121,6 +152,10 @@ const sheet = ref(false)
 const showFarmDetails = ref(false)
 
 const filters = ref<string[]>([])
+
+const removeFilter = (index: number) => {
+   filters.value = filters.value.slice(0, index).concat(filters.value.slice(index + 1))
+}
 
 const farms2 = ref<Farm[]>([
    {id: 1, name: 'Ферма 1', address: 'Рєпіна 7', latitude: 12.21, longitude: 12.21, city: 'Полтава',
@@ -162,7 +197,7 @@ watch(filters, async () => {
                }
                showFarmDetails.value = true
             }
-            const marker: Marker | null = map.createMarker(farm.id, addressItems[0].details.position as LngLatLike, onClick)
+            const marker: Marker | null = map.createMarker(farm.id.toString(), addressItems[0].details.position as LngLatLike, onClick)
             if (marker) {
                map.addMarkerToMap(marker)
             }
@@ -195,7 +230,8 @@ const selectedProduct = cartStore.selectedProduct
 watch(selectedProduct, async () => {
    if(Object.keys(selectedProduct).length) {
       for (const farm of farms2.value) {
-         if (farm.products.some(product => product.title === selectedProduct.title)) {
+         const farmProducts = categoryProducts.filter(product => product.farm_id === farm.id)
+         if (farmProducts.some(product => product.title === selectedProduct.title)) {
             selectedFarm.value = farm
             const addressItems = await map.searchAddresses(selectedProduct.address)
             if (addressItems.length > 0) {
@@ -217,5 +253,22 @@ watch(selectedProduct, async () => {
 
 .card-title {
    font-size: 28px;
+}
+
+.v-slide-group {
+   height: 100px;
+
+   .v-chip {
+      font-size: 16px;
+   }
+}
+
+.filters-block {
+   height: 48px;
+   background-color: white;
+   bottom: 80px;
+   left: 12px;
+   right: 72px;
+   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
 </style>

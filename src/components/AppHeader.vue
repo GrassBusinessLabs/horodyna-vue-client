@@ -110,10 +110,10 @@
          </v-btn>
          <template v-else>
             <v-list-item-title
-            class='mx-5 pt-5 pb-2 mt-7 no-item-title text-center'
-         >
-            Немає жодного товару
-         </v-list-item-title>
+               class='mx-5 pt-5 pb-2 mt-7 no-item-title text-center'
+            >
+               Немає жодного товару
+            </v-list-item-title>
             <v-btn
                color='orange'
                class='text-white mx-5 my-5'
