@@ -14,9 +14,9 @@
          {{ purchase.date }}
       </v-list-item-subtitle>
       <v-list-item-title class='my-margin my-color my-font-size'>
-         Сума: {{ purchase.products.reduce((accumulator, currentValue) => accumulator + currentValue.price * currentValue.quantity, 0) }}.00 грн
+         Сума: {{ purchase.products.reduce((accumulator, currentValue) => accumulator + currentValue.price * (currentValue.selectedQuantity ? currentValue.selectedQuantity : 1), 0) }}.00 грн
       </v-list-item-title>
-      <template v-slot:append >
+      <template v-slot:append>
          <v-icon
             icon="mdi-information-outline"
             size='39'

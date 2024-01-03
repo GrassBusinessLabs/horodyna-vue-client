@@ -25,11 +25,6 @@ export interface AddressItem {
    details: FuzzySearchResult
 }
 
-export interface CityItem {
-   city: string
-   details: FuzzySearchResult
-}
-
 export interface CreateMarkerOptions {
    element?: HTMLElement
    anchor?: string
@@ -71,7 +66,7 @@ export const mapService = () => {
       }
    } as MapOptions
    
-   async function createMap(container: HTMLElement, options?: Partial<MapOptions>): Promise<Map> {
+   async function createMap(container: HTMLElement, options?: Partial<MapOptions>): Promise<void> {
       const combineOptions: MapOptions = {
          ...defaultMapOptions,
          ...options
@@ -96,10 +91,6 @@ export const mapService = () => {
       map.addControl(navControl, 'top-left')
    }
    
-   function getMap(): Map | null {
-      return map
-   }
-   
    function destroyMap(): void {
       map = null
    }
@@ -113,7 +104,7 @@ export const mapService = () => {
       map!.panTo(coords, animationOptions)
    }
    
-   function setZoom(zoom: number = defaultMapOptions.zoom, options?: Partial<AnimationOptions>): void {
+   function setZoom(zoom: number = defaultMapOptions.zoom ? defaultMapOptions.zoom : -1, options?: Partial<AnimationOptions>): void {
       const animationOptions: AnimationOptions = {
          duration: 500,
          ...options
@@ -197,22 +188,18 @@ export const mapService = () => {
          idxSet: 'PAD,Addr' // search addresses only
       })
       
-      return response.results.map((el: FuzzySearchResult) => ({
-         address: generateAddressStr(el.address),
-         details: el
-      }))
-   }
-   
-   async function searchCities(text: string, options?: Partial<FuzzySearchOptions>): Promise<CityItem[]> {
-      const response: FuzzySearchResponse = await fuzzySearch(text, {
-         ...options,
-         entityTypeSet: 'Municipality' // search only municipalities (cities)
-      })
-      
-      return response.results.map((el: FuzzySearchResult) => ({
-         city: generateCityStr(el.address),
-         details: el
-      }))
+      if (response.results) {
+         return response.results.map((el: FuzzySearchResult) => {
+            if (el.address) {
+               return {
+                  address: generateAddressStr(el.address),
+                  details: el
+               }
+            }
+         }).filter(item => item !== undefined) as AddressItem[]
+      } else {
+         return [];
+      }
    }
    
    function generateAddressStr(searchResult: SearchAddress): string {
@@ -237,33 +224,15 @@ export const mapService = () => {
       return segments.join(', ')
    }
    
-   function generateCityStr(searchResult: SearchAddress): string {
-      const segments: string[] = []
-      
-      if (searchResult?.municipality) {
-         segments.push(searchResult.municipality)
-      }
-      
-      if (searchResult?.countrySubdivision) {
-         segments.push(searchResult.countrySubdivision)
-      }
-      
-      return segments.join(', ')
-   }
-   
    return {
       searchAddresses,
-      searchCities,
       createMap,
-      getMap,
       destroyMap,
       setMapCenter,
       setZoom,
       getMapZoom,
       createMarker,
       addMarkerToMap,
-      changeMarkerLocation,
-      removeMarkerFromMap,
       removeAllMarkers
    }
 }

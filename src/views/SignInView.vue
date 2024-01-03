@@ -105,7 +105,7 @@ const submit = form.handleSubmit(async values => {
       isSubmitting.value = true
 
       const body: LoginBody = {
-         email: values.email,
+         email: values.email ? values.email : 'Email not found',
          password: values.password
       }
 

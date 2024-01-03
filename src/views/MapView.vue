@@ -241,7 +241,22 @@ watch(selectedProduct, async () => {
          }
       }
    }
-   cartStore.selectedProduct = {}
+   cartStore.selectedProduct = {
+      id: 0,
+      title: '',
+      description: '',
+      category: '',
+      price: 0,
+      unit: '',
+      stock: 0,
+      status: true,
+      image: '',
+      user_id: 0,
+      farm_id: 0,
+      seller: '',
+      selectedQuantity: 0,
+      address: ''
+   }
 }, { immediate: true })
 </script>
 

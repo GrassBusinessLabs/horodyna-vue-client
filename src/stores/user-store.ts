@@ -13,20 +13,25 @@ export const useUserStore = defineStore('user', () => {
    const request = requestService()
    const authToken = authTokenService()
 
-   const currentUser: Ref<CurrentUserData | null> = ref<CurrentUserData | null>(null)
+   const currentUser: Ref<CurrentUser | null> = ref<CurrentUser | null>(null)
+   const currentUserData: Ref<CurrentUserData | null> = ref<CurrentUserData | null>(null)
    
-   function setCurrentUser(value: CurrentUser | CurrentUserData | null): void {
-      currentUser.value = value?.user ? value?.user : value
+   function setCurrentUser(value: CurrentUser | null): void {
+      currentUser.value = value
+   }
+   
+   function setCurrentUserData(value: CurrentUserData | null): void {
+      currentUserData.value = value
    }
 
-   async function getUserData(): Promise<CurrentUserData | null> {
+   async function getUserData(): Promise<CurrentUser | null> {
       try {
-         if (currentUser.value?.id) {
+         if (currentUser.value?.user.id) {
             return currentUser.value
          }
 
          const userData: CurrentUserData = await request.getCurrentUser()
-         setCurrentUser(userData)
+         setCurrentUserData(userData)
 
          return currentUser.value
       } catch (e) {
@@ -44,7 +49,7 @@ export const useUserStore = defineStore('user', () => {
             return
          }
 
-         const userData: CurrentUserData | null = await getUserData()
+         const userData: CurrentUser | null = await getUserData()
          if (!userData) {
             await logout()
          }

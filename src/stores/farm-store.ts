@@ -16,7 +16,7 @@ export const useFarmStore = defineStore('farm', () => {
    async function getFarmsData(): Promise<void> {
       try {
          const farmsData: Farm[] = await request.getFarms()
-         setFarms(farmsData.items)
+         setFarms(farmsData)
       } catch (e) {
          console.error(e)
          handleError(e)

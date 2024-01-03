@@ -9,8 +9,8 @@
          prepend-avatar='https://randomuser.me/api/portraits/men/78.jpg'
          class='my-padding'
       >
-         <v-list-item-title class='my-subtitle app-font-regular'>{{ currentUser?.name }}</v-list-item-title>
-         <v-list-item-subtitle class='my-font-size'>{{ currentUser?.email }}</v-list-item-subtitle>
+         <v-list-item-title class='my-subtitle app-font-regular'>{{ currentUser?.user.name }}</v-list-item-title>
+         <v-list-item-subtitle class='my-font-size'>{{ currentUser?.user.email }}</v-list-item-subtitle>
          <template v-slot:append>
             <v-icon size='27' icon="mdi-chevron-left" @click='drawer = false'></v-icon>
          </template>
