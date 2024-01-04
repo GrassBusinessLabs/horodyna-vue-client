@@ -119,8 +119,8 @@ const submit = form.handleSubmit(async values => {
       isSubmitting.value = true
 
       const body: RegisterBody = {
-         name: values.username,
-         email: values.email,
+         name: values.username ? values.username : 'Name not found',
+         email: values.email ? values.email : 'Email not found',
          password: values.password
       }
 

@@ -10,7 +10,6 @@ export interface Product {
    image: string,
    user_id: number,
    farm_id: number,
-   
    seller: string,
    selectedQuantity?: number,
    address: string

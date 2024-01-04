@@ -3,7 +3,7 @@
       <v-list class='pa-0 bg-transparent'>
          <app-product
             v-for='product in filteredProducts'
-            :key='product.productId'
+            :key='product.id'
             :product='product'
          />
       </v-list>

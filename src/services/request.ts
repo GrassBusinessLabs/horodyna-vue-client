@@ -1,5 +1,11 @@
 import {apiService} from '@/services/api'
-import type {CurrentUser, CurrentUserData, Farm, LoginBody, PasswordChangeBody, RegisterBody} from '@/models'
+import type {
+   CurrentUser,
+   CurrentUserData, Farm,
+   LoginBody,
+   PasswordChangeBody,
+   RegisterBody
+} from '@/models'
 
 export const requestService = () => {
    const api = apiService()
