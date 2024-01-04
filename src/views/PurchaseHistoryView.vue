@@ -11,6 +11,7 @@
             @purchase-details='showDetails(purchase)'
          ></app-purchase>
       </v-list>
+      
       <v-bottom-sheet v-model="sheet">
          <v-card
             height='566'

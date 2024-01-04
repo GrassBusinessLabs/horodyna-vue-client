@@ -7,7 +7,7 @@
             <v-avatar size="70" :image="purchase.products[0].image"></v-avatar>
          </v-badge>
       </template>
-      <v-list-item-title class='py-1 my-font-size'>
+      <v-list-item-title class='py-1 my-font-size'> 
          Покупка #{{ purchase.purchaseId }}
       </v-list-item-title>
       <v-list-item-subtitle class='my-subtitle-fs py-1'>

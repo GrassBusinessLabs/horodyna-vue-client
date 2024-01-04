@@ -2,7 +2,7 @@ import {apiService} from '@/services/api'
 import type {
    CurrentUser,
    CurrentUserData, Farm,
-   LoginBody,
+   LoginBody, Order,
    PasswordChangeBody,
    RegisterBody
 } from '@/models'
@@ -29,7 +29,11 @@ export const requestService = () => {
    async function getFarms(): Promise<Farm[]> {
       return api.get('farms')
    }
-
+   
+   async function getOrders(): Promise<Order[]> {
+      return api.get('orders')
+   }
+   
    async function logout(): Promise<void> {
       return api.post('/auth/logout')
    }
@@ -40,6 +44,7 @@ export const requestService = () => {
       changePassword,
       getCurrentUser,
       getFarms,
+      getOrders,
       logout
    }
 }

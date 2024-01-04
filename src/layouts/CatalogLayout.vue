@@ -3,7 +3,7 @@
       <app-header :header-title="'Каталог продуктів'" />
 
       <v-main class='app-bg-color'>
-         <v-container class='py-5 pt-2 pl-5 pr-3'>
+         <v-container class='pt-2 pl-5 pr-3'>
             <v-row>
                <slot />
             </v-row>
@@ -37,9 +37,10 @@ const scrollToLetter = (letter: string) => {
 
 <style lang='scss' scoped>
 .v-container {
-   height: calc(100vh - 130px);
+   height: calc(100vh - 64px);
    width: 100%;
    overflow: auto;
+   padding-bottom: 95px;
 }
 
 .v-list {
