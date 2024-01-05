@@ -1,8 +1,8 @@
 <template>
-   <v-col cols='auto'
-          style="position: sticky; top: 0;"
-          class='pa-2 pr-1'
-          v-if='filteredProducts.length !== 0'
+   <v-col cols='1'
+      style="position: sticky; top: 0;"
+      class='pa-2 pr-1'
+      v-if='filteredProducts.length !== 0'
    >
       <div class='letter-block rounded-lg d-flex justify-center align-center app-color'>
          {{ letter }}
@@ -10,8 +10,8 @@
    </v-col>
 
    <v-col
-      cols='10'
-      class='pl-0 pr-0 pt-6'
+      cols='11'
+      class='pl-2 pr-0 pt-6'
       v-if='filteredProducts.length !== 0'
       :class="[letter, isFirst ? 'pt-9' : '']"
    >

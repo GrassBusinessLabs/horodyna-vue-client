@@ -20,6 +20,12 @@ export interface Order {
    total_price: number
 }
 
+export interface OrderResponse {
+   items: Order[],
+   pages: number,
+   total: number
+}
+
 export interface CreateOrder {
    order_items: CreateOrderItem[],
    address_id: number,

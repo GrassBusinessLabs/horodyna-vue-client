@@ -68,10 +68,6 @@ const routing = useRouting()
 const settings = [
    {title: 'Аккаунт', icon: 'mdi-account-outline'},
    {title: 'Повідомлення', icon: 'mdi-bell-outline'},
-   {title: 'Вигляд', icon: 'mdi-eye-outline'},
-   {title: 'Приватність', icon: 'mdi-lock-outline'},
-   {title: 'Написати відгук', icon: 'mdi-comment-quote-outline'},
-   {title: 'Політика', icon: 'mdi-information-slab-box-outline'},
 ]
 
 const switchValue = ref(false)

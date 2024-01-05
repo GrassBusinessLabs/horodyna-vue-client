@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {ref, Ref} from 'vue'
-import {Order} from '@/models'
+import {Order, OrderResponse} from '@/models'
 import {requestService} from '@/services'
 import {useHandleError} from '@/composables'
 
@@ -15,8 +15,8 @@ export const useOrderStore = defineStore('order', () => {
    
    async function getOrders(): Promise<void> {
       try {
-         const orders: Order[] = await request.getOrders()
-         setOrders(orders)
+         const orders: OrderResponse = await request.getOrders()
+         setOrders(orders.items)
       } catch (e) {
          console.error(e)
          handleError(e)

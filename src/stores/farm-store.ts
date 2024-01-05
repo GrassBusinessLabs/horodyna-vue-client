@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {ref, Ref} from 'vue'
-import {Farm} from '@/models'
+import {Farm, FarmResponse} from '@/models'
 import {requestService} from '@/services'
 import {useHandleError} from '@/composables'
 
@@ -15,8 +15,8 @@ export const useFarmStore = defineStore('farm', () => {
    
    async function getFarmsData(): Promise<void> {
       try {
-         const farmsData: Farm[] = await request.getFarms()
-         setFarms(farmsData)
+         const farmsData: FarmResponse = await request.getFarms()
+         setFarms(farmsData.items)
       } catch (e) {
          console.error(e)
          handleError(e)

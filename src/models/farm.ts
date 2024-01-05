@@ -11,3 +11,9 @@ export interface Farm {
       email: string
    }
 }
+
+export interface FarmResponse {
+   items: Farm[],
+   pages: number,
+   total: number
+}
