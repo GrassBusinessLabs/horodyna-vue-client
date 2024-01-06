@@ -31,9 +31,24 @@ export const useOrderStore = defineStore('order', () => {
          handleError(e)
       }
    }
+
+   function getDraftOrders(): Order[] | null {
+      return orders.value ? orders.value.filter(order => order.status === 'DRAFT') : null
+   }
+
+   function getSubmittedOrders(): Order[] | null {
+      return orders.value ? orders.value.filter(order => order.status === 'SUBMITTED') : null
+   }
+
+   function getCompletedOrders(): Order[] | null {
+      return orders.value ? orders.value.filter(order => order.status === 'COMPLETED') : null
+   }
    
    return {
       orders,
-      populateOrders
+      populateOrders,
+      getDraftOrders,
+      getSubmittedOrders,
+      getCompletedOrders
    }
 })

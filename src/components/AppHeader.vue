@@ -6,8 +6,7 @@
       width='290'
    >
       <v-list-item
-         prepend-avatar='https://randomuser.me/api/portraits/men/78.jpg'
-         class='my-padding'
+         class='my-padding pl-4'
       >
          <v-list-item-title class='my-subtitle app-font-regular'>{{ currentUser?.user.name }}</v-list-item-title>
          <v-list-item-subtitle class='my-font-size'>{{ currentUser?.user.email }}</v-list-item-subtitle>

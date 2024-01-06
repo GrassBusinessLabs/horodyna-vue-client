@@ -6,15 +6,15 @@
             <v-list-item-title class='my-font-size my-color my-sub-margin'>
                {{ product.title }}
             </v-list-item-title>
-            <v-list-item-subtitle class='my-subtitle-fs my-margin' @click='showProductOnMap(product)'>
-               {{ product.seller }}
+            <v-list-item-subtitle class='my-subtitle-fs my-margin'>
+               Андрій
             </v-list-item-subtitle>
-            <v-list-item-subtitle class='my-subtitle-fs' @click='showProductOnMap(product)'>
-               {{ product.address }}
+            <v-list-item-subtitle class='my-subtitle-fs'>
+               Рєпіна 7
                <v-icon icon="mdi-map-marker" size='15' class='text-black my-margin'></v-icon>
             </v-list-item-subtitle>
             <v-list-item-title class='my-subtitle-fs my-color my-height'>
-               {{ product.price }} грн за {{ product.unit }}
+               {{ product.price }} грн за {{ translate(product?.unit) }}
             </v-list-item-title>
          </div>
       </div>
@@ -24,47 +24,49 @@
             icon="mdi-minus-circle-outline" 
             size='34' 
             color='black'
-            @click='cartStore.decreaseProductQuantity(product)'
          ></v-icon>
          <v-list-item-subtitle class='my-font-size mx-2 font-weight-bold'>
-            {{ cartStore.getCurrentProductQuantity(product) ? `${cartStore.getCurrentProductQuantity(product)}
-                        ${product.unit}` : 0 }}
+            <!-- {{ cartStore.getCurrentProductQuantity(product) ? `${cartStore.getCurrentProductQuantity(product)}
+                        ${product.unit}` : 0 }} -->
+            2 {{ translate(product?.unit) }}
          </v-list-item-subtitle>
          <v-icon 
             class="text-grey-darken-1" 
             icon="mdi-plus-circle-outline" 
             size='34' 
             color='black'
-            @click='addProduct(product)'
          ></v-icon>
       </div>
    </div>
 </template>
 
 <script lang="ts" setup>
-import type { Product } from "@/models"
-import { productStore } from "@/stores/product-store.ts"
-import { useRouting } from '@/composables'
+import { useTranslate } from '@/composables'
+import type { Offer } from "@/models"
+// import { productStore } from "@/stores/product-store.ts"
+// import { useRouting } from '@/composables'
 
 defineProps<{
-   product: Product
+   product: Offer
 }>()
 
-const routing = useRouting()
+const { translate } = useTranslate()
 
-const cartStore = productStore()
+// const routing = useRouting()
 
-const addProduct = (product: Product) => {
-   cartStore.addProductToCart({
-      ...product,
-      selectedQuantity: 1,
-   })
-}
+// const cartStore = productStore()
 
-const showProductOnMap = (product: Product) => {
-   cartStore.setSelectedProduct(product)
-   routing.toMap()
-}
+// const addProduct = (product: Offer) => {
+//    cartStore.addProductToCart({
+//       ...product,
+//       selectedQuantity: 1,
+//    })
+// }
+
+// const showProductOnMap = (product: Offer) => {
+//    cartStore.setSelectedProduct(product)
+//    routing.toMap()
+// }
 </script>
 
 <style scoped>

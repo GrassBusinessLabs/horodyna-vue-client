@@ -102,10 +102,10 @@ const selectedOrder = ref<Partial<Order>>({})
 const offersDetails = ref<Partial<Offer[] | undefined>>([])
 
 const showOrderDetails = (order: Order) => {
-    selectedOrder.value = order
-    const relatedOffers = offers.value?.filter(offer => order.order_items.some(item => item.offer_id === offer.id))
-    offersDetails.value = relatedOffers
-    sheet.value = true
+   selectedOrder.value = order
+   const relatedOffers = offers.value?.filter(offer => order.order_items.some(item => item.offer_id === offer.id))
+   offersDetails.value = relatedOffers
+   sheet.value = true
 }
 </script>
 

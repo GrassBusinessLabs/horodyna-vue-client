@@ -2,29 +2,34 @@
    <products-layout>
       <v-list class='pa-0 bg-transparent'>
          <app-product
-            v-for='product in filteredProducts'
+            v-for='product in offers'
             :key='product.id'
             :product='product'
          />
       </v-list>
    </products-layout>
 </template>
-<!--go-->
-<script setup lang='ts'>
 
+<script setup lang='ts'>
 import ProductsLayout from '@/layouts/ProductsLayout.vue'
 import AppProduct from '@/components/AppProduct.vue'
-import {useCategoryStore} from '@/stores'
-import {categoryProducts} from '@/constants/categoryProducts.ts'
+import {useOfferStore} from '@/stores'
+// import {categoryProducts} from '@/constants/categoryProducts.ts'
+import { storeToRefs } from 'pinia'
 
-const categoryStore = useCategoryStore()
-const {getCurrentCategory} = categoryStore
-const currentCategory = getCurrentCategory()
+// const categoryStore = useCategoryStore()
+// const {getCurrentCategory} = categoryStore
+// const currentCategory = getCurrentCategory()
 
-const filteredProducts = categoryProducts.filter((product) => product.category === currentCategory)
+// const filteredProducts = categoryProducts.filter((product) => product.category === currentCategory)
+
+const offerStore = useOfferStore()
+const {populateOffers} = offerStore
+const {offers} = storeToRefs(offerStore)
+
+populateOffers()
 
 </script>
 
 <style scoped>
-
 </style>

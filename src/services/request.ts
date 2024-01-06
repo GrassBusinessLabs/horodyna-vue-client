@@ -1,13 +1,13 @@
 import {apiService} from '@/services/api'
 import type {
    CurrentUser,
-   CurrentUserData, Farm,
    FarmResponse,
    LoginBody,
    OfferResponse,
    OrderResponse,
    PasswordChangeBody,
-   RegisterBody
+   RegisterBody,
+   UserData
 } from '@/models'
 
 export const requestService = () => {
@@ -25,20 +25,20 @@ export const requestService = () => {
       return api.post('/auth/change-pwd', body)
    }
 
-   async function getCurrentUser(): Promise<CurrentUserData> {
-      return api.get('users')
+   async function getUserData(): Promise<UserData> {
+      return api.get('/users')
    }
    
    async function getFarms(): Promise<FarmResponse> {
-      return api.get('farms')
+      return api.get('/farms')
    }
    
    async function getOrders(): Promise<OrderResponse> {
-      return api.get('orders')
+      return api.get('/orders')
    }
 
    async function getOffers(): Promise<OfferResponse> {
-      return api.get('offers?all=true')
+      return api.get('/offers?all=true')
    }
    
    async function logout(): Promise<void> {
@@ -49,7 +49,7 @@ export const requestService = () => {
       login,
       register,
       changePassword,
-      getCurrentUser,
+      getUserData,
       getFarms,
       getOrders,
       getOffers,
