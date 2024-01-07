@@ -32,9 +32,10 @@ export const useOrderStore = defineStore('order', () => {
       }
    }
 
-   function getDraftOrders(): Order[] | null {
-      return orders.value ? orders.value.filter(order => order.status === 'DRAFT') : null
-   }
+   function getDraftOrder(): Order | null {
+      const draftOrder = orders.value ? orders.value.find(order => order.status === 'DRAFT') : null
+      return draftOrder ? draftOrder : null
+   }    
 
    function getSubmittedOrders(): Order[] | null {
       return orders.value ? orders.value.filter(order => order.status === 'SUBMITTED') : null
@@ -43,12 +44,19 @@ export const useOrderStore = defineStore('order', () => {
    function getCompletedOrders(): Order[] | null {
       return orders.value ? orders.value.filter(order => order.status === 'COMPLETED') : null
    }
+
+   function getProductAmount(id: number): number | 0 {
+      const cart = getDraftOrder()
+      const cartProduct = cart?.order_items.find(item => item.offer_id === id)
+      return cartProduct ? cartProduct.amount : 0
+   }
    
    return {
       orders,
       populateOrders,
-      getDraftOrders,
+      getDraftOrder,
       getSubmittedOrders,
-      getCompletedOrders
+      getCompletedOrders,
+      getProductAmount
    }
 })

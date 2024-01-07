@@ -2,9 +2,9 @@
    <products-layout>
       <v-list class='pa-0 bg-transparent'>
          <app-product
-            v-for='product in offers'
-            :key='product.id'
-            :product='product'
+            v-for='offer in offers'
+            :key='offer.id'
+            :offer='offer'
          />
       </v-list>
    </products-layout>

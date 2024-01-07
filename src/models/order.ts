@@ -1,16 +1,6 @@
 export interface Order {
    id: number,
-   order_items: [
-      {
-         id: number,
-         order_id: number,
-         offer_id: number,
-         title: string,
-         price: number,
-         total_price: number,
-         amount: number
-      }
-   ],
+   order_items: OrderItem[],
    status: string,
    comment: string,
    address_id: number,
@@ -33,15 +23,23 @@ export interface CreateOrder {
    shipping_price: number
 }
 
-interface CreateOrderItem
-{
+export interface OrderItem {
+   id: number,
+   order_id: number,
+   offer_id: number,
+   title: string,
+   price: number,
+   total_price: number,
+   amount: number
+}
+
+export interface CreateOrderItem {
+   id?: number,
    offer_id: number,
    amount: number
 }
 
-export interface UpdateOrder {
-   address_id: number,
-   comment: string,
-   shipping_price: number,
-   status: string
+export interface UpdateOrderItem {
+   id: number,
+   amount: number
 }

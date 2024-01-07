@@ -1,12 +1,17 @@
 import {apiService} from '@/services/api'
 import type {
+   CreateOrder,
+   CreateOrderItem,
    CurrentUser,
    FarmResponse,
    LoginBody,
    OfferResponse,
+   Order,
+   OrderItem,
    OrderResponse,
    PasswordChangeBody,
    RegisterBody,
+   UpdateOrderItem,
    UserData
 } from '@/models'
 
@@ -37,6 +42,18 @@ export const requestService = () => {
       return api.get('/orders')
    }
 
+   async function createOrder(body: CreateOrder): Promise<Order> {
+      return api.post('/orders', body)
+   }
+
+   async function createOrderItem(body: CreateOrderItem): Promise<OrderItem> {
+      return api.post(`/order-items/${body.id}`, body)
+   }
+
+   async function updateOrderItem(body: UpdateOrderItem){
+      return api.put(`/order-items/${body.id}`, body)
+   }
+
    async function getOffers(): Promise<OfferResponse> {
       return api.get('/offers?all=true')
    }
@@ -52,6 +69,9 @@ export const requestService = () => {
       getUserData,
       getFarms,
       getOrders,
+      createOrder,
+      createOrderItem,
+      updateOrderItem,
       getOffers,
       logout
    }
