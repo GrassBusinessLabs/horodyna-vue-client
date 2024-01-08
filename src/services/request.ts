@@ -3,6 +3,7 @@ import type {
    CreateOrder,
    CreateOrderItem,
    CurrentUser,
+   DeleteOrderItem,
    FarmResponse,
    LoginBody,
    OfferResponse,
@@ -54,6 +55,10 @@ export const requestService = () => {
       return api.put(`/order-items/${body.id}`, body)
    }
 
+   async function deleteOrderItem(body: DeleteOrderItem){
+      return api.del(`/order-items/${body.id}`)
+   }
+
    async function getOffers(): Promise<OfferResponse> {
       return api.get('/offers?all=true')
    }
@@ -72,6 +77,7 @@ export const requestService = () => {
       createOrder,
       createOrderItem,
       updateOrderItem,
+      deleteOrderItem,
       getOffers,
       logout
    }

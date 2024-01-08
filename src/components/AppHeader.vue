@@ -66,7 +66,7 @@
       </template>
       <template v-slot:append>
          <v-btn icon='mdi-cart' @click='sheet = !sheet' v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change'">
-            <v-badge :content='cartStore.getCartLength()' overlap>
+            <v-badge :content='cart?.order_items.length' overlap>
                <v-icon>mdi-cart</v-icon>
             </v-badge>
          </v-btn>
@@ -80,26 +80,26 @@
          <v-card-title class='py-4 text-center my-border my-title'>
             Кошик
             <v-list-item-subtitle
-               v-if='cartStore.getCartLength() !== 0'
+               v-if='cart?.order_items.length !== 0'
                class='my-subtitle pt-2 pb-1'
             >
-               Сума: {{ cartStore.getTotalSum() }}.00 грн
+               Сума: {{ cart?.product_price }} грн
             </v-list-item-subtitle>
          </v-card-title>
 
          <v-list
-            v-if='cartStore.getCartLength() !== 0'
+            v-if='cart?.order_items.length !== 0'
             class='pa-5 pb-0 bg-transparent'
          >
             <app-product
-               v-for="product in cartStore.basket"
-               :key="product.id"
-               :product='product'
+               v-for="item in cart?.order_items"
+               :key="item.id"
+               :offer='getOfferById(item.offer_id)'
                class='app-bg-color-form'
             />
          </v-list>
          <v-btn
-            v-if='cartStore.getCartLength() !== 0'
+            v-if='cart?.order_items.length !== 0'
             color='orange'
             class='text-white mx-5 my-5'
             @click='routing.toPayment'
@@ -130,20 +130,25 @@
 import {useRouting} from '@/composables'
 import {useRoute} from 'vue-router'
 import {ref} from 'vue'
-
-import {productStore} from '@/stores/product-store.ts'
 import AppProduct from '@/components/AppProduct.vue'
 import {storeToRefs} from 'pinia'
-import {useUserStore} from '@/stores'
+import {useCartStore, useOfferStore, useUserStore} from '@/stores'
 
 defineProps<{
    headerTitle: string
 }>()
 
+const offerStore = useOfferStore()
+const {getOfferById} = offerStore
+
 const userStore = useUserStore()
 const {currentUser} = storeToRefs(userStore)
 
-const cartStore = productStore()
+const cartStore = useCartStore()
+const {setCart} = cartStore
+const {cart} = storeToRefs(cartStore)
+
+setCart()
 
 const routing = useRouting()
 const route = useRoute()

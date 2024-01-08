@@ -13,7 +13,7 @@
 <script setup lang='ts'>
 import ProductsLayout from '@/layouts/ProductsLayout.vue'
 import AppProduct from '@/components/AppProduct.vue'
-import {useOfferStore} from '@/stores'
+import {useOfferStore, useOrderStore} from '@/stores'
 // import {categoryProducts} from '@/constants/categoryProducts.ts'
 import { storeToRefs } from 'pinia'
 
@@ -28,6 +28,11 @@ const {populateOffers} = offerStore
 const {offers} = storeToRefs(offerStore)
 
 populateOffers()
+
+const orderStore = useOrderStore()
+const {populateOrders} = orderStore
+
+populateOrders()
 
 </script>
 

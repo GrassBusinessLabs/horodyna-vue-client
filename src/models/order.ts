@@ -43,3 +43,7 @@ export interface UpdateOrderItem {
    id: number,
    amount: number
 }
+
+export interface DeleteOrderItem {
+   id: number
+}

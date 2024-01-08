@@ -24,6 +24,7 @@
             icon="mdi-minus-circle-outline" 
             size='34' 
             color='black'
+            @click="removeProductFromCart(offer)"
          ></v-icon>
          <v-list-item-subtitle class='my-font-size mx-2 font-weight-bold text-center'>
             {{ getProductAmount(offer.id) }} {{ getProductAmount(offer.id) ? translate(offer?.unit) : '' }}
@@ -41,9 +42,8 @@
 
 <script lang="ts" setup>
 import { useTranslate } from '@/composables'
-import type { CreateOrder, CreateOrderItem, Offer, UpdateOrderItem } from "@/models"
-import { requestService } from '@/services'
-import { useOrderStore } from '@/stores'
+import type { Offer } from "@/models"
+import { useCartStore, useOrderStore } from '@/stores'
 // import { productStore } from "@/stores/product-store.ts"
 // import { useRouting } from '@/composables'
 
@@ -52,11 +52,10 @@ defineProps<{
 }>()
 
 const orderStore = useOrderStore()
-const {populateOrders, getDraftOrder, getProductAmount} = orderStore
+const {getProductAmount} = orderStore
 
-populateOrders()
-
-const request = requestService()
+const cartStore = useCartStore()
+const {addProductToCart, removeProductFromCart} = cartStore
 
 const linkIMG = 'https://horodyna.grassbusinesslabs.tk/static/'
 
@@ -68,43 +67,6 @@ const { translate } = useTranslate()
 //    cartStore.setSelectedProduct(product)
 //    routing.toMap()
 // }
-
-const addProductToCart = async (offer: Offer) => {
-   const cart = getDraftOrder()
-   if(cart) {
-      const selectedProduct = cart.order_items.find(item => item.offer_id === offer.id)
-      if(selectedProduct) {
-         const body: UpdateOrderItem = {
-            id: selectedProduct.id,
-            amount: selectedProduct.amount + 1
-         }
-         await request.updateOrderItem(body)
-         populateOrders()
-      } else {
-         const body: CreateOrderItem = {
-            id: cart.id,
-            offer_id: offer.id,
-            amount: 1
-         }
-         await request.createOrderItem(body)
-         populateOrders()
-      }
-   } else {
-      const body: CreateOrder = {
-      order_items: [
-      {
-         offer_id: offer.id,
-         amount: 1
-      }
-      ],
-      address_id: 1,
-      comment: '',
-      shipping_price: 0
-   }
-
-   await request.createOrder(body)
-   }
-}
 </script>
 
 <style scoped>

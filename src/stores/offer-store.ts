@@ -31,9 +31,15 @@ export const useOfferStore = defineStore('offer', () => {
          handleError(e)
       }
    }
+
+   function getOfferById(id: number): Offer | null {
+      const findedOffer = offers.value ? offers.value.find(offer => offer.id === id) : null
+      return findedOffer ? findedOffer : null
+   }  
    
    return {
       offers,
-      populateOffers
+      populateOffers,
+      getOfferById
    }
 })

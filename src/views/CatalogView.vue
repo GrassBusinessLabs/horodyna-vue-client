@@ -13,12 +13,27 @@
 import CatalogLayout from '@/layouts/CatalogLayout.vue'
 import AppCategory from '@/components/AppCategory.vue'
 import {ukrainianAlphabet} from '@/constants'
-import {useUserStore} from '@/stores'
+import {useCartStore, useOfferStore, useOrderStore, useUserStore} from '@/stores'
 
 const userStore = useUserStore()
 const {populate} = userStore
 
 populate()
+
+const orderStore = useOrderStore()
+const {populateOrders} = orderStore
+
+populateOrders()
+
+const offerStore = useOfferStore()
+const {populateOffers} = offerStore
+
+populateOffers()
+
+const cartStore = useCartStore()
+const {setCart} = cartStore
+
+setCart()
 </script>
 
 <style lang='scss' scoped>

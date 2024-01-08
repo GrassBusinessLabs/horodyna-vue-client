@@ -9,14 +9,8 @@
 <script setup lang='ts'>
 import AppNavigation from '@/components/AppNavigation.vue'
 import {useRoute} from 'vue-router'
-import {useUserStore} from '@/stores'
 
 const route = useRoute()
-
-const userStore = useUserStore()
-const {populate} = userStore
-
-populate()
 </script>
 
 <style scoped>
