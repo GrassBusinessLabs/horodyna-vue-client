@@ -7,10 +7,10 @@
                {{ offer.title }}
             </v-list-item-title>
             <v-list-item-subtitle class='my-subtitle-fs my-margin'>
-               Андрій
+               {{ offer.user.name }}
             </v-list-item-subtitle>
             <v-list-item-subtitle class='my-subtitle-fs'>
-               Рєпіна 7
+               {{ getFarmAddress(offer.farm_id) }}
                <v-icon icon="mdi-map-marker" size='15' class='text-black my-margin'></v-icon>
             </v-list-item-subtitle>
             <v-list-item-title class='my-subtitle-fs my-color my-height'>
@@ -43,13 +43,16 @@
 <script lang="ts" setup>
 import { useTranslate } from '@/composables'
 import type { Offer } from "@/models"
-import { useCartStore, useOrderStore } from '@/stores'
+import { useCartStore, useFarmStore, useOrderStore } from '@/stores'
 // import { productStore } from "@/stores/product-store.ts"
 // import { useRouting } from '@/composables'
 
 defineProps<{
    offer: Offer
 }>()
+
+const farmStore = useFarmStore()
+const {getFarmAddress} = farmStore
 
 const orderStore = useOrderStore()
 const {getProductAmount} = orderStore

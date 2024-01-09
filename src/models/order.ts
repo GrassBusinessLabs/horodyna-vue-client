@@ -7,7 +7,8 @@ export interface Order {
    user_id: number,
    product_price: number,
    shipping_price: number,
-   total_price: number
+   total_price: number,
+   created_data: string
 }
 
 export interface OrderResponse {
@@ -42,8 +43,4 @@ export interface CreateOrderItem {
 export interface UpdateOrderItem {
    id: number,
    amount: number
-}
-
-export interface DeleteOrderItem {
-   id: number
 }

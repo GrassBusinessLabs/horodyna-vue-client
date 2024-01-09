@@ -9,7 +9,7 @@
                Замовлення #{{ order.id }}
             </v-list-item-title>
             <v-list-item-subtitle class='my-subtitle-fs py-1'>
-               14 грудня 2023
+               {{ formattedDate }}
             </v-list-item-subtitle>
             <v-list-item-title class='py-1 my-margin my-color my-font-size'>
                Сума: {{ order.total_price }} грн
@@ -26,22 +26,13 @@
 
 <script setup lang='ts'>
 import { Order } from '@/models'
-// import { computed } from 'vue'
 
-defineProps<{
+const props = defineProps<{
    order: Order
 }>()
 
-// const orderStatus = computed(() => {
-//    switch(props.order.status) {
-//       case 'DRAFT': 
-//          return 'Чернетка'
-//       case 'ACTIVE': 
-//          return 'Активний'
-//       default:
-//          return 'Очікує'
-//    }
-// })
+const dateObject = new Date(props.order.created_data)
+const formattedDate = dateObject.toLocaleString('uk-UA', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'long' })
 
 const emit = defineEmits<{
    (e: 'orderDetails', address: Order): void

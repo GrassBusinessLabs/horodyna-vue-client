@@ -1,16 +1,32 @@
 <template>
    <orders-layout>
       <v-list
+         v-if="submittedOrders?.length"
          density="compact"
          class="py-0 bg-transparent"
       >
          <app-order
-            v-for="order in orders"
+            v-for="order in submittedOrders"
             :order='order'
             :key="order.id"
             @order-details='showOrderDetails(order)'
          ></app-order>
       </v-list>
+      <v-sheet v-else class='mx-auto pa-6 rounded-lg'>
+         <v-list-item-title
+            class='no-item-title text-center py-1'
+         >
+            Немає жодного замовлення
+         </v-list-item-title>
+         <v-btn
+            color='orange'
+            class='text-white mt-5 w-100'
+            @click='routing.toCatalog()'
+            variant='flat'
+         >
+            Перейти в каталог
+         </v-btn>
+      </v-sheet>
 
       <v-bottom-sheet v-model="sheet">
          <v-card
@@ -43,7 +59,7 @@
                   <v-list-item-subtitle
                      class='my-subtitle-fs my-margin'
                   >
-                     Андрій
+                     {{ offer?.user.name }}
                   </v-list-item-subtitle>
                   <v-list-item-subtitle
                      class='my-subtitle-fs'
@@ -79,15 +95,18 @@ import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { Offer, Order } from '@/models'
 import { useOfferStore } from '@/stores'
-import { useTranslate } from '@/composables'
+import { useRouting, useTranslate } from '@/composables'
+
+const routing = useRouting()
 
 const { translate } = useTranslate()
 
 const orderStore = useOrderStore()
-const {populateOrders} = orderStore
-const {orders} = storeToRefs(orderStore)
+const {populateOrders, getSubmittedOrders} = orderStore
 
 populateOrders()
+
+const submittedOrders = getSubmittedOrders()
 
 const offerStore = useOfferStore()
 const {populateOffers} = offerStore
@@ -112,5 +131,9 @@ const showOrderDetails = (order: Order) => {
 <style lang='scss' scoped>
 .my-order-title {
    font-size: 24px;
+}
+
+.no-item-title {
+   font-size: 23.5px;
 }
 </style>

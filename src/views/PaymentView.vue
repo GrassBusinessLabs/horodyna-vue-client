@@ -1,6 +1,6 @@
 <template>
    <payment-layout>
-      <v-sheet v-if='cartStore.basket.length' class='mx-auto pa-2 pb-3 pt-1 rounded-lg'>
+      <v-sheet v-if='cart?.order_items.length' class='mx-auto pa-2 pb-3 pt-1 rounded-lg'>
          <v-list-item>
             <template v-slot:prepend>
                <v-container class='pa-0'>
@@ -40,7 +40,7 @@
                      Вартість
                   </v-list-item-title>
                   <v-list-item-subtitle class='text-subtitle-1 pb-2 text-end'>
-                     {{ cartStore.getTotalSum() }} грн
+                     {{ cart?.product_price }} грн
                   </v-list-item-subtitle>
                </v-container>
             </template>
@@ -63,19 +63,6 @@
                   </v-btn-toggle>
                </v-col>
 
-               <v-col cols='12' class='pr-2 text-center' v-if='false'>
-                  <google-pay-button
-                     v-if="paymentMethod === 'googlePay'"
-                     environment="TEST"
-                     button-color="white"
-                     button-type="buy"
-                     :paymentRequest.prop="paymentRequest"
-                     @loadpaymentdata="onLoadPaymentData"
-                     @error="onError"
-                     button-size-mode="fill"
-                     class='w-100'
-                  ></google-pay-button>
-               </v-col>
                <template v-if="paymentMethod === 'googlePay'">
                   <v-col cols='7' class='pb-0 pr-1'>
                      <v-btn
@@ -126,58 +113,23 @@
 import "@google-pay/button-element"
 import PaymentLayout from '@/layouts/PaymentLayout.vue'
 import {ref} from 'vue'
-import {productStore} from '@/stores/product-store.ts'
 import {useRouting} from '@/composables'
-
-const cartStore = productStore()
+import { useCartStore } from '@/stores'
+import { storeToRefs } from 'pinia'
 
 const routing = useRouting()
+
+const cartStore = useCartStore()
+const {setCart} = cartStore
+const {cart} = storeToRefs(cartStore)
+
+setCart()
 
 const shippingItems = ['Нова пошта', 'Укр пошта', 'Самовивіз']
 
 const shippingMethod = ref('Нова пошта')
 
 const paymentMethod = ref('googlePay')
-
-const paymentRequest = {
-   apiVersion: 2,
-   apiVersionMinor: 0,
-   allowedPaymentMethods: [
-      {
-         type: "CARD",
-         parameters: {
-            allowedAuthMethods: ["PAN_ONLY", "CRYPTOGRAM_3DS"],
-            allowedCardNetworks: ["AMEX", "VISA", "MASTERCARD"]
-         },
-         tokenizationSpecification: {
-            type: "PAYMENT_GATEWAY",
-            parameters: {
-               gateway: "example",
-               gatewayMerchantId: "exampleGatewayMerchantId"
-            }
-         }
-      }
-   ],
-   merchantInfo: {
-      merchantId: "12345678901234567890",
-      merchantName: "Demo Merchant"
-   },
-   transactionInfo: {
-      totalPriceStatus: "FINAL",
-      totalPriceLabel: "Total",
-      totalPrice: "100.00",
-      currencyCode: "USD",
-      countryCode: "US"
-   }
-}
-
-const onLoadPaymentData = (event: any) => {
-   console.log(event.detail)
-}
-
-const onError = (event: any) => {
-   console.error("error", event.error)
-}
 </script>
 
 <style lang='scss' scoped>
@@ -195,6 +147,6 @@ const onError = (event: any) => {
 }
 
 .no-item-title {
-   font-size: 30px;
+   font-size: 35px;
 }
 </style>

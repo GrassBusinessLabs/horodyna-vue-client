@@ -4,6 +4,7 @@ import type {
    CreateOrderItem,
    CurrentUser,
    DeleteOrderItem,
+   Farm,
    FarmResponse,
    LoginBody,
    OfferResponse,
@@ -38,6 +39,10 @@ export const requestService = () => {
    async function getFarms(): Promise<FarmResponse> {
       return api.get('/farms')
    }
+
+   async function getFarmById(id: number): Promise<Farm> {
+      return api.post(`/farms/${id}`)
+   }
    
    async function getOrders(): Promise<OrderResponse> {
       return api.get('/orders')
@@ -55,8 +60,8 @@ export const requestService = () => {
       return api.put(`/order-items/${body.id}`, body)
    }
 
-   async function deleteOrderItem(body: DeleteOrderItem){
-      return api.del(`/order-items/${body.id}`)
+   async function deleteOrderItem(id: number){
+      return api.del(`/order-items/${id}`)
    }
 
    async function getOffers(): Promise<OfferResponse> {
@@ -73,6 +78,7 @@ export const requestService = () => {
       changePassword,
       getUserData,
       getFarms,
+      getFarmById,
       getOrders,
       createOrder,
       createOrderItem,

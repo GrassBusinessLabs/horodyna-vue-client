@@ -2,7 +2,6 @@
    <v-bottom-navigation
       v-model="number"
       :grow='true'
-      mode="shift"
       class='rounded-t-lg my-min-height app-color'
       elevation='0'
    >
@@ -54,6 +53,6 @@ watch(route, () => {
 }
 
 span {
-   font-size: 14px;
+   font-size: 13px;
 }
 </style>

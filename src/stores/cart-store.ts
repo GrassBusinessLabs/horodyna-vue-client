@@ -1,4 +1,4 @@
-import { CreateOrder, CreateOrderItem, DeleteOrderItem, Offer, Order, UpdateOrderItem } from '@/models'
+import { CreateOrder, CreateOrderItem, Offer, Order, UpdateOrderItem } from '@/models'
 import {defineStore} from 'pinia'
 import {ref, Ref} from 'vue'
 import { useOrderStore } from './order-store'
@@ -27,7 +27,6 @@ export const useCartStore = defineStore('cart', () => {
             await request.updateOrderItem(body)
             await populateOrders()
             setCart()
-            
          } else {
             const body: CreateOrderItem = {
                id: cart.value.id,
@@ -50,8 +49,9 @@ export const useCartStore = defineStore('cart', () => {
          comment: '',
          shipping_price: 0
       }
-   
       await request.createOrder(body)
+      await populateOrders()
+      setCart()
       }
    }
 
@@ -67,10 +67,7 @@ export const useCartStore = defineStore('cart', () => {
          await populateOrders()
          setCart()
       } else {
-         const body: DeleteOrderItem = {
-            id: selectedProduct?.id,
-         }
-         await request.deleteOrderItem(body)
+         await request.deleteOrderItem(selectedProduct?.id)
          await populateOrders()
          setCart()
       }

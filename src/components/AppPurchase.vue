@@ -1,69 +1,47 @@
 <template>
-   <div class="pa-5 py-4 rounded-xl app-item-color mb-5 d-flex justify-space-between align-center">
+   <div class="pa-5 py-3 rounded-xl app-item-color mb-5 d-flex justify-space-between align-center">
       <div class="d-flex justify-space-between align-center">
-         <v-badge color='indigo' :content='purchase.products.length'>
-            <v-avatar size="70" :image="purchase.products[0].image"></v-avatar>
+         <v-badge color='indigo' :content='order.order_items.length'>
+            <v-avatar size="70" image="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png"></v-avatar>
          </v-badge>
          <div class="ml-6">
             <v-list-item-title class='py-1 my-font-size'>
-               Покупка #{{ purchase.purchaseId }}
+               Замовлення #{{ order.id }}
             </v-list-item-title>
             <v-list-item-subtitle class='my-subtitle-fs py-1'>
-               {{ purchase.date }}
+               14 грудня 20231
             </v-list-item-subtitle>
-            <v-list-item-title class='my-margin my-color my-font-size'>
-               Сума: {{ purchase.products.reduce((accumulator, currentValue) => accumulator + currentValue.price *
-                  (currentValue.selectedQuantity ? currentValue.selectedQuantity : 1), 0) }}.00 грн
+            <v-list-item-title class='py-1 my-margin my-color my-font-size'>
+               Сума: {{ order.total_price }} грн
             </v-list-item-title>
          </div>
       </div>
       <v-icon 
          class="text-grey-darken-1" 
          icon="mdi-information-outline" 
-         size='39'
-         @click='detailsHandler(purchase)'
+         size='39' @click='detailsHandler(order)'
       ></v-icon>
    </div>
 </template>
 
 <script setup lang='ts'>
-import { Purchase } from '@/models'
+import { Order } from '@/models'
 
 defineProps<{
-   purchase: Purchase
+   order: Order
 }>()
 
 const emit = defineEmits<{
-   (e: 'purchaseDetails', address: Purchase): void
+   (e: 'orderDetails', address: Order): void
 }>()
 
-function detailsHandler(event: Purchase): void {
-   emit('purchaseDetails', event)
+function detailsHandler(event: Order): void {
+   emit('orderDetails', event)
 }
 </script>
 
 <style scoped>
-.border-custom {
-   border: 2px solid rgba(128, 128, 128, 0.3);
-}
-
-.my-border-bottom {
-   border-bottom: 2px solid rgba(128, 128, 128, 0.3);
-}
-
-p {
-   font-size: 3.8vw;
-}
-
 .my-font-size {
-   font-size: 17.8px;
-}
-
-.my-color {
-   color: #000099;
-}
-
-.my-margin {
-   margin-top: 4px;
+   font-size: 17.8;
 }
 </style>

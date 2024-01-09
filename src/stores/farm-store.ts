@@ -31,9 +31,15 @@ export const useFarmStore = defineStore('farm', () => {
          handleError(e)
       }
    }
+
+   function getFarmAddress(id: number): string {
+      const farm = farms.value?.find(farm => farm.id === id)
+      return farm ? farm.address : 'Farm not found'
+   }
    
    return {
       farms,
-      populateFarms
+      populateFarms,
+      getFarmAddress
    }
 })

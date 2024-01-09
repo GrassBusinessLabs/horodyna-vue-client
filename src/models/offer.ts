@@ -8,8 +8,12 @@ export interface Offer {
    stock: number,
    status: boolean,
    image: string,
-   user_id: number,
-   farm_id: number,
+   user: {
+      id: number,
+      name: string,
+      email: string
+  },
+   farm_id: number
 }
 
 export interface OfferResponse {

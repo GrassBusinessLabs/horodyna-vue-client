@@ -79,14 +79,14 @@
                   Адреса: {{ selectedFarm.address }}
                </v-list-item-subtitle>
             </v-card-title>
-            <v-list class='pa-5 pb-2 bg-transparent'>
+            <v-list v-if="selectedFarm.products?.length" class='pa-5 pb-2 bg-transparent'>
                <v-list-item
                   v-for="product in selectedFarm.products"
                   :key="product.id"
                   class='pa-3 app-bg-color-form rounded-xl mb-3'
                >
                   <template v-slot:prepend>
-                     <v-avatar size="50" :image="product.image"></v-avatar>
+                     <img width="128" :src="linkIMG + '/' + product.image" alt="Product image" class="product-image">
                   </template>
                   <v-list-item-title class='my-font-size my-color mb-1'>
                      {{ product.title }}
@@ -99,20 +99,26 @@
                         icon="mdi-minus-circle-outline"
                         size='x-large'
                         color='black'
-                        @click='cartStore.decreaseProductQuantity(product)'
+                        @click='removeProductFromCart(product)'
                      ></v-icon>
                      <v-list-item-subtitle class='my-font-size mx-2 font-weight-bold'>
-                        {{ cartStore.getCurrentProductQuantity(product) ? `${cartStore.getCurrentProductQuantity(product)} кг` : 0 }}
+                        {{ getProductAmount(product.id) }} {{ getProductAmount(product.id) ? translate(product?.unit) : '' }}
                      </v-list-item-subtitle>
                      <v-icon
                         icon="mdi-plus-circle-outline"
                         size='x-large'
                         color='black'
-                        @click='addProduct(product)'
+                        @click='addProductToCart(product)'
                      ></v-icon>
                   </template>
                </v-list-item>
             </v-list>
+            <v-list-item-title
+               v-else
+               class='no-item-title text-center mt-5 py-1'
+            >
+               Немає жодного товару
+            </v-list-item-title>
          </v-card>
       </v-bottom-sheet>
    </map-layout>
@@ -124,24 +130,39 @@ import {AddressItem, mapService} from '@/services/map'
 import MapLayout from '@/layouts/MapLayout.vue'
 import AppMap from '@/components/AppMap.vue'
 import {ref, watch} from 'vue'
-import { productStore } from '@/stores/product-store.ts'
-import {Farm, Product} from '@/models'
-import {categoryProducts} from '@/constants/categoryProducts.ts'
+import {Farm, Offer} from '@/models'
 import {productsData} from '@/constants/products.ts'
-// import {storeToRefs} from 'pinia'
-import {useFarmStore} from '@/stores'
+import {useCartStore, useFarmStore, useOfferStore, useOrderStore} from '@/stores'
+import { storeToRefs } from 'pinia'
+import { useTranslate } from '@/composables'
 
 interface SelectedFarm extends Farm {
-   products: Product[]
+   products: Offer[]
 }
+
+const { translate } = useTranslate()
+
+const cartStore = useCartStore()
+const {setCart, addProductToCart, removeProductFromCart} = cartStore
+
+setCart()
 
 const farmStore = useFarmStore()
 const {populateFarms} = farmStore
-// const {farms} = storeToRefs(farmStore)
+const {farms} = storeToRefs(farmStore)
 
 populateFarms()
 
-const cartStore = productStore()
+const offerStore = useOfferStore()
+const {populateOffers} = offerStore
+const {offers} = storeToRefs(offerStore)
+
+populateOffers()
+
+const orderStore = useOrderStore()
+const {getProductAmount} = orderStore
+
+const linkIMG = 'https://horodyna.grassbusinesslabs.tk/static/'
 
 const map = mapService()
 
@@ -157,107 +178,78 @@ const removeFilter = (index: number) => {
    filters.value = filters.value.slice(0, index).concat(filters.value.slice(index + 1))
 }
 
-const farms2 = ref<Farm[]>([
-   {id: 1, name: 'Ферма 1', address: 'Рєпіна 7', latitude: 12.21, longitude: 12.21, city: 'Полтава',
-      "user": {
-         "id": 1,
-         "name": "User Name",
-         "email": "sa@test.com"
-      }
-   },
-   {id: 2, name: 'Ферма 2', address: 'Рєпіна 9', latitude: 12.21, longitude: 12.21, city: 'Полтава',
-      "user": {
-         "id": 1,
-         "name": "User Name",
-         "email": "sa@test.com"
-      }
-   },
-   {id: 3, name: 'Ферма 3', address: 'Рєпіна 8', latitude: 12.21, longitude: 12.21, city: 'Полтава',
-      "user": {
-         "id": 1,
-         "name": "User Name",
-         "email": "sa@test.com"
-      }
-   },
-])
-
 const selectedFarm = ref<Partial<SelectedFarm>>({})
 
-watch(filters, async () => {
-   map.removeAllMarkers()
-   for (const farm of farms2.value) {
-      const farmProducts = categoryProducts.filter(product => product.farm_id === farm.id)
-      if (filters.value.length === 0 || farmProducts.some((product: Product) => filters.value.some(filter => product.title.includes(filter)))) {
-         const addressItems = await map.searchAddresses(farm.address)
-         if (addressItems.length > 0) {
-            const onClick = () => {
-               selectedFarm.value = {
-                  ...farm,
-                  products: farmProducts
-               }
-               showFarmDetails.value = true
+watch(filters, async () => { 
+   map.removeAllMarkers() 
+   for (const farm of farms.value) { 
+      const farmProducts = offers.value?.filter(product => product.farm_id === farm.id) 
+      if (filters.value.length === 0 || farmProducts?.some((product: Offer) => filters.value.some(filter => product.title.includes(filter)))) { 
+         setTimeout(async () => {
+            const addressItems = await map.searchAddresses(farm.address) 
+            if (addressItems.length > 0) { 
+               const onClick = () => { 
+                  selectedFarm.value = { 
+                     ...farm, 
+                     products: farmProducts 
+                  } 
+                  showFarmDetails.value = true 
+               } 
+               const marker: Marker | null = map.createMarker(farm.id.toString(), addressItems[0].details.position as LngLatLike, onClick) 
+               if (marker) { 
+                  map.addMarkerToMap(marker) 
+               } 
             }
-            const marker: Marker | null = map.createMarker(farm.id.toString(), addressItems[0].details.position as LngLatLike, onClick)
-            if (marker) {
-               map.addMarkerToMap(marker)
-            }
-         }
-      }
-   }
+         }, 200)
+      } 
+   } 
 }, { immediate: true })
 
-const addProduct = (product: Product) => {
-   cartStore.addProductToCart({
-      ...product,
-      selectedQuantity: 1,
-   })
-}
+// const mapZoom: number = 15
+// const duration: number = 500
 
-const mapZoom: number = 15
-const duration: number = 500
+// async function selectAddress(address: AddressItem): Promise<void> {
+//    map.setMapCenter(address.details.position as LngLatLike, {duration})
 
-async function selectAddress(address: AddressItem): Promise<void> {
-   map.setMapCenter(address.details.position as LngLatLike, {duration})
+//    if (mapZoom !== map.getMapZoom()) {
+//       await new Promise(resolve => setTimeout(resolve, duration))
+//       map.setZoom(15, {duration})
+//    }
+// }
 
-   if (mapZoom !== map.getMapZoom()) {
-      await new Promise(resolve => setTimeout(resolve, duration))
-      map.setZoom(15, {duration})
-   }
-}
+// const selectedProduct = cartStore.selectedProduct
 
-const selectedProduct = cartStore.selectedProduct
-
-watch(selectedProduct, async () => {
-   if(Object.keys(selectedProduct).length) {
-      for (const farm of farms2.value) {
-         const farmProducts = categoryProducts.filter(product => product.farm_id === farm.id)
-         if (farmProducts.some(product => product.title === selectedProduct.title)) {
-            selectedFarm.value = farm
-            const addressItems = await map.searchAddresses(selectedProduct.address)
-            if (addressItems.length > 0) {
-               await selectAddress(addressItems[0])
-            }
-            break
-         }
-      }
-   }
-   cartStore.selectedProduct = {
-      id: 0,
-      title: '',
-      description: '',
-      category: '',
-      price: 0,
-      unit: '',
-      stock: 0,
-      status: true,
-      image: '',
-      user_id: 0,
-      farm_id: 0,
-      seller: '',
-      selectedQuantity: 0,
-      address: ''
-   }
-}, { immediate: true })
+// watch(selectedProduct, async () => {
+//    if(Object.keys(selectedProduct).length) {
+//       for (const farm of farms2.value) {
+//          const farmProducts = categoryProducts.filter(product => product.farm_id === farm.id)
+//          if (farmProducts.some(product => product.title === selectedProduct.title)) {
+//             selectedFarm.value = farm
+//             const addressItems = await map.searchAddresses(selectedProduct.address)
+//             if (addressItems.length > 0) {
+//                await selectAddress(addressItems[0])
+//             }
+//             break
+//          }
+//       }
+//    }
+//    cartStore.selectedProduct = {
+//       id: 0,
+//       title: '',
+//       description: '',
+//       category: '',
+//       price: 0,
+//       unit: '',
+//       stock: 0,
+//       status: true,
+//       image: '',
+//       user_id: 0,
+//       farm_id: 0,
+//       seller: '',
+//       selectedQuantity: 0,
+//       address: ''
+//    }
+// }, { immediate: true })
 </script>
 
 <style lang='scss' scoped>
@@ -285,5 +277,17 @@ watch(selectedProduct, async () => {
    left: 12px;
    right: 72px;
    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.no-item-title {
+   font-size: 30px;
+}
+
+.product-image {
+   width: 45px;
+   height: 45px;
+   object-fit: cover;
+   border-radius: 100%;
+   margin-right: 10px;
 }
 </style>
