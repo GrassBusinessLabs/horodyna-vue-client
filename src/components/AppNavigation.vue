@@ -23,9 +23,10 @@
 </template>
 
 <script lang='ts' setup>
-import {ref, watch} from 'vue'
-import {useRouting} from '@/composables'
-import {useRoute} from 'vue-router'
+import { useRouting } from '@/composables'
+import { useCartStore, useFarmStore, useOrderStore } from '@/stores'
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const routing = useRouting()
@@ -45,6 +46,21 @@ watch(route, () => {
       number.value = -1
    }
 })
+
+const farmStore = useFarmStore()
+const {populateFarms} = farmStore
+
+populateFarms()
+
+// const orderStore = useOrderStore()
+// const {populateOrders} = orderStore
+
+// populateOrders()
+
+const cartStore = useCartStore()
+const {setCart} = cartStore
+
+setCart()
 </script>
 
 <style lang='scss' scoped>

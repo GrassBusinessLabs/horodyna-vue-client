@@ -6,10 +6,10 @@
             <v-list-item-title class='my-font-size my-color my-sub-margin'>
                {{ offer.title }}
             </v-list-item-title>
-            <v-list-item-subtitle class='my-subtitle-fs my-margin'>
+            <v-list-item-subtitle @click='showProductOnMap(offer)' class='my-subtitle-fs my-margin'>
                {{ offer.user.name }}
             </v-list-item-subtitle>
-            <v-list-item-subtitle class='my-subtitle-fs'>
+            <v-list-item-subtitle @click='showProductOnMap(offer)' class='my-subtitle-fs'>
                {{ getFarmAddress(offer.farm_id) }}
                <v-icon icon="mdi-map-marker" size='15' class='text-black my-margin'></v-icon>
             </v-list-item-subtitle>
@@ -41,11 +41,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useTranslate } from '@/composables'
+import { useRouting, useTranslate } from '@/composables'
 import type { Offer } from "@/models"
 import { useCartStore, useFarmStore, useOrderStore } from '@/stores'
-// import { productStore } from "@/stores/product-store.ts"
-// import { useRouting } from '@/composables'
 
 defineProps<{
    offer: Offer
@@ -64,12 +62,12 @@ const linkIMG = 'https://horodyna.grassbusinesslabs.tk/static/'
 
 const { translate } = useTranslate()
 
-// const routing = useRouting()
+const routing = useRouting()
 
-// const showProductOnMap = (product: Offer) => {
-//    cartStore.setSelectedProduct(product)
-//    routing.toMap()
-// }
+const showProductOnMap = (Offer: Offer) => {
+   cartStore.setSelectedOffer(Offer)
+   routing.toMap()
+}
 </script>
 
 <style scoped>

@@ -39,14 +39,14 @@
                   Сума: {{ selectedOrder.total_price }} грн
                </v-list-item-subtitle>
             </v-card-title>
-            <v-list class='pa-5 h-100'>
+            <!-- <v-list class='pa-5 h-100'>
                <app-product
                v-for="item in cart?.order_items"
                :key="item.id"
                :offer='getOfferById(item.offer_id)'
                class='app-bg-color-form'
             />
-            </v-list>
+            </v-list> -->
          </v-card>
       </v-bottom-sheet>
    </purchase-history-layout>
@@ -78,7 +78,7 @@ populateFarms()
 const orderStore = useOrderStore()
 const {populateOrders, getCompletedOrders} = orderStore
 
-populateOrders()
+// populateOrders()
 
 const completedOrders = getCompletedOrders()
 

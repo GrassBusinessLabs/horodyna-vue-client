@@ -1,7 +1,7 @@
 <template>
    <div class="pa-5 py-3 rounded-xl app-item-color mb-5 d-flex justify-space-between align-center">
       <div class="d-flex justify-space-between align-center">
-         <v-badge color='indigo' :content='order.order_items.length'>
+         <v-badge color='indigo' :content='order.order_items_count'>
             <v-avatar size="70" image="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png"></v-avatar>
          </v-badge>
          <div class="ml-6">

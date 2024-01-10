@@ -20,20 +20,21 @@ const {populate} = userStore
 
 populate()
 
-const orderStore = useOrderStore()
-const {populateOrders} = orderStore
+const cartStore = useCartStore()
+const {setCart} = cartStore
 
-populateOrders()
+setCart()
+
+// const orderStore = useOrderStore()
+// const {populateOrders} = orderStore
+
+// populateOrders()
 
 const offerStore = useOfferStore()
 const {populateOffers} = offerStore
 
 populateOffers()
 
-const cartStore = useCartStore()
-const {setCart} = cartStore
-
-setCart()
 </script>
 
 <style lang='scss' scoped>

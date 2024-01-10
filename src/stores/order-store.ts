@@ -9,10 +9,6 @@ export const useOrderStore = defineStore('order', () => {
    const request = requestService()
    const orders: Ref<Order[] | null> = ref<Order[] | null>(null)
    
-   function setOrders(value: Order[] | null): void {
-      orders.value = value
-   }
-   
    async function getOrders(): Promise<void> {
       try {
          const orders: OrderResponse = await request.getOrders()
@@ -30,6 +26,11 @@ export const useOrderStore = defineStore('order', () => {
          console.error(e)
          handleError(e)
       }
+   }
+
+   async function setOrders(value: Order[] | null): Promise<void> {
+      await populateOrders()
+      orders.value = value
    }
 
    function getDraftOrder(): Order | null {

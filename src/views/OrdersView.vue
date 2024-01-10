@@ -101,10 +101,10 @@ const routing = useRouting()
 
 const { translate } = useTranslate()
 
-const orderStore = useOrderStore()
-const {populateOrders, getSubmittedOrders} = orderStore
+// const orderStore = useOrderStore()
+// const {populateOrders, getSubmittedOrders} = orderStore
 
-populateOrders()
+// populateOrders()
 
 const submittedOrders = getSubmittedOrders()
 

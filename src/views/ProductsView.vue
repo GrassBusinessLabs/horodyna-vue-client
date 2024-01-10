@@ -29,10 +29,10 @@ const {offers} = storeToRefs(offerStore)
 
 populateOffers()
 
-const orderStore = useOrderStore()
-const {populateOrders} = orderStore
+// const orderStore = useOrderStore()
+// const {populateOrders} = orderStore
 
-populateOrders()
+// populateOrders()
 
 const farmStore = useFarmStore()
 const {populateFarms} = farmStore

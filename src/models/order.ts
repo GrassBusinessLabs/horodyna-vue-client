@@ -1,6 +1,6 @@
 export interface Order {
    id: number,
-   order_items: OrderItem[],
+   order_items_count: number,
    status: string,
    comment: string,
    address_id: number,

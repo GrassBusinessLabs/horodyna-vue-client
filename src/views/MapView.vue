@@ -144,20 +144,21 @@ const { translate } = useTranslate()
 
 const cartStore = useCartStore()
 const {setCart, addProductToCart, removeProductFromCart} = cartStore
+const {selectedOffer} = storeToRefs(cartStore)
 
 setCart()
 
 const farmStore = useFarmStore()
-const {populateFarms} = farmStore
+const {populateFarms, getFarmAddress} = farmStore
 const {farms} = storeToRefs(farmStore)
 
 populateFarms()
 
-const offerStore = useOfferStore()
-const {populateOffers} = offerStore
-const {offers} = storeToRefs(offerStore)
+// const offerStore = useOfferStore()
+// const {populateOffers} = offerStore
+// const {offers} = storeToRefs(offerStore)
 
-populateOffers()
+// populateOffers()
 
 const orderStore = useOrderStore()
 const {getProductAmount} = orderStore
@@ -184,7 +185,7 @@ watch(filters, async () => {
    map.removeAllMarkers() 
    for (const farm of farms.value) { 
       const farmProducts = offers.value?.filter(product => product.farm_id === farm.id) 
-      if (filters.value.length === 0 || farmProducts?.some((product: Offer) => filters.value.some(filter => product.title.includes(filter)))) { 
+      if (farmProducts?.length && filters.value.length === 0 || farmProducts?.some((product: Offer) => filters.value.some(filter => product.title.includes(filter)))) { 
          setTimeout(async () => {
             const addressItems = await map.searchAddresses(farm.address) 
             if (addressItems.length > 0) { 
@@ -200,56 +201,42 @@ watch(filters, async () => {
                   map.addMarkerToMap(marker) 
                } 
             }
-         }, 200)
+         }, 300)
       } 
    } 
 }, { immediate: true })
 
-// const mapZoom: number = 15
-// const duration: number = 500
+const mapZoom: number = 15
+const duration: number = 500
 
-// async function selectAddress(address: AddressItem): Promise<void> {
-//    map.setMapCenter(address.details.position as LngLatLike, {duration})
+async function selectAddress(address: AddressItem): Promise<void> {
+   map.setMapCenter(address.details.position as LngLatLike, {duration})
 
-//    if (mapZoom !== map.getMapZoom()) {
-//       await new Promise(resolve => setTimeout(resolve, duration))
-//       map.setZoom(15, {duration})
-//    }
-// }
+   if (mapZoom !== map.getMapZoom()) {
+      await new Promise(resolve => setTimeout(resolve, duration))
+      map.setZoom(15, {duration})
+   }
+}
 
-// const selectedProduct = cartStore.selectedProduct
+console.log(selectedOffer.value, 1)
 
-// watch(selectedProduct, async () => {
-//    if(Object.keys(selectedProduct).length) {
-//       for (const farm of farms2.value) {
-//          const farmProducts = categoryProducts.filter(product => product.farm_id === farm.id)
-//          if (farmProducts.some(product => product.title === selectedProduct.title)) {
-//             selectedFarm.value = farm
-//             const addressItems = await map.searchAddresses(selectedProduct.address)
-//             if (addressItems.length > 0) {
-//                await selectAddress(addressItems[0])
-//             }
-//             break
-//          }
-//       }
-//    }
-//    cartStore.selectedProduct = {
-//       id: 0,
-//       title: '',
-//       description: '',
-//       category: '',
-//       price: 0,
-//       unit: '',
-//       stock: 0,
-//       status: true,
-//       image: '',
-//       user_id: 0,
-//       farm_id: 0,
-//       seller: '',
-//       selectedQuantity: 0,
-//       address: ''
-//    }
-// }, { immediate: true })
+watch(selectedOffer, async () => {
+   if(Object.keys(selectedOffer).length) {
+      for (const farm of farms.value) {
+         const farmProducts = offers.value?.filter(product => product.farm_id === farm.id)
+         if (farmProducts?.some(product => product.title === selectedOffer.value?.title)) {
+            selectedFarm.value = farm
+            const addressItems = await map.searchAddresses(getFarmAddress(selectedOffer.value.id))
+            if (addressItems.length > 0) {
+               await selectAddress(addressItems[0])
+            }
+            break
+         }
+      }
+   }
+   
+}, { immediate: true })
+console.log(selectedOffer.value, 2)
 </script>
 
 <style lang='scss' scoped>

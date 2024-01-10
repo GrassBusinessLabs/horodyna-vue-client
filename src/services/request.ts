@@ -3,7 +3,6 @@ import type {
    CreateOrder,
    CreateOrderItem,
    CurrentUser,
-   DeleteOrderItem,
    Farm,
    FarmResponse,
    LoginBody,
@@ -14,7 +13,6 @@ import type {
    PasswordChangeBody,
    RegisterBody,
    UpdateOrderItem,
-   UserData
 } from '@/models'
 
 export const requestService = () => {
@@ -32,8 +30,8 @@ export const requestService = () => {
       return api.post('/auth/change-pwd', body)
    }
 
-   async function getUserData(): Promise<UserData> {
-      return api.get('/users')
+   async function getCurrentUser(): Promise<CurrentUser> {
+      return api.get('users')
    }
    
    async function getFarms(): Promise<FarmResponse> {
@@ -76,7 +74,7 @@ export const requestService = () => {
       login,
       register,
       changePassword,
-      getUserData,
+      getCurrentUser,
       getFarms,
       getFarmById,
       getOrders,

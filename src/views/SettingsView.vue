@@ -88,8 +88,8 @@ const showSettingSheet = (settingCategory: string) => {
 }
 
 const settingsItems: SettingItem[] = [
-   {title: `Ім'я:`, category: 'Аккаунт', value: currentUser.value?.user.name, showSwitch: false, icon: ''},
-   {title: 'Email:', category: 'Аккаунт', value: currentUser.value?.user.email, showSwitch: false, icon: ''},
+   {title: `Ім'я:`, category: 'Аккаунт', value: currentUser.value?.name, showSwitch: false, icon: ''},
+   {title: 'Email:', category: 'Аккаунт', value: currentUser.value?.email, showSwitch: false, icon: ''},
    {title: 'Змінити пароль', category: 'Аккаунт', value: '', showSwitch: false, icon: 'mdi-chevron-right', routing: routing.toPasswordChange},
    {title: 'Вийти з аккаунту', category: 'Аккаунт', value: '', showSwitch: false, icon: 'mdi-chevron-right', routing: userStore.logout},
    {title: 'Сповіщати', category: 'Повідомлення', value: '', showSwitch: true, icon: ''},

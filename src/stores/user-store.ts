@@ -2,7 +2,7 @@ import {defineStore} from 'pinia'
 import type {Ref} from 'vue'
 import {ref} from 'vue'
 
-import type {CurrentUser, UserData} from '@/models'
+import type {CurrentUser} from '@/models'
 import {authTokenService, requestService} from '@/services'
 import {useHandleError, useRouting} from '@/composables'
 
@@ -14,24 +14,19 @@ export const useUserStore = defineStore('user', () => {
    const authToken = authTokenService()
 
    const currentUser: Ref<CurrentUser | null> = ref<CurrentUser | null>(null)
-   const userData: Ref<UserData | null> = ref<UserData | null>(null)
    
    function setCurrentUser(value: CurrentUser | null): void {
       currentUser.value = value
    }
-   
-   function setUserData(value: UserData | null): void {
-      userData.value = value
-   }
 
    async function getUserData(): Promise<CurrentUser | null> {
       try {
-         if (currentUser.value?.user.id) {
+         if (currentUser.value?.id) {
             return currentUser.value
          }
 
-         const userData: UserData = await request.getUserData()
-         setUserData(userData)
+         const userData: CurrentUser = await request.getCurrentUser()
+         setCurrentUser(userData)
 
          return currentUser.value
       } catch (e) {

@@ -8,8 +8,8 @@
       <v-list-item
          class='my-padding pl-4'
       >
-         <v-list-item-title class='my-subtitle app-font-regular'>{{ currentUser?.user.name }}</v-list-item-title>
-         <v-list-item-subtitle class='my-font-size'>{{ currentUser?.user.email }}</v-list-item-subtitle>
+         <v-list-item-title class='my-subtitle app-font-regular'>{{ currentUser?.name }}</v-list-item-title>
+         <v-list-item-subtitle class='my-font-size'>{{ currentUser?.email }}</v-list-item-subtitle>
          <template v-slot:append>
             <v-icon size='27' icon="mdi-chevron-left" @click='drawer = false'></v-icon>
          </template>
@@ -66,7 +66,7 @@
       </template>
       <template v-slot:append>
          <v-btn icon='mdi-cart' @click='sheet = !sheet' v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change'">
-            <v-badge :content='cart?.order_items.length' overlap>
+            <v-badge :content='cart?.order_items.length'>
                <v-icon>mdi-cart</v-icon>
             </v-badge>
          </v-btn>
@@ -145,10 +145,7 @@ const userStore = useUserStore()
 const {currentUser} = storeToRefs(userStore)
 
 const cartStore = useCartStore()
-const {setCart} = cartStore
 const {cart} = storeToRefs(cartStore)
-
-setCart()
 
 const routing = useRouting()
 const route = useRoute()
