@@ -24,7 +24,7 @@
 
 <script lang='ts' setup>
 import { useRouting } from '@/composables'
-import { useCartStore, useFarmStore, useOrderStore } from '@/stores'
+import { useCartStore, useFarmStore } from '@/stores'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 

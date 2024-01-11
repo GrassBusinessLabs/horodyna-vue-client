@@ -1,6 +1,6 @@
 <template>
    <v-layout class='rounded rounded-md'>
-      <app-header :header-title="'Мої замовлення'" />
+      <app-header :header-title="'Активні замовлення'" />
 
       <v-main class='app-bg-color'>
          <v-container class='pa-5 pt-6 pb-0'>

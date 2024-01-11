@@ -1,13 +1,18 @@
-import {defineStore} from 'pinia'
+import {defineStore, storeToRefs} from 'pinia'
 import {ref, Ref} from 'vue'
 import {Order, OrderResponse} from '@/models'
 import {requestService} from '@/services'
 import {useHandleError} from '@/composables'
+import { useCartStore } from './cart-store'
 
 export const useOrderStore = defineStore('order', () => {
    const {handleError} = useHandleError()
    const request = requestService()
    const orders: Ref<Order[] | null> = ref<Order[] | null>(null)
+   
+   function setOrders(value: Order[] | null): void {
+      orders.value = value
+   }
    
    async function getOrders(): Promise<void> {
       try {
@@ -28,11 +33,6 @@ export const useOrderStore = defineStore('order', () => {
       }
    }
 
-   async function setOrders(value: Order[] | null): Promise<void> {
-      await populateOrders()
-      orders.value = value
-   }
-
    function getDraftOrder(): Order | null {
       const draftOrder = orders.value ? orders.value.find(order => order.status === 'DRAFT') : null
       return draftOrder ? draftOrder : null
@@ -47,8 +47,10 @@ export const useOrderStore = defineStore('order', () => {
    }
 
    function getProductAmount(id: number): number | 0 {
-      const cart = getDraftOrder()
-      const cartProduct = cart?.order_items.find(item => item.offer_id === id)
+      const cartStore = useCartStore()
+      const {cart} = storeToRefs(cartStore)
+      
+      const cartProduct = cart.value?.order_items.find(item => item.offer_id === id)
       return cartProduct ? cartProduct.amount : 0
    }
    

@@ -32,10 +32,26 @@ export const useOfferStore = defineStore('offer', () => {
       }
    }
 
-   function getOfferById(id: number): Offer | null {
+   function getOfferById(id: number): Offer {
       const findedOffer = offers.value ? offers.value.find(offer => offer.id === id) : null
-      return findedOffer ? findedOffer : null
-   }  
+      return findedOffer ? findedOffer : {
+         id: -1,
+         title: '',
+         description: '',
+         category: '',
+         price: -1,
+         unit: '',
+         stock: -1,
+         status: false,
+         image: '',
+         user: {
+            id: -1,
+            name: '',
+            email: ''
+        },
+         farm_id: -1
+      }
+   }
    
    return {
       offers,

@@ -39,14 +39,14 @@
                   Сума: {{ selectedOrder.total_price }} грн
                </v-list-item-subtitle>
             </v-card-title>
-            <!-- <v-list class='pa-5 h-100'>
+            <v-list class='pa-5 h-100'>
                <app-product
-               v-for="item in cart?.order_items"
-               :key="item.id"
-               :offer='getOfferById(item.offer_id)'
-               class='app-bg-color-form'
-            />
-            </v-list> -->
+                  v-for="offer in offersDetails"
+                  :key="offer.id"
+                  :offer='offer'
+                  class='app-bg-color-form'
+               />
+            </v-list>
          </v-card>
       </v-bottom-sheet>
    </purchase-history-layout>
@@ -54,19 +54,21 @@
 
 <script lang='ts' setup>
 import AppOrder from '@/components/AppOrder.vue'
-import PurchaseHistoryLayout from '@/layouts/PurchaseHistoryLayout.vue'
-import {ref} from 'vue'
-import {Offer, Order, Purchase} from '@/models'
 import AppProduct from '@/components/AppProduct.vue'
-import { useCartStore, useFarmStore, useOfferStore, useOrderStore } from '@/stores'
 import { useRouting } from '@/composables'
+import PurchaseHistoryLayout from '@/layouts/PurchaseHistoryLayout.vue'
+import { Offer, Order } from '@/models'
+import { requestService } from '@/services'
+import { useCartStore, useFarmStore, useOfferStore, useOrderStore } from '@/stores'
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
+
+const request = requestService()
 
 const routing = useRouting()
 
 const cartStore = useCartStore()
 const {setCart} = cartStore
-const {cart} = storeToRefs(cartStore)
 
 setCart()
 
@@ -78,28 +80,43 @@ populateFarms()
 const orderStore = useOrderStore()
 const {populateOrders, getCompletedOrders} = orderStore
 
-// populateOrders()
+populateOrders()
 
 const completedOrders = getCompletedOrders()
 
 const sheet = ref(false)
 
 const offerStore = useOfferStore()
-const {populateOffers, getOfferById} = offerStore
+const {populateOffers} = offerStore
 const {offers} = storeToRefs(offerStore)
 
 populateOffers()
 
-const selectedPurchase = ref<Partial<Purchase>>({})
-
 const selectedOrder = ref<Partial<Order>>({})
 
-const offersDetails = ref<Partial<Offer[] | undefined>>([])
+const offersDetails = ref<Offer[]>([])
 
-const showOrderDetails = (order: Order) => {
-   selectedOrder.value = order
-   const relatedOffers = offers.value?.filter(offer => order.order_items.some(item => item.offer_id === offer.id))
-   offersDetails.value = relatedOffers
+const showOrderDetails = async (order: Order) => {
+   const orderResponse = await request.getOrderById(order.id)
+   selectedOrder.value = orderResponse
+   const relatedOffers = offers.value?.filter(offer => orderResponse.order_items.some(item => item.offer_id === offer.id))
+   offersDetails.value = relatedOffers ? relatedOffers : [{
+         id: -1,
+         title: '',
+         description: '',
+         category: '',
+         price: -1,
+         unit: '',
+         stock: -1,
+         status: false,
+         image: '',
+         user: {
+            id: -1,
+            name: '',
+            email: ''
+        },
+         farm_id: -1
+      }]
    sheet.value = true
 }
 </script>

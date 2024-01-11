@@ -8,6 +8,7 @@ import type {
    LoginBody,
    OfferResponse,
    Order,
+   OrderById,
    OrderItem,
    OrderResponse,
    PasswordChangeBody,
@@ -46,6 +47,10 @@ export const requestService = () => {
       return api.get('/orders')
    }
 
+   async function getOrderById(id: number): Promise<OrderById> {
+      return api.get(`/orders/${id}`)
+   }
+
    async function createOrder(body: CreateOrder): Promise<Order> {
       return api.post('/orders', body)
    }
@@ -78,6 +83,7 @@ export const requestService = () => {
       getFarms,
       getFarmById,
       getOrders,
+      getOrderById,
       createOrder,
       createOrderItem,
       updateOrderItem,

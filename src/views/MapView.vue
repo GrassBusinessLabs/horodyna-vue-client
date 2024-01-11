@@ -143,7 +143,7 @@ interface SelectedFarm extends Farm {
 const { translate } = useTranslate()
 
 const cartStore = useCartStore()
-const {setCart, addProductToCart, removeProductFromCart} = cartStore
+const {setCart, addProductToCart, removeProductFromCart, resetSelectedOffer} = cartStore
 const {selectedOffer} = storeToRefs(cartStore)
 
 setCart()
@@ -154,11 +154,11 @@ const {farms} = storeToRefs(farmStore)
 
 populateFarms()
 
-// const offerStore = useOfferStore()
-// const {populateOffers} = offerStore
-// const {offers} = storeToRefs(offerStore)
+const offerStore = useOfferStore()
+const {populateOffers} = offerStore
+const {offers} = storeToRefs(offerStore)
 
-// populateOffers()
+populateOffers()
 
 const orderStore = useOrderStore()
 const {getProductAmount} = orderStore
@@ -181,29 +181,31 @@ const removeFilter = (index: number) => {
 
 const selectedFarm = ref<Partial<SelectedFarm>>({})
 
-watch(filters, async () => { 
-   map.removeAllMarkers() 
-   for (const farm of farms.value) { 
-      const farmProducts = offers.value?.filter(product => product.farm_id === farm.id) 
-      if (farmProducts?.length && filters.value.length === 0 || farmProducts?.some((product: Offer) => filters.value.some(filter => product.title.includes(filter)))) { 
-         setTimeout(async () => {
-            const addressItems = await map.searchAddresses(farm.address) 
-            if (addressItems.length > 0) { 
-               const onClick = () => { 
-                  selectedFarm.value = { 
-                     ...farm, 
-                     products: farmProducts 
-                  } 
-                  showFarmDetails.value = true 
-               } 
-               const marker: Marker | null = map.createMarker(farm.id.toString(), addressItems[0].details.position as LngLatLike, onClick) 
-               if (marker) { 
-                  map.addMarkerToMap(marker) 
-               } 
-            }
-         }, 300)
-      } 
-   } 
+watch(filters, async () => {
+   map.removeAllMarkers()
+   if (farms.value) {
+      for (const farm of farms.value) {
+         const farmProducts = offers.value?.filter(product => product.farm_id === farm.id)
+         if (farmProducts?.length && filters.value.length === 0 || farmProducts?.some((product: Offer) => filters.value.some(filter => product.title.includes(filter)))) {
+            setTimeout(async () => {
+               const addressItems = await map.searchAddresses(farm.address)
+               if (addressItems.length > 0) {
+                  const onClick = () => {
+                     selectedFarm.value = {
+                        ...farm,
+                        products: farmProducts
+                     }
+                     showFarmDetails.value = true
+                  }
+                  const marker: Marker | null = map.createMarker(farm.id.toString(), addressItems[0].details.position as LngLatLike, onClick)
+                  if (marker) {
+                     map.addMarkerToMap(marker)
+                  }
+               }
+            }, 300)
+         }
+      }
+   }
 }, { immediate: true })
 
 const mapZoom: number = 15
@@ -218,15 +220,13 @@ async function selectAddress(address: AddressItem): Promise<void> {
    }
 }
 
-console.log(selectedOffer.value, 1)
-
 watch(selectedOffer, async () => {
-   if(Object.keys(selectedOffer).length) {
+   if(selectedOffer.value && farms.value) {
       for (const farm of farms.value) {
          const farmProducts = offers.value?.filter(product => product.farm_id === farm.id)
          if (farmProducts?.some(product => product.title === selectedOffer.value?.title)) {
             selectedFarm.value = farm
-            const addressItems = await map.searchAddresses(getFarmAddress(selectedOffer.value.id))
+            const addressItems = await map.searchAddresses(getFarmAddress(selectedOffer.value.farm_id))
             if (addressItems.length > 0) {
                await selectAddress(addressItems[0])
             }
@@ -234,9 +234,8 @@ watch(selectedOffer, async () => {
          }
       }
    }
-   
+   resetSelectedOffer()
 }, { immediate: true })
-console.log(selectedOffer.value, 2)
 </script>
 
 <style lang='scss' scoped>

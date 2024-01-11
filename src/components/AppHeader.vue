@@ -66,7 +66,7 @@
       </template>
       <template v-slot:append>
          <v-btn icon='mdi-cart' @click='sheet = !sheet' v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change'">
-            <v-badge :content='cart?.order_items.length'>
+            <v-badge :content='cart?.order_items.length ? cart?.order_items.length : 0'>
                <v-icon>mdi-cart</v-icon>
             </v-badge>
          </v-btn>
@@ -80,7 +80,7 @@
          <v-card-title class='py-4 text-center my-border my-title'>
             Кошик
             <v-list-item-subtitle
-               v-if='cart?.order_items.length !== 0'
+               v-if='cart?.order_items.length'
                class='my-subtitle pt-2 pb-1'
             >
                Сума: {{ cart?.product_price }} грн
@@ -88,18 +88,18 @@
          </v-card-title>
 
          <v-list
-            v-if='cart?.order_items.length !== 0'
+            v-if='cart?.order_items.length'
             class='pa-5 pb-0 bg-transparent'
          >
             <app-product
-               v-for="item in cart?.order_items"
+               v-for="item in cart.order_items"
                :key="item.id"
                :offer='getOfferById(item.offer_id)'
                class='app-bg-color-form'
             />
          </v-list>
          <v-btn
-            v-if='cart?.order_items.length !== 0'
+            v-if='cart?.order_items.length'
             color='orange'
             class='text-white mx-5 my-5'
             @click='routing.toPayment'

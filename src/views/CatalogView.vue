@@ -25,10 +25,10 @@ const {setCart} = cartStore
 
 setCart()
 
-// const orderStore = useOrderStore()
-// const {populateOrders} = orderStore
+const orderStore = useOrderStore()
+const {populateOrders} = orderStore
 
-// populateOrders()
+populateOrders()
 
 const offerStore = useOfferStore()
 const {populateOffers} = offerStore

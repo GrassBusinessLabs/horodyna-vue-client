@@ -2,7 +2,7 @@
    <div class="pa-5 py-3 rounded-xl app-item-color mb-5 d-flex justify-space-between align-center">
       <div class="d-flex justify-space-between align-center">
          <v-badge color='indigo' :content='order.order_items_count'>
-            <v-avatar size="70" image="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-300.png"></v-avatar>
+            <v-avatar size="70" image="https://cdn-icons-png.flaticon.com/512/1584/1584360.png"></v-avatar>
          </v-badge>
          <div class="ml-6">
             <v-list-item-title class='py-1 my-font-size'>

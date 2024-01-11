@@ -90,4 +90,10 @@ const showProductOnMap = (Offer: Offer) => {
    object-fit: cover;
    border-radius: 100%;
 }
+
+.v-list-item-title {
+   max-width: 120px;
+   white-space: normal;
+   line-height: 1.1;
+}
 </style>
