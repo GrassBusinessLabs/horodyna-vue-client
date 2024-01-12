@@ -48,6 +48,7 @@ const scrollToLetter = (letter: string) => {
    position: fixed;
    top: 69px;
    right: 1.3px;
+   bottom: 75px;
    display: flex;
    flex-direction: column;
    padding-right: 4px;

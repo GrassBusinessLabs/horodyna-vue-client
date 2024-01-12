@@ -10,4 +10,5 @@ export const productsData = [
    {id: 9, name: 'Абрикос', img: 'https://east-fruit.com/wp-content/uploads/2021/04/abr-960x640.jpg', category: 'Фрукти'},
    {id: 10, name: 'Баклажан', img: 'https://content2.rozetka.com.ua/goods/images/big/178661066.jpg', category: 'Овочі'},
    {id: 11, name: 'Диня', img: 'https://ovo.ua/_next/image?url=https%3A%2F%2Fd3msyvi49p39ln.cloudfront.net%2Fpublic%2Fproducts%2Fc5c94d2f0da07d7c47a5e03569a430be.png&w=640&q=75', category: 'Фрукти'},
+   {id: 12, name: 'Цибуля', img: 'https://images.unian.net/photos/2023_01/thumb_files/1000_545_1675013478-2668.jpg?1', category: 'Овочі'},
 ]

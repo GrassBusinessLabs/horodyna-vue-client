@@ -96,4 +96,8 @@ const showProductOnMap = (Offer: Offer) => {
    white-space: normal;
    line-height: 1.1;
 }
+
+.v-list-item-subtitle {
+   max-width: 120px;
+}
 </style>

@@ -147,6 +147,8 @@ const paymentMethod = ref('googlePay')
 }
 
 .no-item-title {
-   font-size: 35px;
+   font-size: 38px;
+   white-space: normal;
+   line-height: 1;
 }
 </style>

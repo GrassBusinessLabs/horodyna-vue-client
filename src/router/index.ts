@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteLocationNormalized } from 'vue-router';
 import { authTokenService } from '@/services';
-import { useToastDialog } from '@/composables';
+// import { useToastDialog } from '@/composables';
 import SignInView from '@/views/SignInView.vue';
 import CatalogView from '@/views/CatalogView.vue';
 import ErrorView from '@/views/ErrorView.vue';
@@ -14,7 +14,7 @@ import RegistrationView from '@/views/RegistrationView.vue'
 import PasswordChangeView from '@/views/PasswordChangeView.vue'
 import OrdersView from '@/views/OrdersView.vue'
 
-const toastDialog = useToastDialog();
+// const toastDialog = useToastDialog();
 const authToken = authTokenService();
 
 const routes = [
@@ -118,7 +118,7 @@ router.beforeEach(async (to: RouteLocationNormalized) => {
       return true
    } catch (e) {
       console.error(e)
-      toastDialog.error(e)
+      // toastDialog.error(e)
       return false
    }
 });

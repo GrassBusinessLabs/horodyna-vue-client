@@ -1,9 +1,9 @@
-import {useToastDialog} from '@/composables/toast'
+// import {useToastDialog} from '@/composables/toast'
 import {utilsService} from '@/services'
 import {useUserStore} from '@/stores'
 
 export const useHandleError = () => {
-   const toastDialog = useToastDialog()
+   // const toastDialog = useToastDialog()
    const userStore = useUserStore()
    const {logout} = userStore
 
@@ -16,11 +16,11 @@ export const useHandleError = () => {
 
       if (errorMsg === tokenExpiredMsg) {
          logout()
-         toastDialog.info('Errors session is expired')
+         // toastDialog.info('Errors session is expired')
          return
       }
 
-      toastDialog.error(errorMsg)
+      // toastDialog.error(errorMsg)
    }
 
    return {

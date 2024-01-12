@@ -57,7 +57,7 @@ import AppOrder from '@/components/AppOrder.vue'
 import AppProduct from '@/components/AppProduct.vue'
 import { useRouting } from '@/composables'
 import PurchaseHistoryLayout from '@/layouts/PurchaseHistoryLayout.vue'
-import { Offer, Order } from '@/models'
+import { Offer, Order, OrderById } from '@/models'
 import { requestService } from '@/services'
 import { useCartStore, useFarmStore, useOfferStore, useOrderStore } from '@/stores'
 import { storeToRefs } from 'pinia'
@@ -92,7 +92,7 @@ const {offers} = storeToRefs(offerStore)
 
 populateOffers()
 
-const selectedOrder = ref<Partial<Order>>({})
+const selectedOrder = ref<Partial<OrderById>>({})
 
 const offersDetails = ref<Offer[]>([])
 
@@ -123,6 +123,8 @@ const showOrderDetails = async (order: Order) => {
 
 <style lang='scss' scoped>
 .no-item-title {
-   font-size: 29px;
+   font-size: 34px;
+   white-space: normal;
+   line-height: 1;
 }
 </style>

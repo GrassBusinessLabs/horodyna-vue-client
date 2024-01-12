@@ -44,43 +44,12 @@
                Сума: {{ selectedOrder.total_price }} грн
             </v-card-title>
             <v-list class='pa-5 h-100'>
-               <v-list-item 
+               <app-product
                   v-for="offer in offersDetails"
-                  :key='offer?.id'
-                  class='pa-4 rounded-xl product-item app-item-color'
-               >
-                  <template v-slot:prepend>
-                     <img width="128" :src="linkIMG + '/' + offer?.image" alt="Product image" class="product-image">
-                  </template>
-
-                  <v-list-item-title class='my-font-size my-color my-sub-margin'>
-                     {{ offer?.title }}
-                  </v-list-item-title>
-                  <v-list-item-subtitle
-                     class='my-subtitle-fs my-margin'
-                  >
-                     {{ offer?.user.name }}
-                  </v-list-item-subtitle>
-                  <v-list-item-subtitle
-                     class='my-subtitle-fs'
-                  >
-                     Рєпіна 7
-                     <v-icon
-                        icon="mdi-map-marker"
-                        size='15'
-                        class='text-black my-margin'
-                     ></v-icon>
-                  </v-list-item-subtitle>
-                  <v-list-item-title class='my-subtitle-fs my-color my-height'>
-                     {{ offer?.price }} за {{ translate(offer?.unit) }}
-                  </v-list-item-title>
-
-                  <template v-slot:append>
-                     <v-list-item-subtitle class='my-subtitle pa-2 font-weight-bold'>
-                        2 {{ translate(offer?.unit) }}
-                     </v-list-item-subtitle>
-                  </template>
-               </v-list-item>
+                  :key="offer.id"
+                  :offer='offer'
+                  class='app-bg-color-form'
+               />
             </v-list>
          </v-card>
       </v-bottom-sheet>
@@ -88,23 +57,29 @@
 </template>
 
 <script lang='ts' setup>
+import AppProduct from '@/components/AppProduct.vue'
 import AppOrder from '@/components/AppOrder.vue'
 import OrdersLayout from '@/layouts/OrdersLayout.vue'
-import { useOrderStore } from '@/stores/order-store.ts'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { Offer, Order, OrderById } from '@/models'
-import { useOfferStore } from '@/stores'
-import { useRouting, useTranslate } from '@/composables'
+import { useCartStore, useFarmStore, useOfferStore, useOrderStore } from '@/stores'
+import { useRouting } from '@/composables'
 import { requestService } from '@/services'
-
-const linkIMG = 'https://horodyna.grassbusinesslabs.tk/static/'
 
 const request = requestService()
 
 const routing = useRouting()
 
-const { translate } = useTranslate()
+const cartStore = useCartStore()
+const {setCart} = cartStore
+
+setCart()
+
+const farmStore = useFarmStore()
+const {populateFarms} = farmStore
+
+populateFarms()
 
 const orderStore = useOrderStore()
 const {populateOrders, getSubmittedOrders} = orderStore
@@ -123,13 +98,32 @@ const sheet = ref(false)
 
 const selectedOrder = ref<Partial<OrderById>>({})
 
-const offersDetails = ref<Partial<Offer[] | undefined>>([])
+const offersDetails = ref<Offer[]>([])
 
 const showOrderDetails = async (order: Order) => {
    const orderResponse = await request.getOrderById(order.id)
    selectedOrder.value = orderResponse
+   console.log(orderResponse);
+   console.log(selectedOrder.value);
+   
    const relatedOffers = offers.value?.filter(offer => orderResponse.order_items.some(item => item.offer_id === offer.id))
-   offersDetails.value = relatedOffers
+   offersDetails.value = relatedOffers ? relatedOffers : [{
+         id: -1,
+         title: '',
+         description: '',
+         category: '',
+         price: -1,
+         unit: '',
+         stock: -1,
+         status: false,
+         image: '',
+         user: {
+            id: -1,
+            name: '',
+            email: ''
+        },
+         farm_id: -1
+      }]
    sheet.value = true
 }
 </script>
@@ -140,7 +134,9 @@ const showOrderDetails = async (order: Order) => {
 }
 
 .no-item-title {
-   font-size: 23.5px;
+   font-size: 30px;
+   white-space: normal;
+   line-height: 1;
 }
 
 .product-image {

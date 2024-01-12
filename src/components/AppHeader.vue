@@ -6,10 +6,10 @@
       width='290'
    >
       <v-list-item
-         class='my-padding pl-4'
+         class='my-padding pl-4 pb-2'
       >
          <v-list-item-title class='my-subtitle app-font-regular'>{{ currentUser?.name }}</v-list-item-title>
-         <v-list-item-subtitle class='my-font-size'>{{ currentUser?.email }}</v-list-item-subtitle>
+         <v-list-item-subtitle class='my-font-size pb-1'>{{ currentUser?.email }}</v-list-item-subtitle>
          <template v-slot:append>
             <v-icon size='27' icon="mdi-chevron-left" @click='drawer = false'></v-icon>
          </template>
@@ -109,7 +109,7 @@
          </v-btn>
          <template v-else>
             <v-list-item-title
-               class='mx-5 pt-5 pb-2 mt-7 no-item-title text-center'
+               class='mx-5 pt-0 pb-2 mt-7 no-item-title text-center'
             >
                Немає жодного товару
             </v-list-item-title>
@@ -180,6 +180,8 @@ const goToCatalog = () => {
 }
 
 .no-item-title {
-   font-size: 33px;
+   font-size: 36px;
+   white-space: normal;
+   line-height: 1;
 }
 </style>

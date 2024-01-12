@@ -276,4 +276,14 @@ watch(selectedOffer, async () => {
    border-radius: 100%;
    margin-right: 10px;
 }
+
+.v-list-item-subtitle {
+   white-space: normal;
+   line-height: 1;
+}
+
+.v-list-item-title {
+   white-space: normal;
+   line-height: 1;
+}
 </style>
