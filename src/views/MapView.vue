@@ -76,7 +76,7 @@
             <v-card-title class='py-4 text-center my-border my-title'>
                {{ selectedFarm.name }}
                <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
-                  Адреса: {{ selectedFarm.address }}
+                  {{ selectedFarm.address }}
                </v-list-item-subtitle>
             </v-card-title>
             <v-list v-if="selectedFarm.products?.length" class='pa-5 pb-2 bg-transparent'>

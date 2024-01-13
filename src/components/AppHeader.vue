@@ -153,7 +153,6 @@ const route = useRoute()
 const drawer = ref(false)
 
 const menuOverviewItems = [
-   {name: 'Замовлення', icon: 'mdi-wallet-bifold-outline', routing: routing.toOrders},
    {name: 'Про сайт', icon: 'mdi-information-outline', routing: routing.toAbout}
 ]
 

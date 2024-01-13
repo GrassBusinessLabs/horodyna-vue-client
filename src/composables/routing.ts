@@ -43,10 +43,6 @@ export const useRouting = () => {
       return router.push('/password-change')
    }
    
-   async function toOrders() {
-      return router.push('/orders')
-   }
-   
    return {
       toSignIn,
       toCatalog,
@@ -58,5 +54,4 @@ export const useRouting = () => {
       toAbout,
       toRegister,
       toPasswordChange,
-      toOrders
    }}

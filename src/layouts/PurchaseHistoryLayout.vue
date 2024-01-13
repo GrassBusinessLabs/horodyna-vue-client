@@ -1,9 +1,9 @@
 <template>
    <v-layout class='rounded rounded-md'>
-      <app-header :header-title="'Історія покупок'" />
+      <app-header :header-title="'Мої замовлення'" />
 
       <v-main class='app-bg-color'>
-         <v-container class='pa-5 pt-6 pb-0'>
+         <v-container class='pa-5 pb-0'>
             <slot />
          </v-container>
       </v-main>
