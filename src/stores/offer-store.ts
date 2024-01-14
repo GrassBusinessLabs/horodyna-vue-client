@@ -52,10 +52,15 @@ export const useOfferStore = defineStore('offer', () => {
          farm_id: -1
       }
    }
+
+   function getUnprocessedOffers(): Offer[] | null {
+      return offers.value ? offers.value.filter(offer => offer.category === 'інше') : null
+   }
    
    return {
       offers,
       populateOffers,
-      getOfferById
+      getOfferById,
+      getUnprocessedOffers
    }
 })

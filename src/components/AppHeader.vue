@@ -55,17 +55,24 @@
       <template v-slot:prepend>
          <v-container class='d-flex'>
             <v-btn
-               v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change'"
+               v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change' && route.path !== '/admin-panel'"
                class='pa-0 w-auto h-auto mr-4'
                icon='mdi-menu'
                @click.stop='drawer = !drawer'
+            >
+            </v-btn>
+            <v-btn
+               v-if="route.path === '/admin-panel'"
+               class='pa-0 w-auto h-auto mr-4'
+               icon='mdi-arrow-left'
+               @click='routing.toCatalog'
             >
             </v-btn>
             <v-app-bar-title>{{ headerTitle }}</v-app-bar-title>
          </v-container>
       </template>
       <template v-slot:append>
-         <v-btn icon='mdi-cart' @click='sheet = !sheet' v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change'">
+         <v-btn icon='mdi-cart' @click='sheet = !sheet' v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change' && route.path !== '/admin-panel'">
             <v-badge :content='cart?.order_items.length ? cart?.order_items.length : 0'>
                <v-icon>mdi-cart</v-icon>
             </v-badge>
@@ -111,6 +118,7 @@
             <v-list-item-title
                class='mx-5 pt-0 pb-2 mt-7 no-item-title text-center'
             >
+               
                Немає жодного товару
             </v-list-item-title>
             <v-btn
