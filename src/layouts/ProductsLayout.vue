@@ -3,7 +3,7 @@
       <app-header :header-title="'Список продуктів'" />
 
       <v-main class='app-bg-color'>
-         <v-container class='pa-5 pt-5'>
+         <v-container class='pa-4'>
             <slot />
          </v-container>
       </v-main>
