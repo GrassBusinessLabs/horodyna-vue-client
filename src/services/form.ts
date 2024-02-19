@@ -33,10 +33,22 @@ export const formService = () => {
       return required ? validator.required() : validator
    }
 
+   function nameValidator(required: boolean = true) {
+      const validator = yup.string().min(MIN_PASS_LEN).max(MAX_PASS_LEN).required()
+      return required ? validator.required() : validator
+   }
+
+   function imgValidator(required: boolean = true) {
+      const validator = yup.string().min(MIN_EMAIL_LEN).max(MAX_EMAIL_LEN)
+      return required ? validator.required() : validator
+   }
+
    return {
       vuetifyConfig,
       usernameValidator,
       passwordValidator,
       emailValidator,
+      nameValidator,
+      imgValidator
    }
 }

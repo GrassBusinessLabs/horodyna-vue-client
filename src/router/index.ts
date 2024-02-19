@@ -12,7 +12,7 @@ import MapView from '@/views/MapView.vue';
 import AboutPage from '@/components/AboutPage.vue';
 import RegistrationView from '@/views/RegistrationView.vue'
 import PasswordChangeView from '@/views/PasswordChangeView.vue'
-import OrdersView from '@/views/OrdersView.vue'
+import AdminPanelView from '@/views/AdminPanelView.vue'
 
 // const toastDialog = useToastDialog();
 const authToken = authTokenService();
@@ -79,15 +79,15 @@ const routes = [
       meta: { auth: true }
    },
    {
-      path: '/orders',
-      name: 'Orders',
-      component: OrdersView,
-      meta: { auth: true }
-   },
-   {
       path: '/password-change',
       name: 'PasswordChange',
       component: PasswordChangeView,
+      meta: { auth: true }
+   },
+   {
+      path: '/admin-panel',
+      name: 'AdminPanel',
+      component: AdminPanelView,
       meta: { auth: true }
    },
    {

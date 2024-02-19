@@ -1,8 +1,8 @@
 <template>
-   <div class='pa-4 pr-3 rounded-xl product-item app-item-color d-flex justify-space-between align-center'>
+   <div class='pa-4 py-3 rounded-xl product-item app-item-color d-flex justify-space-between align-center'>
       <div class="d-flex justify-space-between align-center">
          <img width="128" :src="linkIMG + '/' + offer.image" alt="Product image" class="product-image">
-         <div class="ml-4">
+         <div class="ml-3">
             <v-list-item-title class='my-font-size my-color my-sub-margin'>
                {{ offer.title }}
             </v-list-item-title>
@@ -10,7 +10,7 @@
                {{ offer.user.name }}
             </v-list-item-subtitle>
             <v-list-item-subtitle @click='showProductOnMap(offer)' class='my-subtitle-fs'>
-               {{ getFarmAddress(offer.farm_id) }}
+               {{ farmAddress(offer.farm_id) }}
                <v-icon icon="mdi-map-marker" size='15' class='text-black my-margin'></v-icon>
             </v-list-item-subtitle>
             <v-list-item-title class='my-subtitle-fs my-color my-height'>
@@ -19,20 +19,24 @@
          </div>
       </div>
       <div class="d-flex align-center">
-         <v-icon 
+         <v-icon
+            v-if="!orderInfo?.hideIcons" 
             class="text-grey-darken-1" 
             icon="mdi-minus-circle-outline" 
-            size='34' 
+            size='33' 
             color='black'
             @click="removeProductFromCart(offer)"
          ></v-icon>
-         <v-list-item-subtitle class='my-font-size mx-2 font-weight-bold text-center'>
-            {{ getProductAmount(offer.id) }} {{ getProductAmount(offer.id) ? translate(offer?.unit) : '' }}
+         <v-list-item-subtitle class='my-font-size py-1 font-weight-bold text-center product-counter' :class="{'order-amount': orderInfo?.hideIcons}">
+            {{ orderInfo?.hideIcons ? getOrderItemAmount() : getProductAmount(offer.id) }} 
+            {{ getProductAmount(offer.id) ? translate(offer?.unit) : '' }}
+            {{ orderInfo?.hideIcons ? translate(offer?.unit) : '' }}
          </v-list-item-subtitle>
          <v-icon 
+            v-if="!orderInfo?.hideIcons"
             class="text-grey-darken-1" 
             icon="mdi-plus-circle-outline" 
-            size='34' 
+            size='33' 
             color='black'
             @click="addProductToCart(offer)"
          ></v-icon>
@@ -42,11 +46,17 @@
 
 <script lang="ts" setup>
 import { useRouting, useTranslate } from '@/composables'
-import type { Offer } from "@/models"
+import type { Offer, OrderById } from "@/models"
 import { useCartStore, useFarmStore, useOrderStore } from '@/stores'
 
-defineProps<{
-   offer: Offer
+interface OrderInfo {
+   hideIcons: boolean,
+   order: OrderById
+}
+
+const props = defineProps<{
+   offer: Offer,
+   orderInfo?: OrderInfo
 }>()
 
 const farmStore = useFarmStore()
@@ -68,6 +78,17 @@ const showProductOnMap = (Offer: Offer) => {
    cartStore.setSelectedOffer(Offer)
    routing.toMap()
 }
+
+const farmAddress = (farmId: number) => {
+   const foundAddress = getFarmAddress(farmId)
+   const spliteedAddress = foundAddress ? foundAddress.split(",") : 'Farm not found'
+   return (spliteedAddress[0] + "," + spliteedAddress[1]).replace("Вулиця", "")
+}
+
+const getOrderItemAmount = () => {
+   const foundOrderItem = props.orderInfo?.order.order_items.find(item => item.offer_id === props.offer.id)
+   return foundOrderItem?.amount
+}
 </script>
 
 <style scoped>
@@ -88,16 +109,31 @@ const showProductOnMap = (Offer: Offer) => {
    width: 80px;
    height: 80px;
    object-fit: cover;
-   border-radius: 100%;
+   border-radius: 20px;
+   margin: 5px 0;
 }
 
 .v-list-item-title {
-   max-width: 120px;
+   max-width: 170px;
    white-space: normal;
    line-height: 1.1;
 }
 
 .v-list-item-subtitle {
-   max-width: 120px;
+   max-width: 160px;
+}
+
+.order-amount {
+   font-size: 22px;
+   max-width: 40px !important;
+}
+
+.product-counter {
+   max-width: 22px;
+   margin: 0 7px;
+}
+
+.product-item {
+   padding-right: 10px !important;
 }
 </style>

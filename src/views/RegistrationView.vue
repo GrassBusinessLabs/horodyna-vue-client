@@ -46,7 +46,7 @@
                      class='app-color'
                      variant='flat'
                   >
-                     Зареєструватися
+                     Зареєструвати
                   </v-btn>
                </v-col>
                <v-col
