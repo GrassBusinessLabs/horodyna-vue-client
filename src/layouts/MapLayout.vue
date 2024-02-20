@@ -1,0 +1,27 @@
+<template>
+   <ion-page>
+      <ion-content :fullscreen='true'>
+         <v-layout class='rounded rounded-md'>
+            <app-header :header-title="'Карта з фермами'" />
+
+            <v-main>
+               <v-container class='pa-0'>
+                  <slot />
+               </v-container>
+            </v-main>
+         </v-layout>
+      </ion-content>
+   </ion-page>
+</template>
+
+<script lang='ts' setup>
+import { IonContent, IonPage } from '@ionic/vue'
+import AppHeader from '@/components/AppHeader.vue'
+</script>
+
+<style lang='scss' scoped>
+.v-main {
+   padding-bottom: 71px;
+}
+</style>
+
