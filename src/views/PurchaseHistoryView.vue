@@ -23,6 +23,7 @@
             :order='order'
             :key="order.id"
             @order-details='showOrderDetails(order)'
+            class="gotten-order"
          ></app-order>
       </v-list>
       <v-sheet v-else class='mx-auto pa-6 rounded-lg'>
@@ -41,9 +42,11 @@
          </v-btn>
       </v-sheet>
 
-      <!-- <v-bottom-sheet v-model="sheet">
+      <ion-modal style="--background: transparent" :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
+      :initial-breakpoint="0.7">
+      <ion-content style="--background: transparent">
          <v-card
-            height='595'
+            height='700'
             class='pa-0 rounded-t-lg app-item-color'
          >
             <v-card-title v-if="selectedOrder.status === 'SUBMITTED'" class='pa-5 py-3 my-border my-order-title'>
@@ -76,7 +79,8 @@
                />
             </v-list>
          </v-card>
-      </v-bottom-sheet> -->
+      </ion-content>
+   </ion-modal>
    </purchase-history-layout>
 </template>
 
@@ -90,6 +94,7 @@ import { requestService } from '@/services'
 import { useCartStore, useFarmStore, useOfferStore, useOrderStore } from '@/stores'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import { IonContent, IonModal } from '@ionic/vue'
 
 const request = requestService()
 
@@ -114,7 +119,11 @@ const completedOrders = getCompletedOrders()
 
 const submittedOrders = getSubmittedOrders()
 
-const sheet = ref(false)
+const isOpen = ref(false)
+
+const modalDismissed = () => {
+   isOpen.value = false
+}
 
 const offerStore = useOfferStore()
 const {populateOffers} = offerStore
@@ -147,7 +156,7 @@ const showOrderDetails = async (order: Order) => {
         },
          farm_id: -1
       }]
-   sheet.value = true
+   isOpen.value = true
 }
 </script>
 
@@ -161,5 +170,9 @@ const showOrderDetails = async (order: Order) => {
 .order-title {
    font-size: 19px;
    margin-bottom: 10px;
+}
+
+.gotten-order {
+   background-color: #f9f9f9c0;
 }
 </style>

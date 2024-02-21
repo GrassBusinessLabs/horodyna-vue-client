@@ -24,8 +24,8 @@
 
 <script lang='ts' setup>
 import AppHeader from '@/components/AppHeader.vue'
-import { IonContent, IonPage } from '@ionic/vue'
 import { ukrainianAlphabet } from '@/constants'
+import { IonContent, IonPage } from '@ionic/vue'
 
 const scrollToLetter = (letter: string) => {
    const element = document.querySelector(`.${letter}`)
@@ -41,7 +41,7 @@ const scrollToLetter = (letter: string) => {
    height: calc(100vh - 64px);
    width: 100%;
    overflow: auto;
-   padding-bottom: 95px;
+   padding-bottom: 70px;
    padding-right: 44px;
 }
 

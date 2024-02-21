@@ -11,7 +11,10 @@
             @click="showSettingSheet(setting.title)"
          ></app-setting>
       </v-list>
-      <!-- <v-bottom-sheet v-model="sheet">
+
+      <ion-modal style="--background: transparent" :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
+      :initial-breakpoint="0.7">
+      <ion-content style="--background: transparent">
          <v-card
             height='560'
             class='pa-0 rounded-t-lg app-item-color'
@@ -20,13 +23,13 @@
                {{ category }}
             </v-card-title>
             <v-list
-               class='pa-0 ma-5 bg-transparent'
+               class='pa-0 ma-5 mr-4 bg-transparent'
             >
                <v-list-item
                   v-for='item in filteredItems'
                   :key="item.title"
-                  class='text-h6 pa-5 app-bg-color-form rounded-xl mb-3'
-                  :class="`${item.showSwitch ? 'py-1' : 'py-4'}`"
+                  class='text-h6 pa-5 app-bg-color-form rounded-xl mb-3 mr-1'
+                  :class="`${item.showSwitch ? 'py-1' : 'py-2'}`"
                   @click='item.routing'
                >
                   {{ item.title}} {{ item.value }}
@@ -43,7 +46,8 @@
                </v-list-item>
             </v-list>
          </v-card>
-      </v-bottom-sheet> -->
+      </ion-content>
+   </ion-modal>
    </settings-layout>
 </template>
 
@@ -53,6 +57,7 @@ import AppSetting from '@/components/AppSetting.vue'
 import {ref} from 'vue'
 import {useUserStore} from '@/stores'
 import {storeToRefs} from 'pinia'
+import { IonContent, IonModal } from '@ionic/vue'
 import {useRouting} from '@/composables'
 
 interface SettingItem {
@@ -73,7 +78,11 @@ const settings = [
 
 const switchValue = ref(false)
 
-const sheet = ref(false)
+const isOpen = ref(false)
+
+const modalDismissed = () => {
+   isOpen.value = false
+}
 
 const category = ref('')
 
@@ -84,7 +93,7 @@ const filteredItems = ref<SettingItem[]>([])
 
 const showSettingSheet = (settingCategory: string) => {
    category.value = settingCategory
-   sheet.value = !sheet.value
+   isOpen.value = !isOpen.value
    filteredItems.value = settingsItems.filter(item => item.category === category.value)
 }
 

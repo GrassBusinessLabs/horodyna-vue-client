@@ -20,7 +20,7 @@
             v-for="product in filteredProducts"
             :key="product.id"
             @click='setCategory(product.name)'
-            class='pa-3 pl-4 rounded-xl mb-3 app-item-color'
+            class='pa-3 rounded-xl mb-3 app-item-color'
          >
             <template v-slot:prepend>
                <v-avatar size="40" :image="product.img"></v-avatar>
@@ -33,15 +33,13 @@
             </v-list-item-subtitle>
          </v-list-item>
       </v-list>
-
    </v-col>
 </template>
 
 <script lang='ts' setup>
-import {useRouting} from '@/composables'
-
-import {productsData} from '@/constants/products.ts'
-import {useCategoryStore} from '@/stores'
+import { useRouting } from '@/composables'
+import { productsData } from '@/constants/products.ts'
+import { useCategoryStore } from '@/stores'
 
 const props = defineProps<{
    letter: string,
@@ -72,5 +70,13 @@ v-col {
    height: 23px;
    width: 23px;
    font-size: 13px;
+}
+
+.v-avatar {
+   border-radius: 15px;
+}
+
+.app-item-color {
+   padding-left: 13px !important;
 }
 </style>

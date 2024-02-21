@@ -7,7 +7,7 @@
             :offer='offer'
          />
       </v-list>
-      <v-sheet v-else class='mx-auto pa-6 rounded-lg'>
+      <v-sheet v-else class='mx-auto pa-6 pt-5 rounded-lg'>
          <v-list-item-title
             class='no-item-title text-center py-1'
          >
@@ -15,7 +15,7 @@
          </v-list-item-title>
          <v-btn
             color='orange'
-            class='text-white mt-5 w-100'
+            class='text-white mt-4 w-100 rounded-lg'
             @click='routing.toCatalog()'
             variant='flat'
          >
@@ -26,36 +26,41 @@
 </template>
 
 <script setup lang='ts'>
-import ProductsLayout from '@/layouts/ProductsLayout.vue'
 import AppProduct from '@/components/AppProduct.vue'
-import {useCategoryStore, useFarmStore, useOfferStore, useOrderStore} from '@/stores'
-import { storeToRefs } from 'pinia'
-import { Offer } from '@/models'
 import { useRouting } from '@/composables'
+import ProductsLayout from '@/layouts/ProductsLayout.vue'
+import { Offer } from '@/models'
+import { useCategoryStore, useFarmStore, useOfferStore, useOrderStore } from '@/stores'
+import { onIonViewWillEnter } from '@ionic/vue'
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 
 const routing = useRouting()
 
 const categoryStore = useCategoryStore()
 const {getCurrentCategory} = categoryStore
-const currentCategory = getCurrentCategory()
+const currentCategory = ref<string | null>(null)
 
 const offerStore = useOfferStore()
 const {populateOffers} = offerStore
 const {offers} = storeToRefs(offerStore)
 
-populateOffers()
-
-const filteredOffers = offers.value?.filter((offer: Offer) => offer.category === currentCategory)
+const filteredOffers = ref()
 
 const orderStore = useOrderStore()
 const {populateOrders} = orderStore
 
-populateOrders()
-
 const farmStore = useFarmStore()
 const {populateFarms} = farmStore
 
-populateFarms()
+onIonViewWillEnter(async () => {
+   await populateOffers()
+   await populateOrders()
+   await populateFarms()
+
+   currentCategory.value = getCurrentCategory()
+   filteredOffers.value = offers.value?.filter((offer: Offer) => offer.category === currentCategory.value)
+})
 
 </script>
 

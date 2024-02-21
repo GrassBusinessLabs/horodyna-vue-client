@@ -1,7 +1,7 @@
 <template>
-   <div class='pa-4 py-3 rounded-xl product-item app-item-color d-flex justify-space-between align-center'>
+   <div :class="`pa-4 py-3 rounded-xl product-item d-flex justify-space-between align-center ${offer.status ? 'app-item-color' : 'inactive-offer'}`">
       <div class="d-flex justify-space-between align-center">
-         <img width="128" :src="linkIMG + '/' + offer.image" alt="Product image" class="product-image">
+         <img width="128" :src="linkIMG + '/' + offer.image" alt="Product image" :class="`product-image ${offer.status ? '' : 'gray-scale'}`">
          <div class="ml-3">
             <v-list-item-title class='my-font-size my-color my-sub-margin'>
                {{ offer.title }}
@@ -18,7 +18,7 @@
             </v-list-item-title>
          </div>
       </div>
-      <div class="d-flex align-center">
+      <div v-if="offer.status" class="d-flex align-center">
          <v-icon
             v-if="!orderInfo?.hideIcons" 
             class="text-grey-darken-1" 
@@ -41,6 +41,7 @@
             @click="addProductToCart(offer)"
          ></v-icon>
       </div>
+      <div class="inactive-title text-center mr-1 font-weight-medium" v-else>Немає в наявності</div>
    </div>
 </template>
 
@@ -129,11 +130,25 @@ const getOrderItemAmount = () => {
 }
 
 .product-counter {
-   max-width: 22px;
+   max-width: 23px;
    margin: 0 7px;
 }
 
 .product-item {
    padding-right: 10px !important;
+}
+
+.inactive-offer {
+   background-color: #f9f9f98e;
+}
+
+.inactive-title {
+   width: 90px;
+   font-size: 18px;
+   color: rgba(0, 0, 0, 0.651);
+}
+
+.gray-scale {
+    filter: grayscale(50%);
 }
 </style>
