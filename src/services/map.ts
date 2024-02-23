@@ -91,6 +91,10 @@ export const mapService = () => {
       map.addControl(navControl, 'top-left')
    }
    
+   function getMap(): Map | null {
+      return map
+   }
+
    function destroyMap(): void {
       map = null
    }
@@ -233,6 +237,7 @@ export const mapService = () => {
       getMapZoom,
       createMarker,
       addMarkerToMap,
-      removeAllMarkers
+      removeAllMarkers,
+      getMap
    }
 }

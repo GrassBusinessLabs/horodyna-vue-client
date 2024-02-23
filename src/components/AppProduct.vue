@@ -1,5 +1,5 @@
 <template>
-   <div :class="`pa-4 py-3 rounded-xl product-item d-flex justify-space-between align-center ${offer.status ? 'app-item-color' : 'inactive-offer'}`">
+   <div :class="{'inactive-offer': !offer.status}" class='pa-4 py-3 rounded-xl product-item d-flex justify-space-between align-center app-item-color'>
       <div class="d-flex justify-space-between align-center">
          <img width="128" :src="linkIMG + '/' + offer.image" alt="Product image" :class="`product-image ${offer.status ? '' : 'gray-scale'}`">
          <div class="ml-3">
@@ -139,16 +139,12 @@ const getOrderItemAmount = () => {
 }
 
 .inactive-offer {
-   background-color: #f9f9f98e;
+   opacity: 70%;
 }
 
 .inactive-title {
    width: 90px;
    font-size: 18px;
-   color: rgba(0, 0, 0, 0.651);
-}
-
-.gray-scale {
-    filter: grayscale(50%);
+   opacity: 80%;
 }
 </style>

@@ -173,6 +173,6 @@ const showOrderDetails = async (order: Order) => {
 }
 
 .gotten-order {
-   background-color: #f9f9f9c0;
+   opacity: 70%;
 }
 </style>

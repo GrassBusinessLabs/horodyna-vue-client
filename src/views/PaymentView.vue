@@ -1,108 +1,58 @@
 <template>
    <payment-layout>
       <v-sheet v-if='cart?.order_items.length' class='mx-auto pa-2 pb-3 pt-1 rounded-lg'>
-         <v-list-item>
-            <template v-slot:prepend>
-               <v-container class='pa-0'>
-                  <v-list-item-title>
-                     <v-menu>
-                        <template v-slot:activator="{ props }">
-                           <v-btn
-                              dark
-                              v-bind="props"
-                              class='pa-0 h-auto text-capitalize text-h6'
-                              elevation='0'
-                           >
-                              Доставка <v-icon size='25' icon="mdi mdi-chevron-down"></v-icon>
-                           </v-btn>
-                        </template>
 
-                        <v-list>
-                           <v-list-item
-                              v-for="(item, index) in shippingItems"
-                              :key="index"
-                              :value='item'
-                              @click='() => shippingMethod = item'
-                           >
-                              <v-list-item-title>{{ item }}</v-list-item-title>
-                           </v-list-item>
-                        </v-list>
-                     </v-menu>
-                  </v-list-item-title>
-                  <v-list-item-subtitle class='text-subtitle-1 pb-2'>
-                     {{ shippingMethod }}
-                  </v-list-item-subtitle>
-               </v-container>
-            </template>
-            <template v-slot:append>
-               <v-container class='pa-0'>
-                  <v-list-item-title class='text-h6 py-2 text-end'>
-                     Вартість
-                  </v-list-item-title>
-                  <v-list-item-subtitle class='text-subtitle-1 pb-2 text-end'>
-                     {{ cart?.product_price }} грн
-                  </v-list-item-subtitle>
-               </v-container>
-            </template>
-         </v-list-item>
-         <v-form>
-            <v-row class='ma-0 pb-0'>
-               <v-col cols='12' class='pb-2 pr-2 pt-1'>
-                  <v-btn-toggle
-                     mandatory
-                     v-model="paymentMethod"
-                     class='rounded-t-lg bg-grey-lighten-3 h-100'
-                  >
-                     <v-btn class='border pa-0' value="googlePay">
-                        <v-img class='mt-1' src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/1280px-Google_Pay_Logo.svg.png" height='55' width='90'></v-img>
-                     </v-btn>
+         <v-list-item-title class="order-title mt-4">
+            Вартість покупки:
+         </v-list-item-title>
+         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{ cart?.product_price
+         }} грн</v-card-text>
 
-                     <v-btn class='border pa-0' value="applePay">
-                        <v-img class='mt-1' src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Apple_Pay_logo.svg/800px-Apple_Pay_logo.svg.png" height='35' width='90'></v-img>
+         <v-list-item-title class="order-title mt-4">
+            Адреса доставки:
+         </v-list-item-title>
+         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{ orderAddress }} <v-icon size="21" @click="isOpen = true" icon="mdi-pencil"></v-icon></v-card-text>
+         <ion-modal style="--background: transparent" :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
+            :initial-breakpoint="0.6">
+            <ion-content style="--background: transparent">
+               <v-card class="text-center rounded-t-lg" height="600">
+                  <v-card-title class='py-4 text-center my-card-title'>
+                     Пошук адреси
+                  </v-card-title>
+                  <v-autocomplete class="ma-5" v-model='addressModel' v-model:search='searchModel' :items='items'
+                     :loading='loading' autocomplete='off' item-title='address' label='Введіть адресу'
+                     prepend-inner-icon='mdi-map-marker-outline' :no-filter='true' :hide-details='true'
+                     :return-object='true' @update:modelValue='selectHandler' @update:search='debounceSearch' />
+                  <v-card-text class="pa-5 pt-1 mx-2 d-flex justify-center">
+                     <v-btn @click="addressModel = null" class='w-50 rounded-lg mr-4' color="indigo"
+                        variant='outlined'>
+                        Очистити
                      </v-btn>
-                  </v-btn-toggle>
-               </v-col>
-
-               <template v-if="paymentMethod === 'googlePay'">
-                  <v-col cols='7' class='pb-0 pr-1'>
-                     <v-btn
-                        :block='true'
-                        class='app-color pb-0'
-                        variant='flat'
-                     >
-                        Сплатити
+                     <v-btn @click="changeOrderAddress" class='app-color w-50 rounded-lg' variant='flat'>
+                        Зберегти
                      </v-btn>
-                  </v-col>
-                  <v-col cols='5'>
-                     <v-btn
-                        :block='true'
-                        color='primary'
-                        variant='outlined'
-                        class='pb-0'
-                        @click='routing.toCatalog()'
-                     >
-                        Скасувати
-                     </v-btn>
-                  </v-col>
-               </template>
-               <v-col v-else class='text-center' cols='12'>
-                  <h2 >Apple Pay в розробці</h2>
-               </v-col>
-            </v-row>
-         </v-form>
+                  </v-card-text>
+               </v-card>
+            </ion-content>
+         </ion-modal>
+         <v-row class='ma-0 pb-0'>
+            <v-col cols='6' class="pr-2">
+               <v-btn :block='true' color='indigo' variant='outlined' class='pb-0 rounded-lg' @click='routing.toCatalog()'>
+                  Скасувати
+               </v-btn>
+            </v-col>
+            <v-col cols='6' class="pl-2">
+               <v-btn :block='true' class='app-color pb-0 rounded-lg' variant='flat'>
+                  Замовити
+               </v-btn>
+            </v-col>
+         </v-row>
       </v-sheet>
       <v-sheet v-else class='mx-auto pa-6 rounded-lg'>
-         <v-list-item-title
-            class='no-item-title text-center py-1'
-         >
+         <v-list-item-title class='no-item-title text-center py-1'>
             Ваш кошик пустий
          </v-list-item-title>
-         <v-btn
-            color='orange'
-            class='text-white mt-5 w-100'
-            @click='routing.toCatalog()'
-            variant='flat'
-         >
+         <v-btn color='orange' class='text-white mt-5 w-100' @click='routing.toCatalog()' variant='flat'>
             Перейти в каталог
          </v-btn>
       </v-sheet>
@@ -110,25 +60,83 @@
 </template>
 
 <script lang='ts' setup>
+import { useRouting } from '@/composables'
 import PaymentLayout from '@/layouts/PaymentLayout.vue'
-import {ref} from 'vue'
-import {useRouting} from '@/composables'
+import { AddressItem, mapService } from '@/services'
 import { useCartStore } from '@/stores'
+import { IonContent, IonModal } from '@ionic/vue'
+import { LngLatLike } from '@tomtom-international/web-sdk-maps'
+import debounce from 'lodash.debounce'
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 
 const routing = useRouting()
 
 const cartStore = useCartStore()
-const {setCart} = cartStore
-const {cart} = storeToRefs(cartStore)
+const { setCart } = cartStore
+const { cart } = storeToRefs(cartStore)
 
 setCart()
 
-const shippingItems = ['Нова пошта', 'Укр пошта', 'Самовивіз']
+const map = mapService()
 
-const shippingMethod = ref('Нова пошта')
+const isOpen = ref(false)
 
-const paymentMethod = ref('googlePay')
+const orderAddress = ref<string | undefined>('Вулиця Жовтнева, 15, Градизька селищна громада')
+
+const loading = ref<boolean>(false)
+const addressModel = ref<AddressItem | null>(null)
+const searchModel = ref<string>('')
+const items = ref<AddressItem[]>([])
+
+const debounceSearch = debounce(search, 200)
+
+const emit = defineEmits<{
+   (e: 'select', address: AddressItem): void
+}>()
+
+function selectHandler(event: AddressItem): void {
+   emit('select', event)
+}
+
+async function search(value: string | null): Promise<void> {
+   try {
+      loading.value = true
+
+      const searchValue: string = value?.trim() || ''
+
+      if (!searchValue) {
+         items.value = []
+         loading.value = false
+         return
+      }
+
+      items.value = await map.searchAddresses(searchValue)
+      if (items.value[0].details.position != undefined) {
+         const position: LngLatLike = {
+            lat: Number(items.value[0].details.position.lat),
+            lng: Number(items.value[0].details.position.lng)
+         }
+         const ttmap = map.getMap()
+         ttmap?.setCenter(position)
+      }
+      loading.value = false
+   } catch (e) {
+      console.error(e)
+      items.value = []
+      loading.value = false
+   }
+}
+
+const modalDismissed = () => {
+   isOpen.value = false
+}
+
+const changeOrderAddress = () => {
+   orderAddress.value = addressModel.value?.address
+   addressModel.value = null
+   isOpen.value = false
+}
 </script>
 
 <style lang='scss' scoped>
@@ -149,5 +157,18 @@ const paymentMethod = ref('googlePay')
    font-size: 38px;
    white-space: normal;
    line-height: 1;
+}
+
+.address-title {
+   border-bottom: 2px solid rgb(196, 196, 196);
+   background-color: rgb(247, 247, 247);
+   padding: 11px 16px !important;
+   font-size: 18px;
+}
+
+.order-title {
+   font-size: 19px;
+   margin: 0 15px;
+   margin-bottom: 7px;
 }
 </style>
