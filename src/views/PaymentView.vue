@@ -1,7 +1,20 @@
 <template>
    <payment-layout>
-      <v-sheet v-if='cart?.order_items.length' class='mx-auto pa-2 pb-3 pt-1 rounded-lg'>
-
+      <v-sheet v-if='!cart?.order_items.length' class='mx-auto pa-6 rounded-lg'>
+         <v-list-item-title class='no-item-title text-center py-1'>
+            Ваш кошик пустий
+         </v-list-item-title>
+         <v-btn color='orange' class='text-white mt-5 w-100' @click='routing.toCatalog()' variant='flat'>
+            Перейти в каталог
+         </v-btn>
+      </v-sheet>
+      <v-sheet v-else-if="!orderAddress" class='mx-auto pa-6 pt-4 rounded-lg'>
+         <v-list-item-title class='no-item-title text-center pb-4'>
+            Ви ще не ввели свою адресу
+         </v-list-item-title>
+         <app-address-form></app-address-form>
+      </v-sheet>
+      <v-sheet v-else class='mx-auto pa-2 pb-3 pt-1 rounded-lg'>
          <v-list-item-title class="order-title mt-4">
             Вартість покупки:
          </v-list-item-title>
@@ -48,23 +61,17 @@
             </v-col>
          </v-row>
       </v-sheet>
-      <v-sheet v-else class='mx-auto pa-6 rounded-lg'>
-         <v-list-item-title class='no-item-title text-center py-1'>
-            Ваш кошик пустий
-         </v-list-item-title>
-         <v-btn color='orange' class='text-white mt-5 w-100' @click='routing.toCatalog()' variant='flat'>
-            Перейти в каталог
-         </v-btn>
-      </v-sheet>
+      
    </payment-layout>
 </template>
 
 <script lang='ts' setup>
+import AppAddressForm from '@/components/AppAddressForm.vue'
 import { useRouting } from '@/composables'
 import PaymentLayout from '@/layouts/PaymentLayout.vue'
 import { AddressItem, mapService } from '@/services'
-import { useCartStore } from '@/stores'
-import { IonContent, IonModal } from '@ionic/vue'
+import { useAddressStore, useCartStore } from '@/stores'
+import { IonContent, IonModal, onIonViewWillEnter } from '@ionic/vue'
 import { LngLatLike } from '@tomtom-international/web-sdk-maps'
 import debounce from 'lodash.debounce'
 import { storeToRefs } from 'pinia'
@@ -76,13 +83,20 @@ const cartStore = useCartStore()
 const { setCart } = cartStore
 const { cart } = storeToRefs(cartStore)
 
-setCart()
+const addressStore = useAddressStore()
+const { populateAddresses, getUserAddress } = addressStore
+
+const orderAddress = ref<string | undefined>()
+
+onIonViewWillEnter(async () => {
+   await setCart()
+   await populateAddresses()
+   orderAddress.value = getUserAddress()
+})
 
 const map = mapService()
 
 const isOpen = ref(false)
-
-const orderAddress = ref<string | undefined>('Вулиця Жовтнева, 15, Градизька селищна громада')
 
 const loading = ref<boolean>(false)
 const addressModel = ref<AddressItem | null>(null)
@@ -154,7 +168,7 @@ const changeOrderAddress = () => {
 }
 
 .no-item-title {
-   font-size: 38px;
+   font-size: 32px;
    white-space: normal;
    line-height: 1;
 }

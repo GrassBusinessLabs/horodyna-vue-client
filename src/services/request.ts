@@ -1,5 +1,7 @@
 import {apiService} from '@/services/api'
 import type {
+   AddressResponse,
+   CreateAddress,
    CreateOrder,
    CreateOrderItem,
    CurrentUser,
@@ -75,6 +77,14 @@ export const requestService = () => {
       return api.post('/auth/logout')
    }
 
+   async function createAddress(body: CreateAddress): Promise<void> {
+      return api.post('/address', body)
+   }
+
+   async function getAddresses(): Promise<AddressResponse> {
+      return api.get('/address')
+   }
+
    return {
       login,
       register,
@@ -89,6 +99,8 @@ export const requestService = () => {
       updateOrderItem,
       deleteOrderItem,
       getOffers,
-      logout
+      logout,
+      createAddress,
+      getAddresses
    }
 }
