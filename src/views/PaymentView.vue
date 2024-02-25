@@ -12,9 +12,18 @@
          <v-list-item-title class='no-item-title text-center pb-4'>
             Ви ще не ввели свою адресу
          </v-list-item-title>
-         <app-address-form></app-address-form>
+         <app-address-form @get-addresses="getNewAddresses"></app-address-form>
       </v-sheet>
       <v-sheet v-else class='mx-auto pa-2 pb-3 pt-1 rounded-lg'>
+         <v-list-item-title class="order-title mt-4">
+            Продукти:
+         </v-list-item-title>
+         <v-sheet class="px-3">
+            <v-btn :block='true' color="orange-darken-1" class='pb-0 rounded-lg text-white' variant='flat'>
+               Переглянути продукти
+            </v-btn>
+         </v-sheet>
+
          <v-list-item-title class="order-title mt-4">
             Вартість покупки:
          </v-list-item-title>
@@ -24,7 +33,8 @@
          <v-list-item-title class="order-title mt-4">
             Адреса доставки:
          </v-list-item-title>
-         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{ orderAddress }} <v-icon size="21" @click="isOpen = true" icon="mdi-pencil"></v-icon></v-card-text>
+         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{ orderAddress }}
+            <v-icon size="21" @click="isOpen = true" icon="mdi-pencil"></v-icon></v-card-text>
          <ion-modal style="--background: transparent" :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
             :initial-breakpoint="0.6">
             <ion-content style="--background: transparent">
@@ -37,8 +47,7 @@
                      prepend-inner-icon='mdi-map-marker-outline' :no-filter='true' :hide-details='true'
                      :return-object='true' @update:modelValue='selectHandler' @update:search='debounceSearch' />
                   <v-card-text class="pa-5 pt-1 mx-2 d-flex justify-center">
-                     <v-btn @click="addressModel = null" class='w-50 rounded-lg mr-4' color="indigo"
-                        variant='outlined'>
+                     <v-btn @click="addressModel = null" class='w-50 rounded-lg mr-4' color="indigo" variant='outlined'>
                         Очистити
                      </v-btn>
                      <v-btn @click="changeOrderAddress" class='app-color w-50 rounded-lg' variant='flat'>
@@ -61,7 +70,6 @@
             </v-col>
          </v-row>
       </v-sheet>
-      
    </payment-layout>
 </template>
 
@@ -150,6 +158,11 @@ const changeOrderAddress = () => {
    orderAddress.value = addressModel.value?.address
    addressModel.value = null
    isOpen.value = false
+}
+
+const getNewAddresses = async () => {
+   await populateAddresses()
+   orderAddress.value = getUserAddress()
 }
 </script>
 

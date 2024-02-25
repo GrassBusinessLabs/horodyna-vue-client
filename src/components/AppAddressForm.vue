@@ -1,8 +1,10 @@
 <template>
   <div class="text-center">
-    <v-btn :block='true' @click="isOpen = true" class='app-color pb-0 rounded-lg' variant='flat'>
+    <v-btn v-if="!isMenuButton" :block='true' @click="isOpen = true" class='app-color pb-0 rounded-lg' variant='flat'>
       Ввести адресу
     </v-btn>
+    <v-list-item-subtitle v-else-if="userAddress" class='my-font-size text-start py-1'>{{ userAddress }}</v-list-item-subtitle>
+    <v-list-item-subtitle v-else @click="goToSetUserAddress" class='my-font-size text-start'>Вкажіть вашу адресу <v-icon size="21" icon="mdi-alert-circle"></v-icon></v-list-item-subtitle>
 
     <ion-modal style="--background: transparent" :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
       :initial-breakpoint="0.6">
@@ -30,21 +32,31 @@
 import { requestService } from '@/services'
 import type { AddressItem } from '@/services/map'
 import { mapService } from '@/services/map'
-import { useUserStore } from '@/stores'
+import { useAddressStore, useUserStore } from '@/stores'
 import { IonContent, IonModal } from '@ionic/vue'
 import { LngLatLike } from '@tomtom-international/web-sdk-maps'
 import debounce from 'lodash.debounce'
 import { storeToRefs } from 'pinia'
 import { defineEmits, ref, watch } from 'vue'
 
+defineProps<{
+  isMenuButton?: boolean,
+  userAddress?: string
+}>()
+
 const emit = defineEmits<{
   (e: 'select', address: AddressItem): void
+  (e: 'closeMenu'): void
+  (e: 'getAddresses'): void
 }>()
 
 const request = requestService()
 
 const userStore = useUserStore()
 const { currentUser } = storeToRefs(userStore)
+
+const addressStore = useAddressStore()
+const { populateAddresses } = addressStore
 
 const map = mapService()
 
@@ -58,9 +70,9 @@ const items = ref<AddressItem[]>([])
 const debounceSearch = debounce(search, 200)
 
 watch(isOpen, () => {
-   if(!isOpen.value) {
-      addressModel.value = null
-   }
+  if (!isOpen.value) {
+    addressModel.value = null
+  }
 })
 
 function selectHandler(event: AddressItem): void {
@@ -113,7 +125,14 @@ const createAddress = async () => {
     }
     await request.createAddress(body)
     isOpen.value = false
+    await populateAddresses()
+    emit('getAddresses')
   }
+}
+
+const goToSetUserAddress = () => {
+  isOpen.value = true
+  emit('closeMenu')
 }
 </script>
 

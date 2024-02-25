@@ -1,11 +1,8 @@
 <template>
    <v-navigation-drawer v-model='drawer' :temporary='true' class='position-fixed' width='290'>
       <v-list-item class='my-padding pl-4 pb-2'>
-         <v-list-item-title class='my-subtitle app-font-regular'>{{ currentUser?.name }}</v-list-item-title>
-         <v-list-item-subtitle class='my-font-size pb-1'>{{ currentUser?.email }}</v-list-item-subtitle>
-         <template v-slot:append>
-            <v-icon size='27' icon="mdi-chevron-left" @click='drawer = false'></v-icon>
-         </template>
+         <v-list-item-title class='user-name app-font-regular'>{{ currentUser?.name }}</v-list-item-title>
+         <app-address-form :user-address="userAddress" :is-menu-button="true" @close-menu="drawer = false"></app-address-form>
       </v-list-item>
       <v-divider thickness='2'></v-divider>
 
@@ -21,7 +18,7 @@
             </template>
          </v-list-item>
       </v-list>
-      <v-list density='compact' :nav='true' class='mt-2'>
+      <v-list density='compact' :nav='true' class='pt-1'>
          <v-list-item-subtitle class='my-font-size ml-2 mb-2 mt-1'>
             АККАУНТ
          </v-list-item-subtitle>
@@ -50,7 +47,8 @@
       <template v-slot:append>
          <v-btn icon='mdi-cart' @click='isOpen = !isOpen'
             v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change' && route.path !== '/admin-panel'">
-            <v-badge v-if="cart?.order_items.length" color="grey-darken-4" :content='cart?.order_items.length ? cart?.order_items.length : 0'>
+            <v-badge v-if="cart?.order_items.length" color="grey-darken-4"
+               :content='cart?.order_items.length ? cart?.order_items.length : 0'>
                <v-icon>mdi-cart</v-icon>
             </v-badge>
             <v-icon v-else class="ml-2">mdi-cart</v-icon>
@@ -78,14 +76,15 @@
                <v-list-item-title class='mx-5 pb-1 mt-6 no-item-title text-center'>
                   Немає жодного товару
                </v-list-item-title>
-               
+
             </template>
             <v-card-actions class="d-flex justify-center pt-0 px-5">
                <v-btn block v-if='cart?.order_items.length' color='orange' class='text-white mx-5 my-5 rounded-lg'
                   @click='goToPayment' variant='flat'>
                   Оформити замовлення
                </v-btn>
-               <v-btn v-else block color='orange' class='text-white mx-5 my-5 rounded-lg' @click='goToCatalog' variant='flat'>
+               <v-btn v-else block color='orange' class='text-white mx-5 my-5 rounded-lg' @click='goToCatalog'
+                  variant='flat'>
                   Перейти в каталог
                </v-btn>
             </v-card-actions>
@@ -95,12 +94,13 @@
 </template>
 
 <script lang='ts' setup>
+import AppAddressForm from '@/components/AppAddressForm.vue'
 import AppProduct from '@/components/AppProduct.vue'
 import { useRouting } from '@/composables'
-import { useCartStore, useOfferStore, useUserStore } from '@/stores'
+import { useAddressStore, useCartStore, useOfferStore, useUserStore } from '@/stores'
 import { IonContent, IonModal } from '@ionic/vue'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 defineProps<{
@@ -115,6 +115,11 @@ const { currentUser } = storeToRefs(userStore)
 
 const cartStore = useCartStore()
 const { cart } = storeToRefs(cartStore)
+
+const addressStore = useAddressStore()
+const { populateAddresses, getUserAddress } = addressStore
+
+const userAddress = ref<string | undefined>()
 
 const routing = useRouting()
 const route = useRoute()
@@ -145,11 +150,19 @@ const goToPayment = () => {
    isOpen.value = false
    routing.toPayment()
 }
+
+watch(drawer, async () => {
+   if (drawer.value) {
+      await populateAddresses()
+      userAddress.value = getUserAddress()
+   }
+})
 </script>
 
 <style lang='scss' scoped>
 .my-padding {
    padding: 11.6px;
+   padding-top: 9.5px;
 }
 
 .v-app-bar {
@@ -160,5 +173,9 @@ const goToPayment = () => {
    font-size: 36px;
    white-space: normal;
    line-height: 1;
+}
+
+.user-name {
+   font-size: 19px;
 }
 </style>
