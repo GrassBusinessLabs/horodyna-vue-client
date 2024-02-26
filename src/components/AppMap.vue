@@ -16,9 +16,10 @@ const startingCoords: LngLatLike = {
    lng: 32.62480605898742
 }
 
-onMounted(() => {
+onMounted(async () => {
    if (mapContainer.value) {
-      map.createMap(mapContainer.value as HTMLElement, {center: startingCoords})
+      await new Promise(resolve => setTimeout(resolve, 200))
+      await map.createMap(mapContainer.value as HTMLElement, {center: startingCoords})
    }
 })
 
@@ -29,7 +30,7 @@ onUnmounted(() => {
 
 <style lang='scss'>
 .map-container {
-   height: 100vh;
+   height: calc(100vh - 100px);
    &__map {
       width: 100%;
       height: 100%;

@@ -13,11 +13,11 @@
          <app-order v-for="order in completedOrders" :order='order' :key="order.id"
             @order-details='showOrderDetails(order)' class="gotten-order"></app-order>
       </v-list>
-      <v-sheet v-else class='mx-auto pa-6 rounded-lg'>
-         <v-list-item-title class='no-item-title text-center py-1'>
+      <v-sheet v-else class='mx-auto pa-6 pt-5 rounded-lg'>
+         <v-list-item-title class='no-item-title text-center py-0'>
             Немає жодного замовлення
          </v-list-item-title>
-         <v-btn color='orange' class='text-white mt-5 w-100' @click='routing.toCatalog()' variant='flat'>
+         <v-btn color='orange' class='text-white mt-4 w-100 rounded-lg' @click='routing.toCatalog()' variant='flat'>
             Перейти в каталог
          </v-btn>
       </v-sheet>

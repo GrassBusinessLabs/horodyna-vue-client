@@ -1,4 +1,3 @@
-import {apiService} from '@/services/api'
 import type {
    AddressResponse,
    CreateAddress,
@@ -17,6 +16,7 @@ import type {
    RegisterBody,
    UpdateOrderItem,
 } from '@/models'
+import { apiService } from '@/services/api'
 
 export const requestService = () => {
    const api = apiService()
@@ -85,6 +85,10 @@ export const requestService = () => {
       return api.get('/address')
    }
 
+   async function setOrderInSubmitted(farm_id: number, order_id: number): Promise<AddressResponse> {
+      return api.get(`/orders/submitted-status/${farm_id}/${order_id}`)
+   }
+
    return {
       login,
       register,
@@ -92,15 +96,16 @@ export const requestService = () => {
       getCurrentUser,
       getFarms,
       getFarmById,
-      getOrders,
+      // getOrders,
       getOrderById,
-      createOrder,
+      // createOrder,
       createOrderItem,
       updateOrderItem,
       deleteOrderItem,
       getOffers,
       logout,
       createAddress,
-      getAddresses
+      getAddresses,
+      setOrderInSubmitted
    }
 }

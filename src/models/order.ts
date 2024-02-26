@@ -16,7 +16,7 @@ export interface OrderById {
    order_items: OrderItem[],
    status: string,
    comment: string,
-   address_id: number,
+   address: number,
    user_id: number,
    product_price: number,
    shipping_price: number,
@@ -40,7 +40,15 @@ export interface OrderResponse {
 
 export interface CreateOrder {
    order_items: CreateOrderItem[],
-   address_id: number,
+   address: {
+      user_id: number,
+      title: string,
+      city: string,
+      country: string,
+      address: string,
+      lat: number,
+      lon: number
+   },
    comment: string,
    shipping_price: number
 }

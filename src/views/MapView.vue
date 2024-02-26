@@ -7,7 +7,7 @@
             {{ filter }}
          </v-chip>
       </v-slide-group>
-      <v-btn @click="() => isOpen = !isOpen" icon="mdi-filter-cog" class='position-fixed filter-btn'>
+      <v-btn @click="() => isOpen = !isOpen" icon="mdi-filter-cog" variant="flat" class='position-fixed filter-btn'>
       </v-btn>
 
       <ion-modal style="--background: transparent" :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
@@ -88,7 +88,7 @@ import MapLayout from '@/layouts/MapLayout.vue'
 import { Farm, Offer } from '@/models'
 import { AddressItem, mapService } from '@/services/map'
 import { useCartStore, useFarmStore, useOfferStore, useOrderStore } from '@/stores'
-import { IonContent, IonModal } from '@ionic/vue'
+import { IonContent, IonModal, onIonViewWillEnter } from '@ionic/vue'
 import { LngLatLike, Marker } from '@tomtom-international/web-sdk-maps'
 import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
@@ -103,22 +103,22 @@ const cartStore = useCartStore()
 const { setCart, addProductToCart, removeProductFromCart, resetSelectedOffer } = cartStore
 const { selectedOffer } = storeToRefs(cartStore)
 
-setCart()
-
 const farmStore = useFarmStore()
 const { populateFarms, getFarmAddress } = farmStore
 const { farms } = storeToRefs(farmStore)
-
-populateFarms()
 
 const offerStore = useOfferStore()
 const { populateOffers } = offerStore
 const { offers } = storeToRefs(offerStore)
 
-populateOffers()
-
 const orderStore = useOrderStore()
 const { getProductAmount } = orderStore
+
+onIonViewWillEnter(async () => {
+   await setCart()
+   await populateFarms()
+   await populateOffers()
+})
 
 const linkIMG = 'https://horodyna.grassbusinesslabs.tk/static/'
 
@@ -204,8 +204,9 @@ watch(selectedOffer, async () => {
 
 <style lang='scss' scoped>
 .filter-btn {
-   bottom: 80px;
+   bottom: 70px;
    right: 12px;
+   outline: 2.8px solid rgba(0, 0, 0, 0.055);
 }
 
 .card-title {
@@ -214,16 +215,16 @@ watch(selectedOffer, async () => {
 
 .v-slide-group {
    height: 40px;
-
+   outline: 2.5px solid rgba(0, 0, 0, 0.055);
    .v-chip {
       font-size: 16px;
    }
 }
 
 .filters-block {
-   height: 48px;
+   height: 47px;
    background-color: white;
-   bottom: 80px;
+   bottom: 70px;
    left: 12px;
    right: 72px;
    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);

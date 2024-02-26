@@ -1,6 +1,6 @@
 <template>
    <payment-layout>
-      <v-sheet v-if='!cart?.order_items.length' class='mx-auto pa-6 rounded-lg'>
+      <v-sheet v-if='!!cart?.order_items.length' class='mx-auto pa-6 rounded-lg'>
          <v-list-item-title class='no-item-title text-center py-1'>
             Ваш кошик пустий
          </v-list-item-title>
@@ -8,7 +8,7 @@
             Перейти в каталог
          </v-btn>
       </v-sheet>
-      <v-sheet v-else-if="!orderAddress" class='mx-auto pa-6 pt-4 rounded-lg'>
+      <v-sheet v-else-if="!!orderAddress" class='mx-auto pa-6 pt-4 rounded-lg'>
          <v-list-item-title class='no-item-title text-center pb-4'>
             Ви ще не ввели свою адресу
          </v-list-item-title>
@@ -16,12 +16,14 @@
       </v-sheet>
       <v-sheet v-else class='mx-auto pa-2 pb-3 pt-1 rounded-lg'>
          <v-list-item-title class="order-title mt-4">
-            Продукти:
+            Замовлення з ферми:
+         </v-list-item-title>
+         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">Вулиця Репіна, 59, Градизька селищна громада</v-card-text>
+         <v-list-item-title class="order-title mt-4">
+            Продукти до сплати:
          </v-list-item-title>
          <v-sheet class="px-3">
-            <v-btn :block='true' color="orange-darken-1" class='pb-0 rounded-lg text-white' variant='flat'>
-               Переглянути продукти
-            </v-btn>
+            <app-payment-products :is-show-payment-products="true" />
          </v-sheet>
 
          <v-list-item-title class="order-title mt-4">
@@ -64,7 +66,7 @@
                </v-btn>
             </v-col>
             <v-col cols='6' class="pl-2">
-               <v-btn :block='true' class='app-color pb-0 rounded-lg' variant='flat'>
+               <v-btn @click="createSubmittedOrder" :block='true' class='app-color pb-0 rounded-lg' variant='flat'>
                   Замовити
                </v-btn>
             </v-col>
@@ -75,15 +77,18 @@
 
 <script lang='ts' setup>
 import AppAddressForm from '@/components/AppAddressForm.vue'
+import AppPaymentProducts from '@/components/AppPaymentProducts.vue'
 import { useRouting } from '@/composables'
 import PaymentLayout from '@/layouts/PaymentLayout.vue'
-import { AddressItem, mapService } from '@/services'
-import { useAddressStore, useCartStore } from '@/stores'
+import { AddressItem, mapService, requestService } from '@/services'
+import { useAddressStore, useCartStore, useOrderStore } from '@/stores'
 import { IonContent, IonModal, onIonViewWillEnter } from '@ionic/vue'
 import { LngLatLike } from '@tomtom-international/web-sdk-maps'
 import debounce from 'lodash.debounce'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+
+const request = requestService()
 
 const routing = useRouting()
 
@@ -93,6 +98,9 @@ const { cart } = storeToRefs(cartStore)
 
 const addressStore = useAddressStore()
 const { populateAddresses, getUserAddress } = addressStore
+
+const orderStore = useOrderStore()
+const { populateOrders, getDraftOrder } = orderStore
 
 const orderAddress = ref<string | undefined>()
 
@@ -164,6 +172,11 @@ const getNewAddresses = async () => {
    await populateAddresses()
    orderAddress.value = getUserAddress()
 }
+
+const createSubmittedOrder = async () => {
+   await request.setOrderInSubmitted(55, cart.value?.id ? cart.value.id : -1)
+   await populateOrders()
+}
 </script>
 
 <style lang='scss' scoped>
@@ -195,7 +208,7 @@ const getNewAddresses = async () => {
 
 .order-title {
    font-size: 19px;
-   margin: 0 15px;
+   margin: 0 13px;
    margin-bottom: 7px;
 }
 </style>

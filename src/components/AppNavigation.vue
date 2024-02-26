@@ -45,7 +45,7 @@ watch(route, () => {
    } else {
       number.value = -1
    }
-})
+}, { immediate: true })
 
 const farmStore = useFarmStore()
 const {populateFarms} = farmStore

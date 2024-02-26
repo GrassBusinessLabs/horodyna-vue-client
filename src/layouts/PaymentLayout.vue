@@ -5,7 +5,7 @@
             <app-header :header-title="'Оплата товарів'" />
 
             <v-main class='app-bg-color'>
-               <v-container class='pa-5 pt-6'>
+               <v-container class='pa-4 pt-5'>
                   <slot />
                </v-container>
             </v-main>
@@ -19,4 +19,8 @@ import { IonContent, IonPage } from '@ionic/vue'
 import AppHeader from '@/components/AppHeader.vue'
 </script>
 
-<style lang='scss' scoped></style>
+<style lang='scss' scoped>
+.v-main {
+   padding-bottom: 60px;
+}
+</style>

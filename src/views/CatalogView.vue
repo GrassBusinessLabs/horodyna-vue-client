@@ -9,7 +9,7 @@ import CatalogLayout from '@/layouts/CatalogLayout.vue'
 import AppCategory from '@/components/AppCategory.vue'
 import { ukrainianAlphabet } from '@/constants'
 import { useCartStore, useOfferStore, useOrderStore, useUserStore } from '@/stores'
-import { onIonViewDidEnter } from '@ionic/vue'
+import { onIonViewWillEnter } from '@ionic/vue'
 
 const userStore = useUserStore()
 const { populate } = userStore
@@ -23,7 +23,7 @@ const { populateOrders } = orderStore
 const offerStore = useOfferStore()
 const { populateOffers } = offerStore
 
-onIonViewDidEnter(async () => {
+onIonViewWillEnter(async () => {
    await populate()
    await populateOffers()
    await populateOrders()

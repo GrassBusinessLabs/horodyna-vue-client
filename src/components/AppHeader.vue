@@ -46,7 +46,7 @@
       </template>
       <template v-slot:append>
          <v-btn icon='mdi-cart' @click='isOpen = !isOpen'
-            v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change' && route.path !== '/admin-panel'">
+            v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change' && route.path !== '/admin-panel' && route.path !== '/payment'">
             <v-badge v-if="cart?.order_items.length" color="grey-darken-4"
                :content='cart?.order_items.length ? cart?.order_items.length : 0'>
                <v-icon>mdi-cart</v-icon>
@@ -73,7 +73,7 @@
             </v-list>
 
             <template v-else>
-               <v-list-item-title class='mx-5 pb-1 mt-6 no-item-title text-center'>
+               <v-list-item-title class='mx-5 pb-1 mt-5 no-item-title text-center'>
                   Немає жодного товару
                </v-list-item-title>
 
@@ -83,7 +83,7 @@
                   @click='goToPayment' variant='flat'>
                   Оформити замовлення
                </v-btn>
-               <v-btn v-else block color='orange' class='text-white mx-5 my-5 rounded-lg' @click='goToCatalog'
+               <v-btn v-else block color='orange' class='text-white mx-5 my-5 mt-4 rounded-lg' @click='goToCatalog'
                   variant='flat'>
                   Перейти в каталог
                </v-btn>
