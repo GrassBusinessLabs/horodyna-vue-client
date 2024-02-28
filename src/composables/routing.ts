@@ -1,4 +1,4 @@
-import {useIonRouter} from '@ionic/vue'
+import { useIonRouter } from '@ionic/vue'
 
 export const useRouting = () => {
    const ionRouter = useIonRouter()
@@ -42,6 +42,10 @@ export const useRouting = () => {
    async function toPasswordChange() {
       return ionRouter.navigate('/password-change')
    }
+
+   async function toOrders() {
+      return ionRouter.navigate('/orders')
+   }
    
    return {
       toSignIn,
@@ -54,4 +58,5 @@ export const useRouting = () => {
       toAbout,
       toRegister,
       toPasswordChange,
+      toOrders
    }}

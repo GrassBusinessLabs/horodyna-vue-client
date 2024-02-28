@@ -29,7 +29,7 @@ export interface OrderById {
       latitude: number,
       longitude: number,
       user_id: number
-  }
+   }
 }
 
 export interface OrderResponse {
@@ -40,15 +40,7 @@ export interface OrderResponse {
 
 export interface CreateOrder {
    order_items: CreateOrderItem[],
-   address: {
-      user_id: number,
-      title: string,
-      city: string,
-      country: string,
-      address: string,
-      lat: number,
-      lon: number
-   },
+   address: string,
    comment: string,
    shipping_price: number
 }
@@ -60,7 +52,17 @@ export interface OrderItem {
    title: string,
    price: number,
    total_price: number,
-   amount: number
+   amount: number,
+   farm: {
+      id: number,
+      name: string,
+      city: string,
+      address: string,
+      latitude: number,
+      longitude: number,
+      all_images: [],
+      user_id: number
+   }
 }
 
 export interface CreateOrderItem {
@@ -72,4 +74,8 @@ export interface CreateOrderItem {
 export interface UpdateOrderItem {
    id: number,
    amount: number
+}
+
+export interface OrderStatus {
+   status: string
 }

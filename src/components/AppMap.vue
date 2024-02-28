@@ -5,9 +5,9 @@
 </template>
 
 <script lang='ts' setup>
-import {onMounted, onUnmounted, ref} from 'vue'
-import {LngLatLike} from '@tomtom-international/web-sdk-maps'
-import {mapService} from '@/services/map.ts'
+import { mapService } from '@/services/map.ts'
+import { LngLatLike } from '@tomtom-international/web-sdk-maps'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 const map = mapService()
 const mapContainer = ref<HTMLElement | null>(null)

@@ -35,11 +35,14 @@
       <template v-slot:prepend>
          <v-container class='d-flex'>
             <v-btn
-               v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change' && route.path !== '/admin-panel'"
+               v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change' && route.path !== '/admin-panel' && route.path !== '/payment'"
                class='pa-0 w-auto h-auto mr-4' icon='mdi-menu' @click.stop='drawer = !drawer'>
             </v-btn>
             <v-btn v-if="route.path === '/admin-panel'" class='pa-0 w-auto h-auto mr-4' icon='mdi-arrow-left'
                @click='routing.toCatalog'>
+            </v-btn>
+            <v-btn v-if="route.path === '/payment'" class='pa-0 w-auto h-auto mr-4' icon='mdi-arrow-left'
+               @click='routing.toOrders'>
             </v-btn>
             <v-app-bar-title>{{ headerTitle }}</v-app-bar-title>
          </v-container>
@@ -148,7 +151,7 @@ const goToCatalog = () => {
 
 const goToPayment = () => {
    isOpen.value = false
-   routing.toPayment()
+   routing.toOrders()
 }
 
 watch(drawer, async () => {

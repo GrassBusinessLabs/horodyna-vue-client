@@ -2,7 +2,7 @@
    <ion-page>
       <ion-content :fullscreen='true'>
          <v-layout class='rounded rounded-md'>
-            <app-header :header-title="'Активні замовлення'" />
+            <app-header :header-title="'Замовлення по фермам'" />
 
             <v-main class='app-bg-color'>
                <v-container class='pa-5 pt-6 pb-0'>
@@ -15,8 +15,8 @@
 </template>
 
 <script lang='ts' setup>
-import { IonContent, IonPage } from '@ionic/vue'
 import AppHeader from '@/components/AppHeader.vue'
+import { IonContent, IonPage } from '@ionic/vue'
 </script>
 
 <style lang='scss' scoped>

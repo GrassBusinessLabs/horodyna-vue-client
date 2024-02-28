@@ -1,6 +1,6 @@
 <template>
    <payment-layout>
-      <v-sheet v-if='!!cart?.order_items.length' class='mx-auto pa-6 rounded-lg'>
+      <v-sheet v-if='!cart?.order_items.length' class='mx-auto pa-6 rounded-lg'>
          <v-list-item-title class='no-item-title text-center py-1'>
             Ваш кошик пустий
          </v-list-item-title>
@@ -8,7 +8,7 @@
             Перейти в каталог
          </v-btn>
       </v-sheet>
-      <v-sheet v-else-if="!!orderAddress" class='mx-auto pa-6 pt-4 rounded-lg'>
+      <v-sheet v-else-if="!orderAddress" class='mx-auto pa-6 pt-4 rounded-lg'>
          <v-list-item-title class='no-item-title text-center pb-4'>
             Ви ще не ввели свою адресу
          </v-list-item-title>
@@ -18,18 +18,18 @@
          <v-list-item-title class="order-title mt-4">
             Замовлення з ферми:
          </v-list-item-title>
-         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">Вулиця Репіна, 59, Градизька селищна громада</v-card-text>
+         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{ selectedOrder?.order_items[0].farm.address }}</v-card-text>
          <v-list-item-title class="order-title mt-4">
             Продукти до сплати:
          </v-list-item-title>
          <v-sheet class="px-3">
-            <app-payment-products :is-show-payment-products="true" />
+            <app-payment-products :order="selectedOrder" :is-show-payment-products="true" />
          </v-sheet>
 
          <v-list-item-title class="order-title mt-4">
             Вартість покупки:
          </v-list-item-title>
-         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{ cart?.product_price
+         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{ selectedOrder?.product_price
          }} грн</v-card-text>
 
          <v-list-item-title class="order-title mt-4">
@@ -61,7 +61,7 @@
          </ion-modal>
          <v-row class='ma-0 pb-0'>
             <v-col cols='6' class="pr-2">
-               <v-btn :block='true' color='indigo' variant='outlined' class='pb-0 rounded-lg' @click='routing.toCatalog()'>
+               <v-btn :block='true' color='indigo' variant='outlined' class='pb-0 rounded-lg' @click='routing.toOrders()'>
                   Скасувати
                </v-btn>
             </v-col>
@@ -80,6 +80,7 @@ import AppAddressForm from '@/components/AppAddressForm.vue'
 import AppPaymentProducts from '@/components/AppPaymentProducts.vue'
 import { useRouting } from '@/composables'
 import PaymentLayout from '@/layouts/PaymentLayout.vue'
+import { OrderStatus } from '@/models'
 import { AddressItem, mapService, requestService } from '@/services'
 import { useAddressStore, useCartStore, useOrderStore } from '@/stores'
 import { IonContent, IonModal, onIonViewWillEnter } from '@ionic/vue'
@@ -100,14 +101,15 @@ const addressStore = useAddressStore()
 const { populateAddresses, getUserAddress } = addressStore
 
 const orderStore = useOrderStore()
-const { populateOrders, getDraftOrder } = orderStore
+const { populateOrders } = orderStore
+const { selectedOrder } = storeToRefs(orderStore)
 
-const orderAddress = ref<string | undefined>()
+const orderAddress = ref<string | undefined>('Вулиця Жовтнева, 7, Градизька селищна громада')
 
 onIonViewWillEnter(async () => {
    await setCart()
    await populateAddresses()
-   orderAddress.value = getUserAddress()
+   // orderAddress.value = getUserAddress()
 })
 
 const map = mapService()
@@ -174,8 +176,13 @@ const getNewAddresses = async () => {
 }
 
 const createSubmittedOrder = async () => {
-   await request.setOrderInSubmitted(55, cart.value?.id ? cart.value.id : -1)
+   const body: OrderStatus = {
+      status: "SUBMITTED"
+   }
+   await request.setOrderInSubmitted(55, cart.value?.id ? cart.value.id : -1, body)
+   await new Promise(resolve => setTimeout(resolve, 1000))
    await populateOrders()
+   routing.toPurchases()
 }
 </script>
 

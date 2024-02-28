@@ -8,6 +8,7 @@ import AdminPanelView from '@/views/AdminPanelView.vue'
 import CatalogView from '@/views/CatalogView.vue'
 import ErrorView from '@/views/ErrorView.vue'
 import MapView from '@/views/MapView.vue'
+import OrdersView from '@/views/OrdersView.vue'
 import PasswordChangeView from '@/views/PasswordChangeView.vue'
 import PaymentView from '@/views/PaymentView.vue'
 import ProductsView from '@/views/ProductsView.vue'
@@ -90,6 +91,12 @@ const routes: RouteRecordRaw[] = [
       path: '/admin-panel',
       name: 'AdminPanel',
       component: AdminPanelView,
+      meta: { auth: true }
+   },
+   {
+      path: '/orders',
+      name: 'Orders',
+      component: OrdersView,
       meta: { auth: true }
    },
    {

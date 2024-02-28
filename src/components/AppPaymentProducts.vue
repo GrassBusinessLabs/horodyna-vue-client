@@ -10,12 +10,12 @@
             <v-card-title class='py-4 text-center my-border my-title'>
                {{ isShowPaymentProducts ? 'Продукти до сплати' : 'Кошик' }}
                <v-list-item-subtitle v-if='cart?.order_items.length' class='my-subtitle pt-2 pb-1'>
-                  Сума: {{ cart?.product_price }} грн
+                  Сума: {{ order.product_price }} грн
                </v-list-item-subtitle>
             </v-card-title>
 
-            <v-list v-if='cart?.order_items.length' max-height="243" class='pa-5 pb-0 bg-transparent'>
-               <app-product v-for="item in cart.order_items" :key="item.id" :offer='getOfferById(item.offer_id)'
+            <v-list v-if='order.order_items' max-height="243" class='pa-5 pb-0 bg-transparent'>
+               <app-product v-for="item in order.order_items" :key="item.id" :offer='getOfferById(item.offer_id)'
                   class='app-bg-color-form' />
             </v-list>
 
@@ -43,6 +43,7 @@
 <script lang='ts' setup>
 import AppProduct from '@/components/AppProduct.vue'
 import { useRouting } from '@/composables'
+import { OrderById } from '@/models'
 import { useAddressStore, useCartStore, useOfferStore } from '@/stores'
 import { IonContent, IonModal } from '@ionic/vue'
 import { storeToRefs } from 'pinia'
@@ -50,7 +51,8 @@ import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 defineProps<{
-   isShowPaymentProducts?: boolean
+   isShowPaymentProducts?: boolean,
+   order: OrderById
 }>()
 
 const offerStore = useOfferStore()

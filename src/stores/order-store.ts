@@ -1,17 +1,22 @@
-import {defineStore, storeToRefs} from 'pinia'
-import {ref, Ref} from 'vue'
-import {Order, OrderResponse} from '@/models'
-import {requestService} from '@/services'
-import {useHandleError} from '@/composables'
+import { useHandleError } from '@/composables'
+import { Order, OrderById, OrderResponse } from '@/models'
+import { requestService } from '@/services'
+import { defineStore, storeToRefs } from 'pinia'
+import { Ref, ref } from 'vue'
 import { useCartStore } from './cart-store'
 
 export const useOrderStore = defineStore('order', () => {
    const {handleError} = useHandleError()
    const request = requestService()
    const orders: Ref<Order[] | null> = ref<Order[] | null>(null)
+   const selectedOrder: Ref<OrderById | null> = ref<OrderById | null>(null)
    
    function setOrders(value: Order[] | null): void {
       orders.value = value
+   }
+
+   function setSelectedOrder(value: OrderById | null): void {
+      selectedOrder.value = value
    }
    
    async function getOrders(): Promise<void> {
@@ -56,10 +61,12 @@ export const useOrderStore = defineStore('order', () => {
    
    return {
       orders,
+      selectedOrder,
       populateOrders,
       getDraftOrder,
       getSubmittedOrders,
       getCompletedOrders,
-      getProductAmount
+      getProductAmount,
+      setSelectedOrder
    }
 })

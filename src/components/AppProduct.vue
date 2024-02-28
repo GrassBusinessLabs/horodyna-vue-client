@@ -30,7 +30,7 @@
          <v-list-item-subtitle class='my-font-size py-1 font-weight-bold text-center product-counter' :class="{'order-amount': orderInfo?.hideIcons}">
             {{ orderInfo?.hideIcons ? getOrderItemAmount() : getProductAmount(offer.id) }} 
             {{ getProductAmount(offer.id) ? translate(offer?.unit) : '' }}
-            {{ orderInfo?.hideIcons ? translate(offer?.unit) : '' }}
+            <!-- {{ orderInfo?.hideIcons ? translate(offer?.unit) : '' }} -->
          </v-list-item-subtitle>
          <v-icon 
             v-if="!orderInfo?.hideIcons"

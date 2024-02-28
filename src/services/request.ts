@@ -12,6 +12,7 @@ import type {
    OrderById,
    OrderItem,
    OrderResponse,
+   OrderStatus,
    PasswordChangeBody,
    RegisterBody,
    UpdateOrderItem,
@@ -85,8 +86,8 @@ export const requestService = () => {
       return api.get('/address')
    }
 
-   async function setOrderInSubmitted(farm_id: number, order_id: number): Promise<AddressResponse> {
-      return api.get(`/orders/submitted-status/${farm_id}/${order_id}`)
+   async function setOrderInSubmitted(farm_id: number, order_id: number, body: OrderStatus): Promise<AddressResponse> {
+      return api.put(`/orders/receiver-status/${farm_id}/${order_id}`, body)
    }
 
    return {
@@ -96,9 +97,9 @@ export const requestService = () => {
       getCurrentUser,
       getFarms,
       getFarmById,
-      // getOrders,
+      getOrders,
       getOrderById,
-      // createOrder,
+      createOrder,
       createOrderItem,
       updateOrderItem,
       deleteOrderItem,

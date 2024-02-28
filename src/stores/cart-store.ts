@@ -20,15 +20,7 @@ export const useCartStore = defineStore('cart', () => {
       } else {
          const body: CreateOrder = {
          order_items: [],
-         address: {
-            user_id: 1,
-            title: 'Cart',
-            city: "City",
-            country: 'Country',
-            address: 'Address',
-            lat: 1,
-            lon: 1
-         },
+         address: 'Cart address',
          comment: '',
          shipping_price: 0
       }

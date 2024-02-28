@@ -1,17 +1,8 @@
 <template>
-   <purchase-history-layout>
-      <v-list v-if="completedOrders?.length || submittedOrders?.length" density="compact" class="py-0 bg-transparent">
-         <v-list-item-title v-if="submittedOrders?.length" class="order-title">
-            Активні <v-icon size="20" icon="mdi-truck"></v-icon>
-         </v-list-item-title>
-         <app-order v-for="order in submittedOrders" :order='order' :key="order.id"
-            @order-details='showOrderDetails(order)'></app-order>
-
-         <v-list-item-title v-if="completedOrders?.length" class="order-title">
-            Отримані <v-icon size="20" icon="mdi-check-circle"></v-icon>
-         </v-list-item-title>
-         <app-order v-for="order in completedOrders" :order='order' :key="order.id"
-            @order-details='showOrderDetails(order)' class="gotten-order"></app-order>
+   <orders-layout>
+      <v-list v-if="temporaryOrders" density="compact" class="py-0 bg-transparent">
+         <app-farm-order v-for="order in temporaryOrders" :order='order' :key="order.id"
+            @order-details='showOrderDetails(order)'></app-farm-order>
       </v-list>
       <v-sheet v-else class='mx-auto pa-6 pt-5 rounded-lg'>
          <v-list-item-title class='no-item-title text-center py-0'>
@@ -26,36 +17,33 @@
          :initial-breakpoint="0.7">
          <ion-content style="--background: transparent">
             <v-card height='700' class='pa-0 rounded-t-lg app-item-color'>
-               <v-card-title v-if="selectedOrder.status === 'SUBMITTED'" class='py-4 text-center my-border my-title'>
+               <v-card-title class='py-4 text-center my-border my-title'>
                   Деталі замовлення #{{ selectedOrder.id }}
-                  <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
-                     Вартість: {{ selectedOrder.total_price }} грн
-                  </v-list-item-subtitle>
-               </v-card-title>
-
-               <v-card-title v-else class='py-4 text-center my-border my-title'>
-                  Деталі покупки #{{ selectedOrder.id }}
                   <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
                      Вартість: {{ selectedOrder.total_price }} грн
                   </v-list-item-subtitle>
                </v-card-title>
                <v-list class='pa-5 h-100 bg-transparent'>
                   <app-product v-for="offer in offersDetails" :key="offer.id" :offer='offer' :order-info="{
-                     hideIcons: selectedOrder.status === 'SUBMITTED',
+                     hideIcons: false,
                      order: selectedOrder
                   }" class='app-bg-color-form' />
+                  <v-btn block color='orange' class='text-white mt-5 rounded-lg' @click='goToPayment' variant='flat'>
+                     Перейти до оплати
+                  </v-btn>
                </v-list>
             </v-card>
          </ion-content>
       </ion-modal>
-   </purchase-history-layout>
+
+   </orders-layout>
 </template>
 
 <script lang='ts' setup>
-import AppOrder from '@/components/AppOrder.vue'
+import AppFarmOrder from '@/components/AppFarmOrder.vue'
 import AppProduct from '@/components/AppProduct.vue'
 import { useRouting } from '@/composables'
-import PurchaseHistoryLayout from '@/layouts/PurchaseHistoryLayout.vue'
+import OrdersLayout from '@/layouts/OrdersLayout.vue'
 import { Offer, Order, OrderById } from '@/models'
 import { requestService } from '@/services'
 import { useCartStore, useFarmStore, useOfferStore, useOrderStore } from '@/stores'
@@ -78,13 +66,36 @@ const { populateFarms } = farmStore
 populateFarms()
 
 const orderStore = useOrderStore()
-const { populateOrders, getCompletedOrders, getSubmittedOrders } = orderStore
+const { populateOrders, setSelectedOrder } = orderStore
 
 populateOrders()
 
-const completedOrders = getCompletedOrders()
-
-const submittedOrders = getSubmittedOrders()
+const temporaryOrders = [
+    {
+        "id": 39,
+        "order_items_count": 1,
+        "status": "SUBMITTED",
+        "comment": "",
+        "address": "Вулиця Станиця Котляревська, 15, Джулинська сільська громада",
+        "user_id": 1,
+        "product_price": 40,
+        "shipping_price": 0,
+        "total_price": 40,
+        "created_data": "2024-02-28T15:59:04Z"
+    },
+    {
+        "id": 40,
+        "order_items_count": 1,
+        "status": "SUBMITTED",
+        "comment": "",
+        "address": "Вулиця Рєпіна, 59, Єнакієвська міська громада",
+        "user_id": 1,
+        "product_price": 180,
+        "shipping_price": 0,
+        "total_price": 180,
+        "created_data": "2024-02-28T15:59:04Z"
+    }
+]
 
 const isOpen = ref(false)
 
@@ -125,6 +136,12 @@ const showOrderDetails = async (order: Order) => {
    }]
    isOpen.value = true
 }
+
+const goToPayment = () => {
+   isOpen.value = false
+   setSelectedOrder(selectedOrder.value)
+   routing.toPayment()
+}
 </script>
 
 <style lang='scss' scoped>
@@ -144,7 +161,7 @@ const showOrderDetails = async (order: Order) => {
 }
 
 .order-sum {
-   padding-bottom: 2px!important;
+   padding-bottom: 2px !important;
 }
 
 .my-title {
