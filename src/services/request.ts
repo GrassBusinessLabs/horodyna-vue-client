@@ -90,6 +90,10 @@ export const requestService = () => {
       return api.put(`/orders/receiver-status/${farm_id}/${order_id}`, body)
    }
 
+   async function getSplitOrders(order_id: number): Promise<OrderById[]> {
+      return api.get(`/orders/split/${order_id}`)
+   }
+
    return {
       login,
       register,
@@ -107,6 +111,7 @@ export const requestService = () => {
       logout,
       createAddress,
       getAddresses,
-      setOrderInSubmitted
+      setOrderInSubmitted,
+      getSplitOrders
    }
 }

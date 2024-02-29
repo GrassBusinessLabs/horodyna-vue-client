@@ -18,7 +18,7 @@
          <ion-content style="--background: transparent">
             <v-card height='700' class='pa-0 rounded-t-lg app-item-color'>
                <v-card-title class='py-4 text-center my-border my-title'>
-                  Деталі замовлення #{{ selectedOrder.id }}
+                  Деталі замовлення
                   <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
                      Вартість: {{ selectedOrder.total_price }} грн
                   </v-list-item-subtitle>
@@ -28,9 +28,15 @@
                      hideIcons: false,
                      order: selectedOrder
                   }" class='app-bg-color-form' />
-                  <v-btn block color='orange' class='text-white mt-5 rounded-lg' @click='goToPayment' variant='flat'>
-                     Перейти до оплати
+                  <v-card-actions class="pa-0 pr-4">
+                     <v-btn color='indigo' class='text-white rounded-lg w-50 mr-2' @click='1' variant='outlined'>
+                     Видалити
                   </v-btn>
+                     <v-btn class='text-white rounded-lg w-50 app-color' @click='goToPayment' variant='flat'>
+                    До замовлення
+                  </v-btn>
+                  </v-card-actions>
+                  
                </v-list>
             </v-card>
          </ion-content>
@@ -47,7 +53,7 @@ import OrdersLayout from '@/layouts/OrdersLayout.vue'
 import { Offer, Order, OrderById } from '@/models'
 import { requestService } from '@/services'
 import { useCartStore, useFarmStore, useOfferStore, useOrderStore } from '@/stores'
-import { IonContent, IonModal } from '@ionic/vue'
+import { IonContent, IonModal, onIonViewWillEnter } from '@ionic/vue'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
@@ -57,6 +63,7 @@ const routing = useRouting()
 
 const cartStore = useCartStore()
 const { setCart } = cartStore
+const { cart } = storeToRefs(cartStore)
 
 setCart()
 
@@ -70,32 +77,11 @@ const { populateOrders, setSelectedOrder } = orderStore
 
 populateOrders()
 
-const temporaryOrders = [
-    {
-        "id": 39,
-        "order_items_count": 1,
-        "status": "SUBMITTED",
-        "comment": "",
-        "address": "Вулиця Станиця Котляревська, 15, Джулинська сільська громада",
-        "user_id": 1,
-        "product_price": 40,
-        "shipping_price": 0,
-        "total_price": 40,
-        "created_data": "2024-02-28T15:59:04Z"
-    },
-    {
-        "id": 40,
-        "order_items_count": 1,
-        "status": "SUBMITTED",
-        "comment": "",
-        "address": "Вулиця Рєпіна, 59, Єнакієвська міська громада",
-        "user_id": 1,
-        "product_price": 180,
-        "shipping_price": 0,
-        "total_price": 180,
-        "created_data": "2024-02-28T15:59:04Z"
-    }
-]
+const temporaryOrders = ref()
+
+onIonViewWillEnter(async () => {
+   temporaryOrders.value = await request.getSplitOrders(cart.value?.id ? cart.value.id : -1)
+})
 
 const isOpen = ref(false)
 
@@ -114,9 +100,8 @@ const selectedOrder = ref<Partial<OrderById>>({})
 const offersDetails = ref<Offer[]>([])
 
 const showOrderDetails = async (order: Order) => {
-   const orderResponse = await request.getOrderById(order.id)
-   selectedOrder.value = orderResponse
-   const relatedOffers = offers.value?.filter(offer => orderResponse.order_items.some(item => item.offer_id === offer.id))
+   selectedOrder.value = order
+   const relatedOffers = offers.value?.filter(offer => order.order_items.some(item => item.offer_id === offer.id))
    offersDetails.value = relatedOffers ? relatedOffers : [{
       id: -1,
       title: '',

@@ -33,9 +33,9 @@
    </v-navigation-drawer>
    <v-app-bar class='position-fixed text-white' elevation='0'>
       <template v-slot:prepend>
-         <v-container class='d-flex'>
+         <v-container class='d-flex pl-3'>
             <v-btn
-               v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change' && route.path !== '/admin-panel' && route.path !== '/payment'"
+               v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change' && route.path !== '/admin-panel' && route.path !== '/payment' && route.path !== '/orders' && route.path !== '/products'"
                class='pa-0 w-auto h-auto mr-4' icon='mdi-menu' @click.stop='drawer = !drawer'>
             </v-btn>
             <v-btn v-if="route.path === '/admin-panel'" class='pa-0 w-auto h-auto mr-4' icon='mdi-arrow-left'
@@ -44,12 +44,18 @@
             <v-btn v-if="route.path === '/payment'" class='pa-0 w-auto h-auto mr-4' icon='mdi-arrow-left'
                @click='routing.toOrders'>
             </v-btn>
+            <v-btn v-if="route.path === '/orders'" class='pa-0 w-auto h-auto mr-4' icon='mdi-arrow-left'
+               @click='routing.toCatalog'>
+            </v-btn>
+            <v-btn v-if="route.path === '/products'" class='pa-0 w-auto h-auto mr-4' icon='mdi-arrow-left'
+               @click='routing.toCatalog'>
+            </v-btn>
             <v-app-bar-title>{{ headerTitle }}</v-app-bar-title>
          </v-container>
       </template>
       <template v-slot:append>
          <v-btn icon='mdi-cart' @click='isOpen = !isOpen'
-            v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change' && route.path !== '/admin-panel' && route.path !== '/payment'">
+            v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change' && route.path !== '/admin-panel' && route.path !== '/payment' && route.path !== '/orders'">
             <v-badge v-if="cart?.order_items.length" color="grey-darken-4"
                :content='cart?.order_items.length ? cart?.order_items.length : 0'>
                <v-icon>mdi-cart</v-icon>

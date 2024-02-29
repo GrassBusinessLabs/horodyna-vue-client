@@ -18,25 +18,31 @@
          <v-list-item-title class="order-title mt-4">
             Замовлення з ферми:
          </v-list-item-title>
-         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{ selectedOrder?.order_items[0].farm.address }}</v-card-text>
+         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{
+            selectedOrder?.order_items[0].farm.address }}</v-card-text>
          <v-list-item-title class="order-title mt-4">
             Продукти до сплати:
          </v-list-item-title>
          <v-sheet class="px-3">
-            <app-payment-products :order="selectedOrder" :is-show-payment-products="true" />
+            <v-list max-height="129" class='pa-0 bg-transparent'>
+               <app-payment-product v-for="item in selectedOrder?.order_items" :key="item.id"
+                  :offer='getOfferById(item.offer_id)' class='app-bg-color-form' />
+            </v-list>
          </v-sheet>
 
          <v-list-item-title class="order-title mt-4">
             Вартість покупки:
          </v-list-item-title>
-         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{ selectedOrder?.product_price
+         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{
+            selectedOrder?.product_price
          }} грн</v-card-text>
 
          <v-list-item-title class="order-title mt-4">
-            Адреса доставки:
+            Відділення пошти:
          </v-list-item-title>
-         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{ orderAddress }}
-            <v-icon size="21" @click="isOpen = true" icon="mdi-pencil"></v-icon></v-card-text>
+         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{ mailDepartments[0].Description }}
+            <!-- <v-icon size="21" @click="isOpen = true" icon="mdi-pencil"></v-icon> -->
+         </v-card-text>
          <ion-modal style="--background: transparent" :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
             :initial-breakpoint="0.6">
             <ion-content style="--background: transparent">
@@ -77,14 +83,15 @@
 
 <script lang='ts' setup>
 import AppAddressForm from '@/components/AppAddressForm.vue'
-import AppPaymentProducts from '@/components/AppPaymentProducts.vue'
+import AppPaymentProduct from '@/components/AppPaymentProduct.vue'
 import { useRouting } from '@/composables'
 import PaymentLayout from '@/layouts/PaymentLayout.vue'
 import { OrderStatus } from '@/models'
 import { AddressItem, mapService, requestService } from '@/services'
-import { useAddressStore, useCartStore, useOrderStore } from '@/stores'
+import { useAddressStore, useCartStore, useOfferStore, useOrderStore } from '@/stores'
 import { IonContent, IonModal, onIonViewWillEnter } from '@ionic/vue'
 import { LngLatLike } from '@tomtom-international/web-sdk-maps'
+import axios from 'axios'
 import debounce from 'lodash.debounce'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
@@ -104,11 +111,46 @@ const orderStore = useOrderStore()
 const { populateOrders } = orderStore
 const { selectedOrder } = storeToRefs(orderStore)
 
-const orderAddress = ref<string | undefined>('Вулиця Жовтнева, 7, Градизька селищна громада')
+const offerStore = useOfferStore()
+const { getOfferById } = offerStore
+
+const orderAddress = ref<string | undefined>('Вулиця Лідова, 13, Конотопська міська громада')
+
+const mailDepartments = ref()
+
+const getNovaPoshtaBranches = async () => {
+   const apiKey = 'b486fb3c157ea832c9aa2f2b7c406dec'
+   const apiUrl = 'https://api.novaposhta.ua/v2.0/json/'
+
+   const requestBody = {
+      modelName: 'Address',
+      calledMethod: 'getWarehouses',
+      methodProperties: {
+         CityName: 'Полтава',
+      },
+      apiKey: apiKey,
+   }
+
+   try {
+      const response = await axios.post(apiUrl, requestBody)
+      if (response.data.success) {
+         console.log(response.data.data)
+         const formattedAddress = orderAddress.value?.replace("Вулиця", "").split(',')[0]
+         mailDepartments.value = response.data.data.filter((item: any) => item.Description.includes(formattedAddress))
+         console.log(mailDepartments.value)
+
+      } else {
+         console.log('Помилка при отриманні даних:', response.data.errors)
+      }
+   } catch (error) {
+      console.error('Помилка при виконанні запросу:', error)
+   }
+}
 
 onIonViewWillEnter(async () => {
    await setCart()
    await populateAddresses()
+   getNovaPoshtaBranches()
    // orderAddress.value = getUserAddress()
 })
 
@@ -217,5 +259,9 @@ const createSubmittedOrder = async () => {
    font-size: 19px;
    margin: 0 13px;
    margin-bottom: 7px;
+}
+
+.app-bg-color-form:last-child {
+   margin-bottom: 0 !important;
 }
 </style>

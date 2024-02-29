@@ -2,7 +2,7 @@
    <ion-page>
       <ion-content :fullscreen='true'>
          <v-layout class='rounded rounded-md'>
-            <app-header :header-title="'Оплата товарів'" />
+            <app-header :header-title="'Замовлення товарів'" />
 
             <v-main class='app-bg-color'>
                <v-container class='pa-4 pt-5'>

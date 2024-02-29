@@ -48,7 +48,6 @@ import { useAddressStore, useCartStore, useOfferStore } from '@/stores'
 import { IonContent, IonModal } from '@ionic/vue'
 import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
 
 defineProps<{
    isShowPaymentProducts?: boolean,
@@ -67,7 +66,6 @@ const { populateAddresses, getUserAddress } = addressStore
 const userAddress = ref<string | undefined>()
 
 const routing = useRouting()
-const route = useRoute()
 
 const drawer = ref(false)
 
