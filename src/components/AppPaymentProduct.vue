@@ -6,6 +6,9 @@
             <v-list-item-title class='offer-title'>
                {{ offer.title }}
             </v-list-item-title>
+            <v-list-item-title class='my-subtitle-fs my-color my-height'>
+               {{ offer.price }} грн за {{ translate(offer?.unit) }}
+            </v-list-item-title>
          </div>
       </div>
       <div v-if="offer.status" class="d-flex align-center">
@@ -101,6 +104,10 @@ const getOrderItemAmount = () => {
 }
 
 .offer-title {
-   font-size: 17px;
+   font-size: 16px;
+}
+
+.my-subtitle-fs {
+   font-size: 14px;
 }
 </style>

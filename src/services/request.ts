@@ -94,6 +94,14 @@ export const requestService = () => {
       return api.get(`/orders/split/${order_id}`)
    }
 
+   async function submitSplittedOrder(farm_id: number, order_id: number): Promise<void> {
+      return api.post(`/orders/split/${farm_id}/${order_id}`)
+   }
+
+   async function deleteSplittedOrder(farm_id: number, order_id: number): Promise<void> {
+      return api.del(`/orders/split/${farm_id}/${order_id}`)
+   }
+
    return {
       login,
       register,
@@ -112,6 +120,8 @@ export const requestService = () => {
       createAddress,
       getAddresses,
       setOrderInSubmitted,
-      getSplitOrders
+      getSplitOrders,
+      submitSplittedOrder,
+      deleteSplittedOrder
    }
 }

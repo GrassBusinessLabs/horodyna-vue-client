@@ -1,7 +1,7 @@
 <template>
    <orders-layout>
       <v-list v-if="temporaryOrders" density="compact" class="py-0 bg-transparent">
-         <app-farm-order v-for="order in temporaryOrders" :order='order' :key="order.id"
+         <app-farm-order v-for="order in temporaryOrders.splited_orders" :order='order' :key="order.id"
             @order-details='showOrderDetails(order)'></app-farm-order>
       </v-list>
       <v-sheet v-else class='mx-auto pa-6 pt-5 rounded-lg'>
@@ -29,14 +29,13 @@
                      order: selectedOrder
                   }" class='app-bg-color-form' />
                   <v-card-actions class="pa-0 pr-4">
-                     <v-btn color='indigo' class='text-white rounded-lg w-50 mr-2' @click='1' variant='outlined'>
+                     <v-btn color='indigo' class='text-white rounded-lg w-50 mr-2' @click='deleteSplittedOrder' variant='outlined'>
                      Видалити
                   </v-btn>
                      <v-btn class='text-white rounded-lg w-50 app-color' @click='goToPayment' variant='flat'>
                     До замовлення
                   </v-btn>
                   </v-card-actions>
-                  
                </v-list>
             </v-card>
          </ion-content>
@@ -126,6 +125,12 @@ const goToPayment = () => {
    isOpen.value = false
    setSelectedOrder(selectedOrder.value)
    routing.toPayment()
+}
+
+const deleteSplittedOrder = async () => {
+   await request.deleteSplittedOrder(cart.value?.id ? cart.value.id : -1, selectedOrder.value.order_items ? selectedOrder.value?.order_items[0].farm.id : -1)
+   temporaryOrders.value = await request.getSplitOrders(cart.value?.id ? cart.value.id : -1)
+   isOpen.value = false
 }
 </script>
 

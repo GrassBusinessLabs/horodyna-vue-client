@@ -40,28 +40,49 @@
          <v-list-item-title class="order-title mt-4">
             Відділення пошти:
          </v-list-item-title>
-         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{ mailDepartments[0].Description }}
-            <!-- <v-icon size="21" @click="isOpen = true" icon="mdi-pencil"></v-icon> -->
+         <v-card-text class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{ selectedDepartment
+            ? selectedDepartment : (mailDepartments ?
+               mailDepartments[0].Description : '') }}
+            <v-icon size="21" @click="isOpen = true" icon="mdi-pencil"></v-icon>
          </v-card-text>
          <ion-modal style="--background: transparent" :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
             :initial-breakpoint="0.6">
             <ion-content style="--background: transparent">
                <v-card class="text-center rounded-t-lg" height="600">
-                  <v-card-title class='py-4 text-center my-card-title'>
-                     Пошук адреси
+                  <v-card-title class='py-4 text-center my-card-title address-search'>
+                     {{ isShowDepartmentsList ? 'Зміна відділення пошти' : 'Пошук відділень за адресою' }}
                   </v-card-title>
-                  <v-autocomplete class="ma-5" v-model='addressModel' v-model:search='searchModel' :items='items'
-                     :loading='loading' autocomplete='off' item-title='address' label='Введіть адресу'
-                     prepend-inner-icon='mdi-map-marker-outline' :no-filter='true' :hide-details='true'
-                     :return-object='true' @update:modelValue='selectHandler' @update:search='debounceSearch' />
-                  <v-card-text class="pa-5 pt-1 mx-2 d-flex justify-center">
-                     <v-btn @click="addressModel = null" class='w-50 rounded-lg mr-4' color="indigo" variant='outlined'>
-                        Очистити
-                     </v-btn>
-                     <v-btn @click="changeOrderAddress" class='app-color w-50 rounded-lg' variant='flat'>
-                        Зберегти
-                     </v-btn>
-                  </v-card-text>
+                  <template v-if="!isShowDepartmentsList">
+                     <v-autocomplete class="ma-5" v-model='addressModel' v-model:search='searchModel' :items='items'
+                        :loading='loading' autocomplete='off' item-title='address' label='Введіть адресу'
+                        prepend-inner-icon='mdi-map-marker-outline' :no-filter='true' :hide-details='true'
+                        :return-object='true' @update:modelValue='selectHandler' @update:search='debounceSearch' />
+                     <v-card-text class="pa-5 pt-1 mx-2 d-flex justify-center">
+                        <v-btn @click="addressModel = null" class='w-50 rounded-lg mr-4' color="indigo" variant='outlined'>
+                           Очистити
+                        </v-btn>
+                        <v-btn @click="changeOrderAddress" class='app-color w-50 rounded-lg' variant='flat'>
+                           Знайти
+                        </v-btn>
+                     </v-card-text>
+                  </template>
+                  <template v-else>
+                     <v-sheet class="pa-5 pt-3">
+                        <ion-select v-model="temporaryDepartment" aria-label="Відділення" interface="action-sheet"
+                           placeholder="Оберіть відділення">
+                           <ion-select-option v-for="department in mailDepartments" :key="department.SiteKey"
+                              :value="department.Description">{{ department.Description }}</ion-select-option>
+                        </ion-select>
+                        <v-card-text class="px-2 pt-1 d-flex justify-center">
+                           <v-btn @click="isOpen = false" class='w-50 rounded-lg mr-4' color="indigo" variant='outlined'>
+                              Скасувати
+                           </v-btn>
+                           <v-btn @click="changeSelectedDepartment" class='app-color w-50 rounded-lg' variant='flat'>
+                              Зберегти
+                           </v-btn>
+                        </v-card-text>
+                     </v-sheet>
+                  </template>
                </v-card>
             </ion-content>
          </ion-modal>
@@ -86,15 +107,14 @@ import AppAddressForm from '@/components/AppAddressForm.vue'
 import AppPaymentProduct from '@/components/AppPaymentProduct.vue'
 import { useRouting } from '@/composables'
 import PaymentLayout from '@/layouts/PaymentLayout.vue'
-import { OrderStatus } from '@/models'
 import { AddressItem, mapService, requestService } from '@/services'
 import { useAddressStore, useCartStore, useOfferStore, useOrderStore } from '@/stores'
-import { IonContent, IonModal, onIonViewWillEnter } from '@ionic/vue'
+import { IonContent, IonModal, IonSelect, IonSelectOption, onIonViewWillEnter } from '@ionic/vue'
 import { LngLatLike } from '@tomtom-international/web-sdk-maps'
 import axios from 'axios'
 import debounce from 'lodash.debounce'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 const request = requestService()
 
@@ -116,7 +136,13 @@ const { getOfferById } = offerStore
 
 const orderAddress = ref<string | undefined>('Вулиця Лідова, 13, Конотопська міська громада')
 
+const allMailDepartments = ref()
 const mailDepartments = ref()
+
+const selectedDepartment = ref()
+const temporaryDepartment = ref()
+
+const isShowDepartmentsList = ref(false)
 
 const getNovaPoshtaBranches = async () => {
    const apiKey = 'b486fb3c157ea832c9aa2f2b7c406dec'
@@ -128,17 +154,16 @@ const getNovaPoshtaBranches = async () => {
       methodProperties: {
          CityName: 'Полтава',
       },
-      apiKey: apiKey,
+      apiKey: apiKey
    }
 
    try {
       const response = await axios.post(apiUrl, requestBody)
       if (response.data.success) {
-         console.log(response.data.data)
+         allMailDepartments.value = response.data.data
+
          const formattedAddress = orderAddress.value?.replace("Вулиця", "").split(',')[0]
          mailDepartments.value = response.data.data.filter((item: any) => item.Description.includes(formattedAddress))
-         console.log(mailDepartments.value)
-
       } else {
          console.log('Помилка при отриманні даних:', response.data.errors)
       }
@@ -151,12 +176,19 @@ onIonViewWillEnter(async () => {
    await setCart()
    await populateAddresses()
    getNovaPoshtaBranches()
+   orderAddress.value = 'Вулиця Лідова, 13, Конотопська міська громада'
    // orderAddress.value = getUserAddress()
 })
 
 const map = mapService()
 
 const isOpen = ref(false)
+
+watch(isOpen, async () => {
+   if (!isOpen.value) {
+      isShowDepartmentsList.value = false
+   }
+})
 
 const loading = ref<boolean>(false)
 const addressModel = ref<AddressItem | null>(null)
@@ -207,8 +239,19 @@ const modalDismissed = () => {
 }
 
 const changeOrderAddress = () => {
-   orderAddress.value = addressModel.value?.address
-   addressModel.value = null
+   if (addressModel.value) {
+      orderAddress.value = addressModel.value.address
+      addressModel.value = null
+
+      const formattedAddress = orderAddress.value?.replace("Вулиця", "").split(',')[0]
+      mailDepartments.value = allMailDepartments.value.filter((item: any) => item.Description.includes(formattedAddress))
+
+      isShowDepartmentsList.value = true
+   }
+}
+
+const changeSelectedDepartment = () => {
+   selectedDepartment.value = temporaryDepartment.value
    isOpen.value = false
 }
 
@@ -218,11 +261,7 @@ const getNewAddresses = async () => {
 }
 
 const createSubmittedOrder = async () => {
-   const body: OrderStatus = {
-      status: "SUBMITTED"
-   }
-   await request.setOrderInSubmitted(55, cart.value?.id ? cart.value.id : -1, body)
-   await new Promise(resolve => setTimeout(resolve, 1000))
+   await request.submitSplittedOrder(cart.value?.id ? cart.value.id : -1, selectedOrder.value ? selectedOrder.value?.order_items[0].farm.id : -1)
    await populateOrders()
    routing.toPurchases()
 }
@@ -263,5 +302,19 @@ const createSubmittedOrder = async () => {
 
 .app-bg-color-form:last-child {
    margin-bottom: 0 !important;
+}
+
+.address-search {
+   white-space: normal;
+   line-height: 1;
+}
+
+ion-select {
+   font-size: 19px;
+   margin-bottom: 7px;
+}
+
+.new-department {
+   font-size: 23px;
 }
 </style>

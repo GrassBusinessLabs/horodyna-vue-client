@@ -1,7 +1,7 @@
 <template>
    <div class="pa-5 py-3 rounded-xl app-item-color mb-5 d-flex justify-space-between align-center">
       <div class="d-flex justify-space-between align-center">
-         <v-badge color='indigo' :content='order.order_items_count'>
+         <v-badge color='indigo' :content='order.order_items.length'>
             <v-avatar size="70" :image="order.status === 'SUBMITTED' ? 'https://cdn-icons-png.flaticon.com/512/1584/1584365.png' : 'https://cdn-icons-png.flaticon.com/512/1584/1584360.png'"></v-avatar>
          </v-badge>
          <div class="ml-6">
@@ -25,10 +25,10 @@
 </template>
 
 <script setup lang='ts'>
-import { Order } from '@/models'
+import { Order, OrderById } from '@/models'
 
 const props = defineProps<{
-   order: Order
+   order: OrderById
 }>()
 
 const dateObject = new Date(props.order.created_data)
