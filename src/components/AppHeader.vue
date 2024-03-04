@@ -106,7 +106,9 @@
 import AppAddressForm from '@/components/AppAddressForm.vue'
 import AppProduct from '@/components/AppProduct.vue'
 import { useRouting } from '@/composables'
-import { useAddressStore, useCartStore, useOfferStore, useUserStore } from '@/stores'
+import { Address } from '@/models'
+import { requestService } from '@/services'
+import { useCartStore, useOfferStore, useUserStore } from '@/stores'
 import { IonContent, IonModal } from '@ionic/vue'
 import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
@@ -115,6 +117,8 @@ import { useRoute } from 'vue-router'
 defineProps<{
    headerTitle: string
 }>()
+
+const request = requestService()
 
 const offerStore = useOfferStore()
 const { getOfferById } = offerStore
@@ -125,10 +129,7 @@ const { currentUser } = storeToRefs(userStore)
 const cartStore = useCartStore()
 const { cart } = storeToRefs(cartStore)
 
-const addressStore = useAddressStore()
-const { populateAddresses, getUserAddress } = addressStore
-
-const userAddress = ref<string | undefined>()
+const userAddress = ref<Address | undefined>()
 
 const routing = useRouting()
 const route = useRoute()
@@ -162,8 +163,8 @@ const goToPayment = () => {
 
 watch(drawer, async () => {
    if (drawer.value) {
-      await populateAddresses()
-      userAddress.value = getUserAddress()
+      const userAddressResponse = await request.getAddressByUserId(currentUser.value?.id ? currentUser.value.id : -1)
+      userAddress.value = userAddressResponse[0]
    }
 })
 </script>

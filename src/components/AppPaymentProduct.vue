@@ -12,7 +12,7 @@
          </div>
       </div>
       <div v-if="offer.status" class="d-flex align-center">
-         <v-list-item-subtitle class='my-font-size py-1 font-weight-medium text-center product-counter' :class="{'order-amount': orderInfo?.hideIcons}">
+         <v-list-item-subtitle class='py-1 font-weight-medium text-center product-counter mr-1' :class="{'order-amount': orderInfo?.hideIcons}">
             {{ orderInfo?.hideIcons ? getOrderItemAmount() : getProductAmount(offer.id) }} 
             {{ !orderInfo?.hideIcons ? (getProductAmount(offer.id) ? translate(offer?.unit) : '') : (orderInfo?.hideIcons ? translate(offer?.unit) : '') }}
          </v-list-item-subtitle>
@@ -104,10 +104,15 @@ const getOrderItemAmount = () => {
 }
 
 .offer-title {
-   font-size: 16px;
+   font-size: 17px;
+   margin-bottom: 1px;
 }
 
 .my-subtitle-fs {
    font-size: 14px;
+}
+
+.product-counter {
+   font-size: 18px;
 }
 </style>

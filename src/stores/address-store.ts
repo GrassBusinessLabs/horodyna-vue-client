@@ -33,12 +33,12 @@ export const useAddressStore = defineStore('address', () => {
       }
    }
 
-   function getUserAddress(): string | undefined {
+   async function getUserAddress() {
       const userStore = useUserStore()
       const { currentUser } = storeToRefs(userStore)
 
-      const foundedAddress = addresses.value?.find(address => address.user.id === currentUser.value?.id)
-      return foundedAddress?.address
+      const foundedAddress = await request.getAddressByUserId(currentUser.value?.id ? currentUser.value.id : -1)
+      return foundedAddress
    }
 
    return {

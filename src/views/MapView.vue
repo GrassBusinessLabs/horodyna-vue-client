@@ -48,28 +48,34 @@
                   </v-list-item-subtitle>
                </v-card-title>
                <v-list v-if="selectedFarm.products?.length" class='pa-5 pb-2 bg-transparent'>
-                  <v-list-item v-for="product in selectedFarm.products" :key="product.id"
-                     class='pa-3 app-bg-color-form rounded-xl mb-3'>
-                     <template v-slot:prepend>
-                        <img width="128" :src="linkIMG + '/' + product.image" alt="Product image" class="product-image">
-                     </template>
-                     <v-list-item-title class='my-font-size my-color mb-1'>
-                        {{ product.title }}
-                     </v-list-item-title>
-                     <v-list-item-subtitle class='my-subtitle-fs my-color'>
-                        {{ product.price }} грн за кг
-                     </v-list-item-subtitle>
-                     <template v-slot:append>
-                        <v-icon icon="mdi-minus-circle-outline" size='x-large' color='black'
-                           @click='removeProductFromCart(product)'></v-icon>
+                  <div v-for="offer in selectedFarm.products" :key="offer.id"
+                     :class="{ 'inactive-offer': !offer.status }"
+                     class='d-flex justify-space-between align-center payment-product app-bg-color-form'>
+                     <div class="d-flex justify-space-between align-center">
+                        <img width="128" :src="linkIMG + '/' + offer.image" alt="Product image"
+                           :class="`product-image ${offer.status ? '' : 'gray-scale'}`">
+                        <div class="ml-2">
+                           <v-list-item-title class='offer-title'>
+                              {{ offer.title }}
+                           </v-list-item-title>
+                           <v-list-item-title class='my-subtitle-fs my-color my-height'>
+                              {{ offer.price }} грн за {{ translate(offer?.unit) }}
+                           </v-list-item-title>
+                        </div>
+                     </div>
+                     <div v-if="offer.status" class="d-flex align-center">
+                        <v-icon class="text-grey-darken-1" icon="mdi-minus-circle-outline" size='29' color='black'
+                           @click='removeProductFromCart(offer)'></v-icon>
                         <v-list-item-subtitle class='my-font-size mx-2 font-weight-bold'>
-                           {{ getProductAmount(product.id) }} {{ getProductAmount(product.id) ? translate(product?.unit) :
-                              '' }}
+                           {{ getProductAmount(offer.id) }} {{ getProductAmount(offer.id) ? translate(offer?.unit)
+         :
+                           '' }}
                         </v-list-item-subtitle>
-                        <v-icon icon="mdi-plus-circle-outline" size='x-large' color='black'
-                           @click='addProductToCart(product)'></v-icon>
-                     </template>
-                  </v-list-item>
+                        <v-icon class="text-grey-darken-1" icon="mdi-plus-circle-outline" size='29' color='black'
+                           @click='addProductToCart(offer)'></v-icon>
+                     </div>
+                     <div class="inactive-title text-center mr-1 font-weight-medium" v-else>Немає в наявності</div>
+                  </div>
                </v-list>
                <v-list-item-title v-else class='no-item-title text-center mt-5 py-1'>
                   Немає жодного товару
@@ -216,6 +222,7 @@ watch(selectedOffer, async () => {
 .v-slide-group {
    height: 40px;
    outline: 2.5px solid rgba(0, 0, 0, 0.055);
+
    .v-chip {
       font-size: 16px;
    }
@@ -235,11 +242,11 @@ watch(selectedOffer, async () => {
 }
 
 .product-image {
-   width: 45px;
-   height: 45px;
+   width: 35px;
+   height: 35px;
    object-fit: cover;
-   border-radius: 100%;
-   margin-right: 10px;
+   border-radius: 12px;
+   margin: 5px 0;
 }
 
 .v-list-item-subtitle {
@@ -254,5 +261,29 @@ watch(selectedOffer, async () => {
 
 .app-bg-color-form:last-child {
    margin-bottom: 25px !important;
+}
+
+.payment-product {
+   padding: 7px 11px;
+   border-radius: 17px;
+   margin-bottom: 11px;
+}
+
+.offer-title {
+   font-size: 17px;
+   margin-bottom: 1px;
+}
+
+.my-subtitle-fs {
+   font-size: 14px;
+}
+
+.inactive-offer {
+   opacity: 80%;
+}
+
+.inactive-title {
+   font-size: 16px;
+   opacity: 90%;
 }
 </style>

@@ -1,4 +1,5 @@
 import type {
+   Address,
    AddressResponse,
    CreateAddress,
    CreateOrder,
@@ -86,6 +87,10 @@ export const requestService = () => {
       return api.get('/address')
    }
 
+   async function getAddressByUserId(id: number): Promise<Address[]> {
+      return api.get(`/address/by-user/${id}`)
+   }
+
    async function setOrderInSubmitted(farm_id: number, order_id: number, body: OrderStatus): Promise<AddressResponse> {
       return api.put(`/orders/receiver-status/${farm_id}/${order_id}`, body)
    }
@@ -122,6 +127,7 @@ export const requestService = () => {
       setOrderInSubmitted,
       getSplitOrders,
       submitSplittedOrder,
-      deleteSplittedOrder
+      deleteSplittedOrder,
+      getAddressByUserId
    }
 }

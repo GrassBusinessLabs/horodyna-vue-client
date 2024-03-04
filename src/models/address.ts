@@ -14,6 +14,7 @@ export interface Address {
   city: string,
   country: string,
   address: string,
+  department: string,
   lat: number,
   lon: number,
   user: {
