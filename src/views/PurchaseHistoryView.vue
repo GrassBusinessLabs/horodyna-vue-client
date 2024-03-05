@@ -13,11 +13,14 @@
          <app-order v-for="order in completedOrders" :order='order' :key="order.id"
             @order-details='showOrderDetails(order)' class="gotten-order"></app-order>
       </v-list>
-      <v-sheet v-else class='mx-auto pa-6 pt-5 rounded-lg'>
+      <v-sheet v-else class='mx-auto pa-5 pt-6 rounded-lg'>
+         <div class="d-flex">
+            <img width='45%' class="cart-image" src='https://cdn-icons-png.flaticon.com/512/5102/5102639.png'>
+         </div>
          <v-list-item-title class='no-item-title text-center py-0'>
             Немає жодного замовлення
          </v-list-item-title>
-         <v-btn color='orange' class='text-white mt-4 w-100 rounded-lg' @click='routing.toCatalog()' variant='flat'>
+         <v-btn class='text-white mt-4 w-100 rounded-lg app-color' @click='routing.toCatalog()' variant='flat'>
             Перейти в каталог
          </v-btn>
       </v-sheet>
@@ -41,9 +44,9 @@
                </v-card-title>
                <v-list class='pa-5 h-100 bg-transparent'>
                   <app-product v-for="offer in offersDetails" :key="offer.id" :offer='offer' :order-info="{
-                     hideIcons: selectedOrder.status === 'SUBMITTED',
-                     order: selectedOrder
-                  }" class='app-bg-color-form' />
+         hideIcons: selectedOrder.status === 'SUBMITTED',
+         order: selectedOrder
+      }" class='app-bg-color-form' />
                </v-list>
             </v-card>
          </ion-content>
@@ -59,7 +62,7 @@ import PurchaseHistoryLayout from '@/layouts/PurchaseHistoryLayout.vue'
 import { Offer, Order, OrderById } from '@/models'
 import { requestService } from '@/services'
 import { useCartStore, useFarmStore, useOfferStore, useOrderStore } from '@/stores'
-import { IonContent, IonModal } from '@ionic/vue'
+import { IonContent, IonModal, onIonViewWillEnter } from '@ionic/vue'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
@@ -70,17 +73,22 @@ const routing = useRouting()
 const cartStore = useCartStore()
 const { setCart } = cartStore
 
-setCart()
-
 const farmStore = useFarmStore()
 const { populateFarms } = farmStore
-
-populateFarms()
 
 const orderStore = useOrderStore()
 const { populateOrders, getCompletedOrders, getSubmittedOrders } = orderStore
 
-populateOrders()
+const offerStore = useOfferStore()
+const { populateOffers } = offerStore
+const { offers } = storeToRefs(offerStore)
+
+onIonViewWillEnter(async () => {
+   await setCart()
+   await populateFarms()
+   await populateOrders()
+   await populateOffers()
+})
 
 const completedOrders = getCompletedOrders()
 
@@ -91,12 +99,6 @@ const isOpen = ref(false)
 const modalDismissed = () => {
    isOpen.value = false
 }
-
-const offerStore = useOfferStore()
-const { populateOffers } = offerStore
-const { offers } = storeToRefs(offerStore)
-
-populateOffers()
 
 const selectedOrder = ref<Partial<OrderById>>({})
 
@@ -129,9 +131,11 @@ const showOrderDetails = async (order: Order) => {
 
 <style lang='scss' scoped>
 .no-item-title {
-   font-size: 34px;
+   font-size: 21px;
    white-space: normal;
    line-height: 1;
+   margin-top: 15px;
+   margin-bottom: 5px;
 }
 
 .order-title {
@@ -144,10 +148,14 @@ const showOrderDetails = async (order: Order) => {
 }
 
 .order-sum {
-   padding-bottom: 2px!important;
+   padding-bottom: 2px !important;
 }
 
 .my-title {
    font-size: 25px;
+}
+
+.cart-image {
+   margin: 0 auto;
 }
 </style>

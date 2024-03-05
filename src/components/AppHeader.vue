@@ -82,7 +82,10 @@
             </v-list>
 
             <template v-else>
-               <v-list-item-title class='mx-5 pb-1 mt-5 no-item-title text-center'>
+               <div class="d-flex mt-5">
+                  <img width='40%' class="cart-image" src='https://cdn-icons-png.flaticon.com/512/5102/5102639.png'>
+               </div>
+               <v-list-item-title class='mx-5 pb-1 no-item-title text-center'>
                   Немає жодного товару
                </v-list-item-title>
 
@@ -92,7 +95,7 @@
                   @click='goToPayment' variant='flat'>
                   Оформити замовлення
                </v-btn>
-               <v-btn v-else block color='orange' class='text-white mx-5 my-5 mt-4 rounded-lg' @click='goToCatalog'
+               <v-btn v-else block class='text-white mx-5 my-5 mt-4 rounded-lg app-color' @click='goToCatalog'
                   variant='flat'>
                   Перейти в каталог
                </v-btn>
@@ -180,12 +183,17 @@ watch(drawer, async () => {
 }
 
 .no-item-title {
-   font-size: 36px;
+   font-size: 28px;
    white-space: normal;
    line-height: 1;
+   margin-top: 14px;
 }
 
 .user-name {
    font-size: 19px;
+}
+
+.cart-image {
+   margin: 0 auto;
 }
 </style>

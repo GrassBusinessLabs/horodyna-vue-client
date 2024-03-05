@@ -14,8 +14,7 @@
             Поки що немає жодного товару
          </v-list-item-title>
          <v-btn
-            color='orange'
-            class='text-white mt-4 w-100 rounded-lg'
+            class='text-white mt-4 w-100 rounded-lg app-color'
             @click='routing.toCatalog()'
             variant='flat'
          >

@@ -95,7 +95,7 @@ const getNovaPoshtaBranches = async (city: string) => {
     modelName: 'Address',
     calledMethod: 'getWarehouses',
     methodProperties: {
-      CityName: city,
+      CityName: city.replace("Міста", "").trim(),
     },
     apiKey: apiKey
   }
@@ -136,6 +136,7 @@ const debounceSearch = debounce(search, 200)
 watch(isOpen, () => {
   if (!isOpen.value) {
     addressModel.value = null
+    isShowDepartmentsList.value = false
   }
 })
 

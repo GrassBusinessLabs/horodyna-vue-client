@@ -49,7 +49,7 @@ import AppFarmOrder from '@/components/AppFarmOrder.vue'
 import AppProduct from '@/components/AppProduct.vue'
 import { useRouting } from '@/composables'
 import OrdersLayout from '@/layouts/OrdersLayout.vue'
-import { Offer, Order, OrderById } from '@/models'
+import { Offer, OrderById } from '@/models'
 import { requestService } from '@/services'
 import { useCartStore, useFarmStore, useOfferStore, useOrderStore } from '@/stores'
 import { IonContent, IonModal, onIonViewWillEnter } from '@ionic/vue'
@@ -64,21 +64,23 @@ const cartStore = useCartStore()
 const { setCart } = cartStore
 const { cart } = storeToRefs(cartStore)
 
-setCart()
-
 const farmStore = useFarmStore()
 const { populateFarms } = farmStore
-
-populateFarms()
 
 const orderStore = useOrderStore()
 const { populateOrders, setSelectedOrder } = orderStore
 
-populateOrders()
+const offerStore = useOfferStore()
+const { populateOffers } = offerStore
+const { offers } = storeToRefs(offerStore)
 
 const temporaryOrders = ref()
 
 onIonViewWillEnter(async () => {
+   await setCart()
+   await populateFarms()
+   await populateOrders()
+   await populateOffers()
    temporaryOrders.value = await request.getSplitOrders(cart.value?.id ? cart.value.id : -1)
 })
 
@@ -88,17 +90,11 @@ const modalDismissed = () => {
    isOpen.value = false
 }
 
-const offerStore = useOfferStore()
-const { populateOffers } = offerStore
-const { offers } = storeToRefs(offerStore)
-
-populateOffers()
-
 const selectedOrder = ref<Partial<OrderById>>({})
 
 const offersDetails = ref<Offer[]>([])
 
-const showOrderDetails = async (order: Order) => {
+const showOrderDetails = async (order: OrderById) => {
    selectedOrder.value = order
    const relatedOffers = offers.value?.filter(offer => order.order_items.some(item => item.offer_id === offer.id))
    offersDetails.value = relatedOffers ? relatedOffers : [{
