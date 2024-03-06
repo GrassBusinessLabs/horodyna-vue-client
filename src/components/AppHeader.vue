@@ -167,7 +167,7 @@ const goToPayment = () => {
 watch(drawer, async () => {
    if (drawer.value) {
       const userAddressResponse = await request.getAddressByUserId(currentUser.value?.id ? currentUser.value.id : -1)
-      userAddress.value = userAddressResponse[0]
+      userAddress.value = userAddressResponse
    }
 })
 </script>

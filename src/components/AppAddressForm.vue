@@ -4,7 +4,7 @@
       Ввести
     </v-btn>
     <v-list-item-subtitle v-else-if="userAddress" class='my-font-size text-start py-1'>{{ userAddress.department
-      }}</v-list-item-subtitle>
+      }} ({{ userAddress.name }})</v-list-item-subtitle>
     <v-list-item-subtitle v-else @click="goToSetUserAddress" class='my-font-size text-start'>Вкажіть ваше місто <v-icon
         size="21" icon="mdi-alert-circle"></v-icon></v-list-item-subtitle>
 

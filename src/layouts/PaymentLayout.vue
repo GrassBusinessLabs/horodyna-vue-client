@@ -21,6 +21,6 @@ import AppHeader from '@/components/AppHeader.vue'
 
 <style lang='scss' scoped>
 .v-main {
-   padding-bottom: 60px;
+   padding-bottom: 61px;
 }
 </style>

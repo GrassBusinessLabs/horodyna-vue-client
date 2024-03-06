@@ -141,6 +141,7 @@ const showOrderDetails = async (order: Order) => {
 .order-title {
    font-size: 19px;
    margin-bottom: 10px;
+   margin-left: 3px;
 }
 
 .gotten-order {

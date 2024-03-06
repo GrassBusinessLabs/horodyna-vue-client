@@ -1,5 +1,5 @@
 <template>
-   <div class="pa-5 py-3 rounded-xl app-item-color mb-5 d-flex justify-space-between align-center">
+   <div class="pa-5 py-3 rounded-xl app-item-color mb-4 d-flex justify-space-between align-center">
       <div class="d-flex justify-space-between align-center">
          <v-badge color='indigo' :content='order.order_items.length'>
             <v-avatar size="70" :image="order.status === 'SUBMITTED' ? 'https://cdn-icons-png.flaticon.com/512/1584/1584365.png' : 'https://cdn-icons-png.flaticon.com/512/1584/1584360.png'"></v-avatar>

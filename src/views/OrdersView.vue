@@ -1,6 +1,9 @@
 <template>
    <orders-layout>
       <v-list v-if="temporaryOrders" density="compact" class="py-0 bg-transparent">
+         <v-list-item-title class="order-title">
+            Очікують підтвердження <v-icon size="20" icon="mdi-clock-time-eight"></v-icon>
+         </v-list-item-title>
          <app-farm-order v-for="order in temporaryOrders.splited_orders" :order='order' :key="order.id"
             @order-details='showOrderDetails(order)'></app-farm-order>
       </v-list>
@@ -140,6 +143,7 @@ const deleteSplittedOrder = async () => {
 .order-title {
    font-size: 19px;
    margin-bottom: 10px;
+   margin-left: 3px;
 }
 
 .gotten-order {
