@@ -16,6 +16,7 @@ import type {
    OrderStatus,
    PasswordChangeBody,
    RegisterBody,
+   UpdateOrder,
    UpdateOrderItem,
 } from '@/models'
 import { apiService } from '@/services/api'
@@ -59,6 +60,10 @@ export const requestService = () => {
       return api.post('/orders', body)
    }
 
+   async function updateOrderDepartment(body: UpdateOrder): Promise<Order> {
+      return api.put(`/orders/${body.order_id}`, body)
+   }
+
    async function createOrderItem(body: CreateOrderItem): Promise<OrderItem> {
       return api.post(`/order-items/${body.id}`, body)
    }
@@ -99,7 +104,7 @@ export const requestService = () => {
       return api.get(`/orders/split/${order_id}`)
    }
 
-   async function submitSplittedOrder(farm_id: number, order_id: number): Promise<void> {
+   async function submitSplittedOrder(farm_id: number, order_id: number): Promise<OrderById> {
       return api.post(`/orders/split/${farm_id}/${order_id}`)
    }
 
@@ -117,6 +122,7 @@ export const requestService = () => {
       getOrders,
       getOrderById,
       createOrder,
+      updateOrderDepartment,
       createOrderItem,
       updateOrderItem,
       deleteOrderItem,

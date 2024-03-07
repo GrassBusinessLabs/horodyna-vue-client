@@ -51,7 +51,6 @@
          <v-card-text @click="isOpen = true"
             class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">{{
          selectedDepartment ? selectedDepartment : orderDepartment }}
-            <!-- <v-icon size="21" @click="isOpen = true" icon="mdi-pencil"></v-icon> -->
          </v-card-text>
 
          <ion-modal style="--background: transparent" :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
@@ -62,9 +61,10 @@
                      Зміна відділення пошти
                   </v-card-title>
                   <v-autocomplete density="compact" class="ma-5" v-model='addressModel' v-model:search='searchModel'
-                     :items='items' :loading='loading' autocomplete='off' item-title='Description' label='Введіть назву міста'
-                     prepend-inner-icon='mdi-map-marker' :no-filter='true' :hide-details='true' :return-object='true'
-                     @update:modelValue='selectHandler' @update:search='debounceSearch' />
+                     :items='items' :loading='loading' autocomplete='off' item-title='Description'
+                     label='Введіть назву міста' prepend-inner-icon='mdi-map-marker' :no-filter='true'
+                     :hide-details='true' :return-object='true' @update:modelValue='selectHandler'
+                     @update:search='debounceSearch' />
                   <v-sheet class="pr-10">
                      <ion-select justify="start" label="" v-model="temporaryDepartment" aria-label="Відділення"
                         interface="action-sheet" placeholder="Оберіть відділення">
@@ -105,10 +105,10 @@ import AppAddressForm from '@/components/AppAddressForm.vue'
 import AppPaymentProduct from '@/components/AppPaymentProduct.vue'
 import { useRouting } from '@/composables'
 import PaymentLayout from '@/layouts/PaymentLayout.vue'
-import { CityItem, mapService, requestService } from '@/services'
+import { UpdateOrder } from '@/models'
+import { CityItem, requestService } from '@/services'
 import { useCartStore, useOfferStore, useOrderStore, useUserStore } from '@/stores'
-import { IonContent, IonModal, IonSelect, IonSelectOption, onIonViewWillEnter } from '@ionic/vue'
-import { LngLatLike } from '@tomtom-international/web-sdk-maps'
+import { IonContent, IonModal, IonSelect, IonSelectOption, onIonViewWillEnter, onIonViewWillLeave } from '@ionic/vue'
 import axios from 'axios'
 import debounce from 'lodash.debounce'
 import { storeToRefs } from 'pinia'
@@ -143,7 +143,7 @@ const mailCities = ref()
 const selectedDepartment = ref()
 const temporaryDepartment = ref()
 
-const getNovaPoshtaBranches = async (city: string) => {
+const getNovaPoshtaBranches = async (cityRef: string) => {
    const apiKey = 'b486fb3c157ea832c9aa2f2b7c406dec'
    const apiUrl = 'https://api.novaposhta.ua/v2.0/json/'
 
@@ -151,7 +151,7 @@ const getNovaPoshtaBranches = async (city: string) => {
       modelName: 'Address',
       calledMethod: 'getWarehouses',
       methodProperties: {
-         CityName: city.replace("Міста", "").trim(),
+         CityRef: cityRef,
       },
       apiKey: apiKey
    }
@@ -160,6 +160,7 @@ const getNovaPoshtaBranches = async (city: string) => {
       const response = await axios.post(apiUrl, requestBody)
       if (response.data.success) {
          allMailDepartments.value = response.data.data
+         console.log(response.data.data)
 
          mailDepartments.value = response.data.data.filter((item: any) => item.CategoryOfWarehouse === 'Branch')
       } else {
@@ -177,9 +178,6 @@ const getNovaPoshtaCities = async () => {
    const requestBody = {
       modelName: 'Address',
       calledMethod: 'getCities',
-      // methodProperties: {
-      //    FindByString: "Полтава",
-      // },
       apiKey: apiKey
    }
 
@@ -200,13 +198,16 @@ const getNovaPoshtaCities = async () => {
 onIonViewWillEnter(async () => {
    await setCart()
    const departmentResponse = await request.getAddressByUserId(currentUser.value?.id ? currentUser.value.id : -1)
-   await getNovaPoshtaBranches(departmentResponse.name)
+   // await getNovaPoshtaBranches(departmentResponse.Ref)
+   await getNovaPoshtaBranches("db5c8892-391c-11dd-90d9-001a92567626")
    await getNovaPoshtaCities()
    orderDepartment.value = departmentResponse.department
    orderCity.value = departmentResponse.name
 })
 
-const map = mapService()
+onIonViewWillLeave(async () => {
+   selectedDepartment.value = null
+})
 
 const isOpen = ref(false)
 
@@ -220,15 +221,16 @@ const debounceSearch = debounce(search, 200)
 watch(isOpen, async () => {
    if (isOpen.value) {
       addressModel.value = {
-         Description: orderCity.value
+         Description: orderCity.value,
+         // Ref: orderCity.value.cityRef
       }
       temporaryDepartment.value = orderDepartment.value
    }
 })
 
 watch(addressModel, async () => {
-   if(addressModel.value?.Description) {
-      getNovaPoshtaBranches(addressModel.value?.Description)
+   if (addressModel.value?.Ref) {
+      getNovaPoshtaBranches(addressModel.value?.Ref)
    }
 })
 
@@ -240,38 +242,10 @@ function selectHandler(event: CityItem): void {
    emit('select', event)
 }
 
-// async function search(value: string | null): Promise<void> {
-//    try {
-//       loading.value = true
-
-//       const searchValue: string = value?.trim() || ''
-
-//       if (!searchValue) {
-//          items.value = []
-//          loading.value = false
-//          return
-//       }
-
-//       items.value = await map.searchCities(searchValue)
-//       if (items.value[0].details.position != undefined) {
-//          const position: LngLatLike = {
-//             lat: Number(items.value[0].details.position.lat),
-//             lng: Number(items.value[0].details.position.lng)
-//          }
-//          const ttmap = map.getMap()
-//          ttmap?.setCenter(position)
-//       }
-//       loading.value = false
-//    } catch (e) {
-//       console.error(e)
-//       items.value = []
-//       loading.value = false
-//    }
-// }
-
 async function search(value: string | null): Promise<void> {
    const searchValue: string = value?.trim() || ''
-   items.value = await mailCities.value.filter((city: any) => city.Description.includes(searchValue))
+   items.value = await mailCities.value.filter((city: any) => city.Description.includes(searchValue) && city.SettlementTypeDescription === 'місто' && !city.Description.includes('('))
+
 }
 
 const modalDismissed = () => {
@@ -283,7 +257,6 @@ const changeOrderDepartment = () => {
       getNovaPoshtaBranches(addressModel.value.Description)
 
       isOpen.value = false
-      // orderCity.value = addressModel.value.city.replace("Міста", "").trim()
       orderCity.value = addressModel.value.Description
       selectedDepartment.value = temporaryDepartment.value
    }
@@ -294,7 +267,13 @@ const getNewAddresses = async (department: string) => {
 }
 
 const createSubmittedOrder = async () => {
-   await request.submitSplittedOrder(cart.value?.id ? cart.value.id : -1, selectedOrder.value ? selectedOrder.value?.order_items[0].farm.id : -1)
+   const newOrder = await request.submitSplittedOrder(cart.value?.id ? cart.value.id : -1, selectedOrder.value ? selectedOrder.value?.order_items[0].farm.id : -1)
+   const body: UpdateOrder = {
+      order_id: newOrder.id,
+      post_office: selectedDepartment.value ? selectedDepartment.value : orderDepartment.value,
+      address: 'Order Address'
+   }
+   await request.updateOrderDepartment(body)
    await populateOrders()
    routing.toPurchases()
 }
@@ -364,6 +343,6 @@ ion-select {
    height: 23px;
    border-radius: 5px;
    margin-right: 7px;
-   margin-bottom: 1px;
+   margin-bottom: 2px;
 }
 </style>

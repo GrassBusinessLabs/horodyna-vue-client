@@ -13,7 +13,13 @@ export interface Offer {
       name: string,
       email: string
   },
-   farm_id: number
+   farm_id: number,
+   additional_images: {
+      id: number, 
+      name: string, 
+      entity: string, 
+      entity_id: number
+   }[]
 }
 
 export interface OfferResponse {

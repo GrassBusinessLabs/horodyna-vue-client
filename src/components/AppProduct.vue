@@ -6,10 +6,10 @@
             <v-list-item-title class='my-font-size my-color my-sub-margin'>
                {{ offer.title }}
             </v-list-item-title>
-            <v-list-item-subtitle @click='showProductOnMap(offer)' class='my-subtitle-fs my-margin'>
+            <v-list-item-subtitle v-if="!isHideSeller" @click='showProductOnMap(offer)' class='my-subtitle-fs my-margin'>
                {{ offer.user.name }}
             </v-list-item-subtitle>
-            <v-list-item-subtitle @click='showProductOnMap(offer)' class='my-subtitle-fs'>
+            <v-list-item-subtitle @click='showProductOnMap(offer)' class='my-subtitle-fs' :class="{'my-2': isHideSeller}">
                {{ farmAddress(offer.farm_id) }}
                <v-icon icon="mdi-map-marker" size='15' class='text-black my-margin'></v-icon>
             </v-list-item-subtitle>
@@ -56,7 +56,8 @@ interface OrderInfo {
 
 const props = defineProps<{
    offer: Offer,
-   orderInfo?: OrderInfo
+   orderInfo?: OrderInfo,
+   isHideSeller?: boolean
 }>()
 
 const farmStore = useFarmStore()

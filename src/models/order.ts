@@ -45,6 +45,12 @@ export interface CreateOrder {
    shipping_price: number
 }
 
+export interface UpdateOrder {
+   order_id: number,
+   address: string,
+   post_office: string
+}
+
 export interface OrderItem {
    id: number,
    order_id: number,
