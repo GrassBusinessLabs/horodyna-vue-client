@@ -73,7 +73,7 @@ const farmStore = useFarmStore()
 const { populateFarms } = farmStore
 
 const orderStore = useOrderStore()
-const { populateOrders, getCompletedOrders, getSubmittedOrders } = orderStore
+const { populateOrders } = orderStore
 const { orders } = storeToRefs(orderStore)
 
 const offerStore = useOfferStore()
@@ -86,10 +86,6 @@ onIonViewWillEnter(async () => {
    await populateOrders()
    await populateOffers()
 })
-
-const completedOrders = getCompletedOrders()
-
-const submittedOrders = getSubmittedOrders()
 
 const isOpen = ref(false)
 

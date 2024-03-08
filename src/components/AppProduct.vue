@@ -1,7 +1,7 @@
 <template>
    <div :class="{'inactive-offer': !offer.status}" class='pa-4 py-3 rounded-xl product-item d-flex justify-space-between align-center app-item-color'>
       <div class="d-flex justify-space-between align-center">
-         <img width="128" :src="linkIMG + '/' + offer.image" alt="Product image" :class="`product-image ${offer.status ? '' : 'gray-scale'}`">
+         <img @click="offerHandler(offer)" width="128" :src="linkIMG + '/' + offer.image" alt="Product image" :class="`product-image ${offer.status ? '' : 'gray-scale'}`">
          <div class="ml-3">
             <v-list-item-title class='my-font-size my-color my-sub-margin'>
                {{ offer.title }}
@@ -89,6 +89,14 @@ const farmAddress = (farmId: number) => {
 const getOrderItemAmount = () => {
    const foundOrderItem = props.orderInfo?.order.order_items.find(item => item.offer_id === props.offer.id)
    return foundOrderItem?.amount
+}
+
+const emit = defineEmits<{
+   (e: 'offerDetails', offer: Offer): void
+}>()
+
+function offerHandler(event: Offer): void {
+   emit('offerDetails', event)
 }
 </script>
 
