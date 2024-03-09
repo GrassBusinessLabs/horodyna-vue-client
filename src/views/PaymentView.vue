@@ -40,7 +40,6 @@
          </v-list-item-title>
          <v-card-text @click="isOpen = true"
             class="text-grey-darken-2 pa-0 px-3 mx-3 mb-3 mt-1 address-title rounded-t-lg">
-            <!-- {{ selectedDepartment ? selectedDepartment : orderDepartment }} -->
             {{ orderCity }}
          </v-card-text>
          <v-list-item-title class="order-title mt-4 d-flex align-center">
@@ -57,8 +56,9 @@
             :initial-breakpoint="0.6">
             <ion-content style="--background: transparent">
                <v-card class="text-center rounded-t-lg" height="600">
-                  <v-card-title class='py-5 text-center my-card-title address-search'>
-                     Зміна відділення пошти
+                  <v-card-title class='py-5 text-center my-card-title address-search d-flex align-center justify-center'>
+                     Зміна відділення <img class="mail-image2"
+               src='https://play-lh.googleusercontent.com/mtyOm0Rp0PeG_BWE7M5j9gBWuU1Du34LLj-dLdSE1-006_BkFg32W3Cca00l2BBvNM0'>
                   </v-card-title>
                   <v-autocomplete density="compact" class="ma-5" v-model='addressModel' v-model:search='searchModel'
                      :items='items' :loading='loading' autocomplete='off' item-title='Description'
@@ -134,6 +134,7 @@ const { currentUser } = storeToRefs(userStore)
 
 const orderDepartment = ref<string | undefined>()
 const orderCity = ref<string | undefined>()
+const orderCityRef = ref<string | undefined>()
 
 const allMailDepartments = ref()
 const mailDepartments = ref()
@@ -184,7 +185,6 @@ const getNovaPoshtaCities = async () => {
    try {
       const response = await axios.post(apiUrl, requestBody)
       if (response.data.success) {
-         console.log(response.data.data)
          mailCities.value = response.data.data
          return response.data.data
       } else {
@@ -198,11 +198,11 @@ const getNovaPoshtaCities = async () => {
 onIonViewWillEnter(async () => {
    await setCart()
    const departmentResponse = await request.getAddressByUserId(currentUser.value?.id ? currentUser.value.id : -1)
-   // await getNovaPoshtaBranches(departmentResponse.Ref)
-   await getNovaPoshtaBranches("db5c8892-391c-11dd-90d9-001a92567626")
+   await getNovaPoshtaBranches(departmentResponse.city_ref)
    await getNovaPoshtaCities()
    orderDepartment.value = departmentResponse.department
    orderCity.value = departmentResponse.name
+   orderCityRef.value = departmentResponse.city_ref
 })
 
 onIonViewWillLeave(async () => {
@@ -222,7 +222,7 @@ watch(isOpen, async () => {
    if (isOpen.value) {
       addressModel.value = {
          Description: orderCity.value,
-         // Ref: orderCity.value.cityRef
+         Ref: orderCityRef.value
       }
       temporaryDepartment.value = orderDepartment.value
    }
@@ -245,7 +245,6 @@ function selectHandler(event: CityItem): void {
 async function search(value: string | null): Promise<void> {
    const searchValue: string = value?.trim() || ''
    items.value = await mailCities.value.filter((city: any) => city.Description.includes(searchValue) && city.SettlementTypeDescription === 'місто' && !city.Description.includes('('))
-
 }
 
 const modalDismissed = () => {
@@ -262,8 +261,9 @@ const changeOrderDepartment = () => {
    }
 }
 
-const getNewAddresses = async (department: string) => {
+const getNewAddresses = async (department: string, city: string) => {
    orderDepartment.value = department
+   orderCity.value = city
 }
 
 const createSubmittedOrder = async () => {
@@ -344,5 +344,12 @@ ion-select {
    border-radius: 5px;
    margin-right: 7px;
    margin-bottom: 2px;
+}
+
+.mail-image2 {
+   width: 28px;
+   height: 28px;
+   border-radius: 5px;
+   margin-left: 8px;
 }
 </style>

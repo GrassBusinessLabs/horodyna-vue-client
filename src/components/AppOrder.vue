@@ -36,7 +36,6 @@
 
 <script setup lang='ts'>
 import { Offer, Order, OrderById } from '@/models'
-import { Offer, Order, OrderById } from '@/models'
 import { useOfferStore } from '@/stores'
 import { onIonViewWillEnter } from '@ionic/vue'
 import { storeToRefs } from 'pinia'

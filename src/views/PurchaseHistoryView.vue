@@ -7,7 +7,7 @@
          <app-order v-for="order in orders?.filter(order => order.status !== 'COMPLETED' && order.status !== 'DRAFT')" :order='order' :key="order.id"
             @order-details='showOrderDetails(order)'></app-order>
 
-         <v-list-item-title v-if="orders?.filter(order => order.status === 'COMPLETED')" class="order-title">
+         <v-list-item-title v-if="completedOrders?.length" class="order-title">
             Отримані <v-icon size="20" icon="mdi-check-circle"></v-icon>
          </v-list-item-title>
          <app-order v-for="order in orders?.filter(order => order.status === 'COMPLETED')" :order='order' :key="order.id"
@@ -73,18 +73,21 @@ const farmStore = useFarmStore()
 const { populateFarms } = farmStore
 
 const orderStore = useOrderStore()
-const { populateOrders } = orderStore
+const { populateOrders, getCompletedOrders } = orderStore
 const { orders } = storeToRefs(orderStore)
 
 const offerStore = useOfferStore()
 const { populateOffers } = offerStore
 const { offers } = storeToRefs(offerStore)
 
+const completedOrders = ref<Order[] | null>([])
+
 onIonViewWillEnter(async () => {
    await setCart()
    await populateFarms()
    await populateOrders()
    await populateOffers()
+   completedOrders.value = getCompletedOrders()
 })
 
 const isOpen = ref(false)

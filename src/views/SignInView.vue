@@ -57,17 +57,17 @@
 </template>
 
 <script lang='ts' setup>
-import {useForm} from 'vee-validate'
-import {toTypedSchema} from '@vee-validate/yup'
+import { toTypedSchema } from '@vee-validate/yup'
+import { useForm } from 'vee-validate'
+import type { MaybeRefOrGetter } from 'vue'
+import { ref } from 'vue'
 import * as yup from 'yup'
-import type {MaybeRefOrGetter} from 'vue'
-import {ref} from 'vue'
 
-import type {CurrentUser, LoginBody} from '@/models'
-import {useHandleError, useRouting} from '@/composables'
-import {authTokenService, formService, requestService} from '@/services'
-import {useUserStore} from '@/stores'
+import { useHandleError, useRouting } from '@/composables'
 import AuthLayout from '@/layouts/AuthLayout.vue'
+import type { CurrentUser, LoginBody } from '@/models'
+import { authTokenService, formService, requestService } from '@/services'
+import { useUserStore } from '@/stores'
 
 const {handleError} = useHandleError()
 const routing = useRouting()
@@ -86,7 +86,7 @@ const form = useForm({
       })
    ),
    initialValues: {
-      email: 'sa@test.com',
+      email: 'anton@test.com',
       password: '222222'
    }
 })

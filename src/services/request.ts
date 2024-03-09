@@ -92,7 +92,7 @@ export const requestService = () => {
       return api.get('/address')
    }
 
-   async function getAddressByUserId(id: number): Promise<Address[]> {
+   async function getAddressByUserId(id: number): Promise<Address> {
       return api.get(`/address/by-user/${id}`)
    }
 

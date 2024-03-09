@@ -1,7 +1,9 @@
 export interface CreateAddress {
   user_id: number,
-  title: string,
+  name: string,
+  city_ref: string,
   city: string,
+  department: string,
   country: string,
   address: string,
   lat: number,
@@ -10,8 +12,8 @@ export interface CreateAddress {
 
 export interface Address {
   id: number,
-  title: string,
-  city: string,
+  name: string,
+  city_ref: string,
   country: string,
   address: string,
   department: string,
