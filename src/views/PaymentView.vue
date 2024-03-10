@@ -261,9 +261,10 @@ const changeOrderDepartment = () => {
    }
 }
 
-const getNewAddresses = async (department: string, city: string) => {
+const getNewAddresses = async (department: string, city: string, cityRef: string) => {
    orderDepartment.value = department
    orderCity.value = city
+   getNovaPoshtaBranches(cityRef)
 }
 
 const createSubmittedOrder = async () => {
@@ -326,7 +327,7 @@ ion-select {
    margin-bottom: 16px;
    margin-left: 21px;
    --background: rgb(247, 247, 247);
-   border-bottom: 2px solid rgb(196, 196, 196);
+   border-bottom: 1px solid rgb(150, 150, 150);
    --padding-end: 20px;
 }
 

@@ -60,7 +60,7 @@ defineProps<{
 const emit = defineEmits<{
   (e: 'select', address: CityItem): void
   (e: 'closeMenu'): void
-  (e: 'getAddresses', department: string): void
+  (e: 'getAddresses', department: string, city: string, cityRef: string): void
 }>()
 
 const request = requestService()
@@ -180,7 +180,7 @@ const createAddress = async () => {
     }
     await request.createAddress(body)
     modalDismissed()
-    emit('getAddresses', temporaryDepartment.value, addressModel.value.Description)
+    emit('getAddresses', temporaryDepartment.value, addressModel.value.Description, addressModel.value.Ref)
   }
 }
 
@@ -196,7 +196,7 @@ ion-select {
    margin-bottom: 16px;
    margin-left: 21px;
    --background: rgb(247, 247, 247);
-   border-bottom: 2px solid rgb(196, 196, 196);
+   border-bottom: 1px solid rgb(150, 150, 150);
    --padding-end: 20px;
 }
 

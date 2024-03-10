@@ -1,5 +1,5 @@
 <template>
-   <div @click='detailsHandler(order)' class="rounded-xl app-item-color mb-4 d-flex justify-space-between align-center">
+   <div @click='detailsHandler(order)' class="rounded-xl app-item-color d-flex justify-space-between align-center">
       <div class="d-flex justify-space-between align-center">
          <!-- <img v-for="offer in relatedOffers" class="product-image" alt="Product image" :key="offer.id" size="70"
             :src="linkIMG + '/' + offer.image"> -->
@@ -16,14 +16,14 @@
             </v-col>
          </v-row>
 
-         <div class="ml-5">
-            <v-list-item-title class='py-1 my-font-size'>
+         <div class="order-info">
+            <v-list-item-title class='pb-1 my-font-size order-status'>
                {{ order.status === 'SUBMITTED' ? 'Статус: Очікує' :
       (order.status === 'APPROVED' ? 'Статус: Схвалено' :
          (order.status === 'DECLINED' ? 'Статус: Відхилено' :
             (order.status === 'SHIPPING' ? 'Статус: Надіслано' : 'Статус: Отримано'))) }}
             </v-list-item-title>
-            <v-list-item-subtitle class='my-subtitle-fs py-1'>
+            <v-list-item-subtitle class='my-subtitle-fs'>
                {{ formattedDate }}
             </v-list-item-subtitle>
             <v-list-item-title class='py-1 my-margin my-color my-font-size'>
@@ -36,12 +36,10 @@
 
 <script setup lang='ts'>
 import { Offer, Order, OrderById } from '@/models'
-import { useOfferStore } from '@/stores'
-import { onIonViewWillEnter } from '@ionic/vue'
-import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+
 const props = defineProps<{
-   order: OrderById
+   order: OrderById,
+   relatedOffers: Offer[]
 }>()
 
 const linkIMG = 'https://horodyna.grassbusinesslabs.tk/static/'
@@ -49,17 +47,14 @@ const linkIMG = 'https://horodyna.grassbusinesslabs.tk/static/'
 const dateObject = new Date(props.order.created_data)
 const formattedDate = dateObject.toLocaleString('uk-UA', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'long' })
 
-const offerStore = useOfferStore()
-const { populateOffers } = offerStore
-const { offers } = storeToRefs(offerStore)
-
-const relatedOffers = ref<Offer[]>()
-
-onIonViewWillEnter(async () => {
-   await populateOffers()
-   relatedOffers.value = offers.value?.filter(offer => props.order.order_items.some(item => item.offer_id === offer.id))
-   console.log(relatedOffers.value)
-})
+const images = [
+   {image: 'https://tut-cikavo.com/images/Nauka/tomatos.jpg'},
+   {image: 'https://tut-cikavo.com/images/Nauka/tomatos.jpg'},
+   {image: 'https://tut-cikavo.com/images/Nauka/tomatos.jpg'},
+   {image: 'https://tut-cikavo.com/images/Nauka/tomatos.jpg'},
+   {image: 'https://tut-cikavo.com/images/Nauka/tomatos.jpg'},
+   {image: 'https://tut-cikavo.com/images/Nauka/tomatos.jpg'},
+]
 
 const emit = defineEmits<{
    (e: 'orderDetails', address: Order): void
@@ -76,20 +71,29 @@ function detailsHandler(event: Order): void {
 }
 
 .product-image {
-   width: 30px;
-   height: 30px;
+   width: 33px;
+   height: 33px;
    object-fit: cover;
    border-radius: 100%;
-   margin-right: 3px;
-   margin-bottom: 3px;
+   margin-right: -5px;
+   margin-bottom: -2px;
+   border: 2px solid white;
 }
 
 .app-item-color {
-   padding: 15px 30px;
-   padding-bottom: 10px;
+   padding: 11px 15px 13px 28px;
+   margin-bottom: 12px;
 }
 
 .v-col {
    width: 50px !important;
+}
+
+.order-info {
+   margin-left: 13px;
+}
+
+.order-status {
+   padding-top: 6px;
 }
 </style>

@@ -7,7 +7,7 @@
          <app-order v-for="order in orders?.filter(order => order.status !== 'COMPLETED' && order.status !== 'DRAFT')" :order='order' :key="order.id"
             @order-details='showOrderDetails(order)'></app-order>
 
-         <v-list-item-title v-if="completedOrders?.length" class="order-title">
+         <v-list-item-title v-if="completedOrders?.length" class="order-title mt-4">
             Отримані <v-icon size="20" icon="mdi-check-circle"></v-icon>
          </v-list-item-title>
          <app-order v-for="order in orders?.filter(order => order.status === 'COMPLETED')" :order='order' :key="order.id"
