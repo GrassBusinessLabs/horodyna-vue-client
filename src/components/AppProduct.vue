@@ -82,7 +82,7 @@ const showProductOnMap = (Offer: Offer) => {
 
 const farmAddress = (farmId: number) => {
    const foundAddress = getFarmAddress(farmId)
-   const spliteedAddress = foundAddress ? foundAddress.split(",") : 'Farm not found'
+   const spliteedAddress = foundAddress?.address ? foundAddress?.address.split(",") : 'Farm not found'
    return (spliteedAddress[0] + "," + spliteedAddress[1]).replace("Вулиця", "")
 }
 

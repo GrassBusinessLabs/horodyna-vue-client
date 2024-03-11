@@ -47,7 +47,7 @@
                      {{ selectedFarm.address }}
                   </v-list-item-subtitle>
                </v-card-title>
-               <v-list v-if="selectedFarm.products?.length" class='pa-5 pb-2 bg-transparent'>
+               <v-list v-if="selectedFarm.products?.length" max-height="370" class='pa-5 pb-2 bg-transparent'>
                   <div v-for="offer in selectedFarm.products" :key="offer.id"
                      :class="{ 'inactive-offer': !offer.status }"
                      class='d-flex justify-space-between align-center payment-product app-bg-color-form'>

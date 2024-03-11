@@ -272,6 +272,7 @@ const createSubmittedOrder = async () => {
    const body: UpdateOrder = {
       order_id: newOrder.id,
       post_office: selectedDepartment.value ? selectedDepartment.value : orderDepartment.value,
+      post_office_city: orderCity.value ? orderCity.value : '',
       address: 'Order Address'
    }
    await request.updateOrderDepartment(body)

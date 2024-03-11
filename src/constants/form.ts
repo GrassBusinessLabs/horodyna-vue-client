@@ -12,3 +12,6 @@ export const MAX_NAME_LEN: number = 32
 
 export const MIN_IMG_LEN: number = 1
 export const MAX_IMG_LEN: number = 100
+
+export const MIN_PHONE_LEN: number = 10
+export const MAX_PHONE_LEN: number = 12

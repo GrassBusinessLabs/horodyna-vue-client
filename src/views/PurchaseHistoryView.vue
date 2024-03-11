@@ -1,16 +1,25 @@
 <template>
    <purchase-history-layout>
-      <v-list v-if="orders?.filter(order => order.status !== 'DRAFT')" density="compact" class="py-0 bg-transparent">
-         <v-list-item-title v-if="orders?.filter(order => order.status !== 'COMPLETED' && order.status !== 'DRAFT')" class="order-title">
-            Активні <v-icon size="20" icon="mdi-truck"></v-icon>
+      <v-list v-if="activeOrders?.length" density="compact" class="py-0 bg-transparent">
+         <v-list-item-title v-if="activeOrders?.length" class="order-title">
+            Активні
+            <!-- <v-icon size="20" icon="mdi-truck"></v-icon> -->
          </v-list-item-title>
-         <app-order v-for="order in orders?.filter(order => order.status !== 'COMPLETED' && order.status !== 'DRAFT')" :order='order' :key="order.id"
+         <app-order v-for="order in activeOrders" :order='order' :key="order.id"
             @order-details='showOrderDetails(order)'></app-order>
 
-         <v-list-item-title v-if="completedOrders?.length" class="order-title mt-4">
-            Отримані <v-icon size="20" icon="mdi-check-circle"></v-icon>
+         <v-list-item-title v-if="declinedOrders?.length" class="order-title mt-4">
+            Відхилені
+            <!-- <v-icon size="21" icon="mdi-close-box"></v-icon> -->
          </v-list-item-title>
-         <app-order v-for="order in orders?.filter(order => order.status === 'COMPLETED')" :order='order' :key="order.id"
+         <app-order v-for="order in declinedOrders" :order='order' :key="order.id"
+            @order-details='showOrderDetails(order)' class="gotten-order"></app-order>
+
+         <v-list-item-title v-if="completedOrders?.length" class="order-title mt-4">
+            Отримані
+            <!-- <v-icon size="20" icon="mdi-check-circle"></v-icon> -->
+         </v-list-item-title>
+         <app-order v-for="order in completedOrders" :order='order' :key="order.id"
             @order-details='showOrderDetails(order)' class="gotten-order"></app-order>
       </v-list>
       <v-sheet v-else class='mx-auto pa-5 pt-6 rounded-lg'>
@@ -32,15 +41,16 @@
                <v-card-title class='py-4 text-center my-border my-title'>
                   {{ offersDetails[0].user.name }}
                   <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
-                     +380 123 4567
+                     {{ offersDetails[0].user.phone_number }}
                   </v-list-item-subtitle>
                   <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
                      Вартість: {{ selectedOrder.total_price }} грн
                   </v-list-item-subtitle>
                </v-card-title>
                <v-list class='pa-5 h-100 bg-transparent'>
-                  <app-product v-for="offer in offersDetails" :key="offer.id" :offer='offer' :is-hide-seller="true" :order-info="{
-         hideIcons: selectedOrder.status === 'SUBMITTED',
+                  <app-product v-for="offer in offersDetails" :key="offer.id" :offer='offer' :is-hide-seller="true"
+                     :order-info="{
+         hideIcons: selectedOrder.status !== 'COMPLETED',
          order: selectedOrder
       }" class='app-bg-color-form' />
                </v-list>
@@ -73,7 +83,7 @@ const farmStore = useFarmStore()
 const { populateFarms } = farmStore
 
 const orderStore = useOrderStore()
-const { populateOrders, getCompletedOrders } = orderStore
+const { populateOrders, getCompletedOrders, getActiveOrders, getDeclinedOrders } = orderStore
 const { orders } = storeToRefs(orderStore)
 
 const offerStore = useOfferStore()
@@ -81,6 +91,8 @@ const { populateOffers } = offerStore
 const { offers } = storeToRefs(offerStore)
 
 const completedOrders = ref<Order[] | null>([])
+const activeOrders = ref<Order[] | null>([])
+const declinedOrders = ref<Order[] | null>([])
 
 onIonViewWillEnter(async () => {
    await setCart()
@@ -88,6 +100,8 @@ onIonViewWillEnter(async () => {
    await populateOrders()
    await populateOffers()
    completedOrders.value = getCompletedOrders()
+   activeOrders.value = getActiveOrders()
+   declinedOrders.value = getDeclinedOrders()
 })
 
 const isOpen = ref(false)
@@ -135,9 +149,11 @@ const showOrderDetails = async (order: Order) => {
 }
 
 .order-title {
-   font-size: 19px;
-   margin-bottom: 10px;
+   font-size: 18px;
+   margin-bottom: 6px;
    margin-left: 3px;
+   color: rgb(83, 83, 83);
+   font-weight: 500;
 }
 
 .gotten-order {

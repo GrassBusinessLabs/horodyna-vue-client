@@ -43,12 +43,16 @@ export const useOrderStore = defineStore('order', () => {
       return draftOrder ? draftOrder : null
    }    
 
-   function getSubmittedOrders(): Order[] | null {
-      return orders.value ? orders.value.filter(order => order.status === 'SUBMITTED') : null
+   function getActiveOrders(): Order[] | null {
+      return orders.value ? orders.value.filter(order => order.status !== 'COMPLETED' && order.status !== 'DRAFT' && order.status !== 'DECLINED') : null
    }
 
    function getCompletedOrders(): Order[] | null {
       return orders.value ? orders.value.filter(order => order.status === 'COMPLETED') : null
+   }
+
+   function getDeclinedOrders(): Order[] | null {
+      return orders.value ? orders.value.filter(order => order.status === 'DECLINED') : null
    }
 
    function getProductAmount(id: number): number | 0 {
@@ -64,8 +68,9 @@ export const useOrderStore = defineStore('order', () => {
       selectedOrder,
       populateOrders,
       getDraftOrder,
-      getSubmittedOrders,
+      getActiveOrders,
       getCompletedOrders,
+      getDeclinedOrders,
       getProductAmount,
       setSelectedOrder
    }

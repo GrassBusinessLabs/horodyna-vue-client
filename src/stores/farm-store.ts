@@ -1,8 +1,8 @@
-import {defineStore} from 'pinia'
-import {ref, Ref} from 'vue'
-import {Farm, FarmResponse} from '@/models'
-import {requestService} from '@/services'
-import {useHandleError} from '@/composables'
+import { useHandleError } from '@/composables'
+import { Farm, FarmResponse } from '@/models'
+import { requestService } from '@/services'
+import { defineStore } from 'pinia'
+import { ref, Ref } from 'vue'
 
 export const useFarmStore = defineStore('farm', () => {
    const {handleError} = useHandleError()
@@ -32,9 +32,9 @@ export const useFarmStore = defineStore('farm', () => {
       }
    }
 
-   function getFarmAddress(id: number): string {
+   function getFarmAddress(id: number): Farm | null {
       const farm = farms.value?.find(farm => farm.id === id)
-      return farm ? farm.address : 'Farm not found'
+      return farm ? farm : null
    }
    
    return {

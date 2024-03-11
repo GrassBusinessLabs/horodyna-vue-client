@@ -48,7 +48,8 @@ export interface CreateOrder {
 export interface UpdateOrder {
    order_id: number,
    address: string,
-   post_office: string
+   post_office: string,
+   post_office_city: string
 }
 
 export interface OrderItem {

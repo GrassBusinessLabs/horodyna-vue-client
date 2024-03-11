@@ -5,12 +5,12 @@
             <v-row>
                <v-col cols='12'>
                   <v-text-field
-                     v-model='email'
-                     v-bind='emailAttrs'
-                     label='Email'
+                     v-model='phone'
+                     v-bind='phoneAttrs'
+                     label='Номер телефону'
                      :disabled='isSubmitting'
                      :hide-details='true'
-                     type='email'
+                     type='text'
                   ></v-text-field>
                </v-col>
 
@@ -32,7 +32,7 @@
                      :block='true'
                      :disabled='isSubmitting'
                      type='submit'
-                     class='app-color'
+                     class='app-color rounded-lg'
                      variant='flat'
                   >
                      Вхід
@@ -74,26 +74,26 @@ const routing = useRouting()
 const userStore = useUserStore()
 const {setCurrentUser} = userStore
 
-const {vuetifyConfig, usernameValidator, passwordValidator} = formService()
+const {vuetifyConfig, phoneValidator, passwordValidator} = formService()
 const request = requestService()
 const authToken = authTokenService()
 
 const form = useForm({
    validationSchema: toTypedSchema(
       yup.object({
-         email: usernameValidator(),
+         phone: phoneValidator(),
          password: passwordValidator()
       })
    ),
    initialValues: {
-      email: 'anton@test.com',
+      phone: '0951234567',
       password: '222222'
    }
 })
 
 const isSubmitting = ref<boolean>(false)
-const [email, emailAttrs] = form.defineField('email' as MaybeRefOrGetter, vuetifyConfig)
 const [password, passwordAttrs] = form.defineField('password' as MaybeRefOrGetter, vuetifyConfig)
+const [phone, phoneAttrs] = form.defineField('phone' as MaybeRefOrGetter, vuetifyConfig)
 
 const showPassword = ref<boolean>(false)
 
@@ -105,7 +105,7 @@ const submit = form.handleSubmit(async values => {
       isSubmitting.value = true
 
       const body: LoginBody = {
-         email: values.email ? values.email : 'Email not found',
+         phone_number: values.phone ? values.phone : 'Phone not found',
          password: values.password
       }
 
@@ -116,6 +116,7 @@ const submit = form.handleSubmit(async values => {
       await routing.toCatalog()
 
       isSubmitting.value = false
+      form.resetForm()
    } catch (e) {
       console.error(e)
       handleError(e)

@@ -6,7 +6,7 @@
       </v-list-item>
       <v-divider thickness='2'></v-divider>
 
-      <v-list density='compact' :nav='true' class='mt-2'>
+      <!-- <v-list density='compact' :nav='true' class='mt-2'>
          <v-list-item-subtitle class='my-font-size ml-2 mb-2 mt-1'>
             ОГЛЯД
          </v-list-item-subtitle>
@@ -17,9 +17,9 @@
                <p class='my-font-size ml-2'>{{ item.name }}</p>
             </template>
          </v-list-item>
-      </v-list>
+      </v-list> -->
       <v-list density='compact' :nav='true' class='pt-1'>
-         <v-list-item-subtitle class='my-font-size ml-2 mb-2 mt-1'>
+         <v-list-item-subtitle class='my-font-size ml-2 mb-2 mt-3'>
             АККАУНТ
          </v-list-item-subtitle>
          <v-list-item v-for="item in menuAccountItems" :key="item.name" @click="item.routing" class='pl-0 pt-0 mb-0'>
@@ -167,7 +167,7 @@ const goToPayment = () => {
 watch(drawer, async () => {
    if (drawer.value) {
       const userAddressResponse = await request.getAddressByUserId(currentUser.value?.id ? currentUser.value.id : -1)
-      userAddress.value = userAddressResponse
+      userAddress.value = userAddressResponse ? userAddressResponse : undefined
    }
 })
 </script>
