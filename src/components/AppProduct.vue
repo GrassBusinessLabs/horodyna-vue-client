@@ -9,7 +9,7 @@
             <v-list-item-subtitle v-if="!isHideSeller" @click='showProductOnMap(offer)' class='my-subtitle-fs my-margin'>
                {{ offer.user.name }}
             </v-list-item-subtitle>
-            <v-list-item-subtitle @click='showProductOnMap(offer)' class='my-subtitle-fs' :class="{'my-2': isHideSeller}">
+            <v-list-item-subtitle @click='showProductOnMap(offer)' class='my-subtitle-fs' :class="{'no-seller': isHideSeller}">
                {{ farmAddress(offer.farm_id) }}
                <v-icon icon="mdi-map-marker" size='15' class='text-black my-margin'></v-icon>
             </v-list-item-subtitle>
@@ -154,5 +154,9 @@ function offerHandler(event: Offer): void {
    width: 90px;
    font-size: 18px;
    opacity: 80%;
+}
+
+.no-seller {
+   margin: 5px 0;
 }
 </style>

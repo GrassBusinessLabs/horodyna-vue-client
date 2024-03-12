@@ -26,20 +26,21 @@
                      Вартість: {{ selectedOrder.total_price }} грн
                   </v-list-item-subtitle>
                </v-card-title>
-               <v-list class='pa-5 h-100 bg-transparent'>
+               <v-list max-height="300" class='pa-5 bg-transparent py-0 mt-5'>
                   <app-product v-for="offer in offersDetails" :key="offer.id" :offer='offer' :order-info="{
-                     hideIcons: false,
-                     order: selectedOrder
-                  }" class='app-bg-color-form' />
-                  <v-card-actions class="pa-0 pr-4">
-                     <v-btn color='indigo' class='text-white rounded-lg w-50 mr-2' @click='deleteSplittedOrder' variant='outlined'>
+         hideIcons: false,
+         order: selectedOrder
+      }" class='app-bg-color-form' />
+               </v-list>
+               <v-card-actions class="pa-0 pr-4 mx-5 mt-4">
+                  <v-btn color='indigo' class='text-white rounded-lg w-50 mr-2' @click='deleteSplittedOrder'
+                     variant='outlined'>
                      Видалити
                   </v-btn>
-                     <v-btn class='text-white rounded-lg w-50 app-color' @click='goToPayment' variant='flat'>
-                    До замовлення
+                  <v-btn class='text-white rounded-lg w-50 app-color' @click='goToPayment' variant='flat'>
+                     До замовлення
                   </v-btn>
-                  </v-card-actions>
-               </v-list>
+               </v-card-actions>
             </v-card>
          </ion-content>
       </ion-modal>

@@ -41,13 +41,14 @@
                <v-card-title class='py-4 text-center my-border my-title'>
                   {{ offersDetails[0].user.name }}
                   <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
-                     {{ offersDetails[0].user.phone_number }}
+                     <!-- {{ offersDetails[0].user.phone_number }} -->
+                     095 823 4163
                   </v-list-item-subtitle>
                   <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
                      Вартість: {{ selectedOrder.total_price }} грн
                   </v-list-item-subtitle>
                </v-card-title>
-               <v-list class='pa-5 h-100 bg-transparent'>
+               <v-list max-height="290" class='pa-5 h-100 bg-transparent py-0 mt-5'>
                   <app-product v-for="offer in offersDetails" :key="offer.id" :offer='offer' :is-hide-seller="true"
                      :order-info="{
          hideIcons: selectedOrder.status !== 'COMPLETED',

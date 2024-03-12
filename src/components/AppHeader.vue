@@ -76,7 +76,7 @@
                </v-list-item-subtitle>
             </v-card-title>
 
-            <v-list v-if='cart?.order_items.length' max-height="243" class='pa-5 pb-0 bg-transparent'>
+            <v-list v-if='cart?.order_items.length' max-height="300" class='pa-5 pb-0 bg-transparent pt-0 mt-5'>
                <app-product v-for="item in cart.order_items" :key="item.id" :offer='getOfferById(item.offer_id)'
                   class='app-bg-color-form' />
             </v-list>
@@ -195,5 +195,9 @@ watch(drawer, async () => {
 
 .cart-image {
    margin: 0 auto;
+}
+
+.v-card {
+   position: fixed;
 }
 </style>
