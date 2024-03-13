@@ -40,7 +40,7 @@
                </v-col>
 
                <v-col cols='12' class='pb-0'>
-                  <v-btn :block='true' :disabled='isSubmitting' type='submit' class='app-color rounded-lg'
+                  <v-btn :block='true' :disabled='isSubmitting' type='submit' class='app-color rounded-lg btn-text'
                      variant='flat'>
                      Зареєструвати
                   </v-btn>

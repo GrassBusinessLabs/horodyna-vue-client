@@ -3,17 +3,17 @@
       <div class="d-flex justify-space-between align-center">
          <img @click="offerHandler(offer)" width="128" :src="linkIMG + '/' + offer.image" alt="Product image" :class="`product-image ${offer.status ? '' : 'gray-scale'}`">
          <div class="ml-3">
-            <v-list-item-title class='my-font-size my-color my-sub-margin'>
+            <v-list-item-title class='offer-title my-color my-sub-margin'>
                {{ offer.title }}
             </v-list-item-title>
-            <v-list-item-subtitle v-if="!isHideSeller" @click='showProductOnMap(offer)' class='my-subtitle-fs my-margin'>
+            <v-list-item-subtitle v-if="!isHideSeller" @click='showProductOnMap(offer)' class='offer-info-size'>
                {{ offer.user.name }}
             </v-list-item-subtitle>
-            <v-list-item-subtitle @click='showProductOnMap(offer)' class='my-subtitle-fs' :class="{'no-seller': isHideSeller}">
+            <v-list-item-subtitle @click='showProductOnMap(offer)' class='offer-info-size' :class="{'no-seller': isHideSeller}">
                {{ farmAddress(offer.farm_id) }}
-               <v-icon icon="mdi-map-marker" size='15' class='text-black my-margin'></v-icon>
+               <v-icon icon="mdi-map-marker" size='13' class='text-black my-margin address-icon'></v-icon>
             </v-list-item-subtitle>
-            <v-list-item-title class='my-subtitle-fs my-color my-height'>
+            <v-list-item-title class='offer-title my-color my-height'>
                {{ offer.price }} грн за {{ translate(offer?.unit) }}
             </v-list-item-title>
          </div>
@@ -23,11 +23,11 @@
             v-if="!orderInfo?.hideIcons" 
             class="text-grey-darken-1" 
             icon="mdi-minus-circle-outline" 
-            size='33' 
+            size='30' 
             color='black'
             @click="removeProductFromCart(offer)"
          ></v-icon>
-         <v-list-item-subtitle class='my-font-size py-1 font-weight-bold text-center product-counter' :class="{'order-amount': orderInfo?.hideIcons}">
+         <v-list-item-subtitle class='py-1 font-weight-bold text-center product-counter' :class="{'order-amount': orderInfo?.hideIcons}">
             {{ orderInfo?.hideIcons ? getOrderItemAmount() : getProductAmount(offer.id) }} 
             {{ !orderInfo?.hideIcons ? (getProductAmount(offer.id) ? translate(offer?.unit) : '') : (orderInfo?.hideIcons ? translate(offer?.unit) : '') }}
          </v-list-item-subtitle>
@@ -35,7 +35,7 @@
             v-if="!orderInfo?.hideIcons"
             class="text-grey-darken-1" 
             icon="mdi-plus-circle-outline" 
-            size='33' 
+            size='30' 
             color='black'
             @click="addProductToCart(offer)"
          ></v-icon>
@@ -87,7 +87,7 @@ const farmAddress = (farmId: number) => {
 }
 
 const getOrderItemAmount = () => {
-   const foundOrderItem = props.orderInfo?.order.order_items.find(item => item.offer_id === props.offer.id)
+   const foundOrderItem = props.orderInfo?.order.order_items.find(item => item.offer.id === props.offer.id)
    return foundOrderItem?.amount
 }
 
@@ -106,7 +106,7 @@ function offerHandler(event: Offer): void {
 }
 
 .my-sub-margin {
-   margin-bottom: 3px;
+   margin-bottom: 1px;
 }
 
 .v-list-item {
@@ -115,10 +115,10 @@ function offerHandler(event: Offer): void {
 }
 
 .product-image {
-   width: 80px;
-   height: 80px;
+   width: 70px;
+   height: 70px;
    object-fit: cover;
-   border-radius: 20px;
+   border-radius: 13px;
    margin: 5px 0;
 }
 
@@ -139,7 +139,7 @@ function offerHandler(event: Offer): void {
 
 .product-counter {
    max-width: 23px;
-   margin: 0 7px;
+   margin: 0 4px;
 }
 
 .product-item {
@@ -158,5 +158,17 @@ function offerHandler(event: Offer): void {
 
 .no-seller {
    margin: 5px 0;
+}
+
+.offer-info-size {
+   font-size: 14px;
+}
+
+.address-icon {
+   margin-left: -3px;
+}
+
+.offer-title {
+   font-size: 16px;
 }
 </style>

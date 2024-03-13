@@ -8,7 +8,7 @@
          <v-list-item-title class='no-item-title text-center py-1'>
             Поки що немає жодного товару
          </v-list-item-title>
-         <v-btn class='text-white mt-4 w-100 rounded-lg app-color' @click='routing.toCatalog()' variant='flat'>
+         <v-btn class='text-white mt-4 w-100 rounded-lg app-color btn-text' @click='routing.toCatalog()' variant='flat'>
             Перейти в каталог
          </v-btn>
       </v-sheet>
@@ -124,5 +124,10 @@ const showOfferDetails = (offer: Offer) => {
    border: 2px solid rgba(0, 0, 0, 0.144);
    padding: 10px;
    padding-bottom: 7px;
+}
+
+.btn-text {
+   padding-top: 4px !important;
+   padding-bottom: 5px !important;
 }
 </style>

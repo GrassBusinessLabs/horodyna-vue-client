@@ -29,27 +29,27 @@
                   ></v-text-field>
                </v-col>
 
-               <v-col cols='7' class='pb-0 pr-1'>
+               <v-col cols='6' class="pr-2">
+                  <v-btn
+                     :block='true'
+                     :disabled='isSubmitting'
+                     color='indigo'
+                     variant='outlined'
+                     @click='routing.toCatalog'
+                     class='pb-0 rounded-lg'
+                  >
+                     Скасувати
+                  </v-btn>
+               </v-col>
+               <v-col cols='6' class='pb-0 pl-2'>
                   <v-btn
                      :block='true'
                      :disabled='isSubmitting'
                      type='submit'
-                     class='app-color pb-0'
+                     class='app-color pb-0 rounded-lg'
                      variant='flat'
                   >
                      Змінити
-                  </v-btn>
-               </v-col>
-               <v-col cols='5'>
-                  <v-btn
-                     :block='true'
-                     :disabled='isSubmitting'
-                     color='primary'
-                     variant='outlined'
-                     @click='routing.toSettings'
-                     class='pb-0'
-                  >
-                     Скасувати
                   </v-btn>
                </v-col>
             </v-row>
@@ -59,16 +59,16 @@
 </template>
 
 <script lang='ts' setup>
-import {useForm} from 'vee-validate'
-import {toTypedSchema} from '@vee-validate/yup'
+import { toTypedSchema } from '@vee-validate/yup'
+import { useForm } from 'vee-validate'
+import type { MaybeRefOrGetter } from 'vue'
+import { ref } from 'vue'
 import * as yup from 'yup'
-import type {MaybeRefOrGetter} from 'vue'
-import {ref} from 'vue'
 
-import type {PasswordChangeBody} from '@/models'
-import {useHandleError, useRouting} from '@/composables'
-import {formService, requestService} from '@/services'
+import { useHandleError, useRouting } from '@/composables'
 import PasswordChangeLayout from '@/layouts/PasswordChangeLayout.vue'
+import type { PasswordChangeBody } from '@/models'
+import { formService, requestService } from '@/services'
 
 const {handleError} = useHandleError()
 const routing = useRouting()

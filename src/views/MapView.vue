@@ -10,10 +10,10 @@
       <v-btn @click="() => isOpen = !isOpen" icon="mdi-filter-cog" variant="flat" class='position-fixed filter-btn'>
       </v-btn>
 
-      <ion-modal style="--background: transparent" :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
-         :initial-breakpoint="0.7">
-         <ion-content style="--background: transparent">
-            <v-card height='550' class='pa-0 rounded-t-lg app-item-color'>
+      <ion-modal :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
+      :handle="false" :initial-breakpoint="1"
+         :breakpoints="[0, 1]">
+            <v-card height='604' class='pa-0 rounded-t-lg app-item-color'>
                <v-card-title class='py-6 text-center my-border card-title'>
                   Фільтри
                   <v-icon size='27' icon="mdi-filter-cog"></v-icon>
@@ -24,7 +24,7 @@
                      {{ filter }}
                   </v-chip>
                </v-slide-group>
-               <v-list max-height="370" :lines="'two'" class='pa-5 pb-2 bg-transparent'
+               <v-list @touchmove.stop max-height="472" :lines="'two'" class='pa-5 bg-transparent'
                   :class="{ 'pt-0': filters.length }">
                   <v-list-item v-for="product in sortedCategory" :key="product.id" :title="product.name"
                      :prepend-avatar="product.img" class='pa-0 pl-4 pr-2 rounded-xl mb-3 app-bg-color-form'>
@@ -34,54 +34,51 @@
                   </v-list-item>
                </v-list>
             </v-card>
-         </ion-content>
       </ion-modal>
 
-      <ion-modal style="--background: transparent" :is-open="isOpen2" @ionModalDidDismiss="modalDismissed2"
-         :initial-breakpoint="0.7">
-         <ion-content style="--background: transparent">
-            <v-card height='700' class='pa-0 rounded-t-lg app-item-color'>
-               <v-card-title class='py-4 text-center my-border my-title'>
-                  {{ selectedFarm.name }}
-                  <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
-                     {{ selectedFarm.address }}
-                  </v-list-item-subtitle>
-               </v-card-title>
-               <v-list v-if="selectedFarm.products?.length" max-height="370" class='pa-5 pb-2 bg-transparent'>
-                  <div v-for="offer in selectedFarm.products" :key="offer.id"
-                     :class="{ 'inactive-offer': !offer.status }"
-                     class='d-flex justify-space-between align-center payment-product app-bg-color-form'>
-                     <div class="d-flex justify-space-between align-center">
-                        <img width="128" :src="linkIMG + '/' + offer.image" alt="Product image"
-                           :class="`product-image ${offer.status ? '' : 'gray-scale'}`">
-                        <div class="ml-2">
-                           <v-list-item-title class='offer-title'>
-                              {{ offer.title }}
-                           </v-list-item-title>
-                           <v-list-item-title class='my-subtitle-fs my-color my-height'>
-                              {{ offer.price }} грн за {{ translate(offer?.unit) }}
-                           </v-list-item-title>
-                        </div>
+      <ion-modal :is-open="isOpen2" @ionModalDidDismiss="modalDismissed2" :handle="false" :initial-breakpoint="1"
+         :breakpoints="[0, 1]">
+         <v-card height='604' class='pa-0 rounded-t-lg app-item-color'>
+            <v-card-title class='py-4 text-center my-border my-title'>
+               {{ selectedFarm.name }}
+               <v-list-item-subtitle class='my-subtitle py-1'>
+                  {{ selectedFarm.address }}
+               </v-list-item-subtitle>
+            </v-card-title>
+            <v-list v-if="selectedFarm.products?.length" @touchmove.stop max-height="407"
+               class='pa-5 pb-2 bg-transparent'>
+               <div v-for="offer in selectedFarm.products" :key="offer.id" :class="{ 'inactive-offer': !offer.status }"
+                  class='d-flex justify-space-between align-center payment-product app-bg-color-form'>
+                  <div class="d-flex justify-space-between align-center">
+                     <img width="128" :src="linkIMG + '/' + offer.image" alt="Product image"
+                        :class="`product-image ${offer.status ? '' : 'gray-scale'}`">
+                     <div class="ml-2">
+                        <v-list-item-title class='offer-title'>
+                           {{ offer.title }}
+                        </v-list-item-title>
+                        <v-list-item-title class='my-subtitle-fs my-color my-height'>
+                           {{ offer.price }} грн за {{ translate(offer?.unit) }}
+                        </v-list-item-title>
                      </div>
-                     <div v-if="offer.status" class="d-flex align-center">
-                        <v-icon class="text-grey-darken-1" icon="mdi-minus-circle-outline" size='29' color='black'
-                           @click='removeProductFromCart(offer)'></v-icon>
-                        <v-list-item-subtitle class='my-font-size mx-2 font-weight-bold'>
-                           {{ getProductAmount(offer.id) }} {{ getProductAmount(offer.id) ? translate(offer?.unit)
-         :
-                           '' }}
-                        </v-list-item-subtitle>
-                        <v-icon class="text-grey-darken-1" icon="mdi-plus-circle-outline" size='29' color='black'
-                           @click='addProductToCart(offer)'></v-icon>
-                     </div>
-                     <div class="inactive-title text-center mr-1 font-weight-medium" v-else>Немає в наявності</div>
                   </div>
-               </v-list>
-               <v-list-item-title v-else class='no-item-title text-center mt-5 py-1'>
-                  Немає жодного товару
-               </v-list-item-title>
-            </v-card>
-         </ion-content>
+                  <div v-if="offer.status" class="d-flex align-center">
+                     <v-icon class="text-grey-darken-1" icon="mdi-minus-circle-outline" size='29' color='black'
+                        @click='removeProductFromCart(offer)'></v-icon>
+                     <v-list-item-subtitle class='my-font-size mx-2 font-weight-bold'>
+                        {{ getProductAmount(offer.id) }} {{ getProductAmount(offer.id) ? translate(offer?.unit)
+         :
+         '' }}
+                     </v-list-item-subtitle>
+                     <v-icon class="text-grey-darken-1" icon="mdi-plus-circle-outline" size='29' color='black'
+                        @click='addProductToCart(offer)'></v-icon>
+                  </div>
+                  <div class="inactive-title text-center mr-1 font-weight-medium" v-else>Немає в наявності</div>
+               </div>
+            </v-list>
+            <v-list-item-title v-else class='no-item-title text-center mt-5 py-1'>
+               Немає жодного товару
+            </v-list-item-title>
+         </v-card>
       </ion-modal>
    </map-layout>
 </template>
@@ -94,7 +91,7 @@ import MapLayout from '@/layouts/MapLayout.vue'
 import { Farm, Offer } from '@/models'
 import { AddressItem, mapService } from '@/services/map'
 import { useCartStore, useFarmStore, useOfferStore, useOrderStore } from '@/stores'
-import { IonContent, IonModal, onIonViewWillEnter } from '@ionic/vue'
+import { IonModal, onIonViewWillEnter } from '@ionic/vue'
 import { LngLatLike, Marker } from '@tomtom-international/web-sdk-maps'
 import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
@@ -156,7 +153,7 @@ watch(filters, async () => {
    if (farms.value) {
       for (const farm of farms.value) {
          const farmProducts = offers.value?.filter(product => product.farm_id === farm.id)
-         if (farmProducts?.length && filters.value.length === 0 || farmProducts?.some((product: Offer) => filters.value.some(filter => product.title.includes(filter)))) {
+         if (farmProducts?.length && filters.value.length === 0 || farmProducts?.some((product: Offer) => filters.value.some(filter => product.category === filter))) {
             setTimeout(async () => {
                const addressItems = await map.searchAddresses(farm.address)
                if (addressItems.length > 0) {
@@ -221,8 +218,6 @@ watch(selectedOffer, async () => {
 
 .v-slide-group {
    height: 40px;
-   outline: 2.5px solid rgba(0, 0, 0, 0.055);
-
    .v-chip {
       font-size: 16px;
    }
@@ -260,7 +255,7 @@ watch(selectedOffer, async () => {
 }
 
 .app-bg-color-form:last-child {
-   margin-bottom: 25px !important;
+   margin-bottom: 34px !important;
 }
 
 .payment-product {

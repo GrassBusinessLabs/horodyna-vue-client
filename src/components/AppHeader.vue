@@ -2,7 +2,8 @@
    <v-navigation-drawer v-model='drawer' :temporary='true' class='position-fixed' width='290'>
       <v-list-item class='my-padding pl-4 pb-2'>
          <v-list-item-title class='user-name app-font-regular'>{{ currentUser?.name }}</v-list-item-title>
-         <app-address-form :user-address="userAddress" :is-menu-button="true" @close-menu="drawer = false"></app-address-form>
+         <app-address-form :user-address="userAddress" :is-menu-button="true"
+            @close-menu="drawer = false"></app-address-form>
       </v-list-item>
       <v-divider thickness='2'></v-divider>
 
@@ -16,8 +17,8 @@
                <v-icon class='mx-1' :icon='item.icon'></v-icon>
                <p class='my-font-size ml-2'>{{ item.name }}</p>
             </template>
-         </v-list-item>
-      </v-list> -->
+</v-list-item>
+</v-list> -->
       <v-list density='compact' :nav='true' class='pt-1'>
          <v-list-item-subtitle class='my-font-size ml-2 mb-2 mt-3'>
             АККАУНТ
@@ -50,6 +51,9 @@
             <v-btn v-if="route.path === '/products'" class='pa-0 w-auto h-auto mr-4' icon='mdi-arrow-left'
                @click='routing.toCatalog'>
             </v-btn>
+            <v-btn v-if="route.path === '/password-change'" class='pa-0 w-auto h-auto mr-4' icon='mdi-arrow-left'
+               @click='routing.toCatalog'>
+            </v-btn>
             <v-app-bar-title>{{ headerTitle }}</v-app-bar-title>
          </v-container>
       </template>
@@ -65,43 +69,41 @@
       </template>
    </v-app-bar>
 
-   <ion-modal style="--background: transparent" :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
-      :initial-breakpoint="0.7">
-      <ion-content style="--background: transparent">
-         <v-card height='700' class='pa-0 rounded-t-lg app-item-color'>
-            <v-card-title class='py-4 text-center my-border my-title'>
-               Кошик
-               <v-list-item-subtitle v-if='cart?.order_items.length' class='my-subtitle pt-2 pb-1'>
-                  Сума: {{ cart?.product_price }} грн
-               </v-list-item-subtitle>
-            </v-card-title>
+   <ion-modal :is-open="isOpen" @ionModalDidDismiss="modalDismissed" :handle="false" :initial-breakpoint="1"
+      :breakpoints="[0, 1]">
+      <v-card height='604' class='pa-0 rounded-t-lg app-item-color'>
+         <v-card-title class='py-4 text-center my-border my-title'>
+            Кошик
+            <v-list-item-subtitle v-if='cart?.order_items.length' class='my-subtitle py-1'>
+               Сума: {{ cart?.product_price }} грн
+            </v-list-item-subtitle>
+         </v-card-title>
 
-            <v-list v-if='cart?.order_items.length' max-height="300" class='pa-5 pb-0 bg-transparent pt-0 mt-5'>
-               <app-product v-for="item in cart.order_items" :key="item.id" :offer='getOfferById(item.offer_id)'
-                  class='app-bg-color-form' />
-            </v-list>
+         <v-list v-if='cart?.order_items.length' @touchmove.stop max-height="407"
+            class='pa-5 pb-0 bg-transparent pt-0 mt-5'>
+            <app-product v-for="item in cart.order_items" :key="item.id" :offer='item.offer'
+               class='app-bg-color-form' />
+         </v-list>
 
-            <template v-else>
-               <div class="d-flex mt-5">
-                  <img width='40%' class="cart-image" src='https://cdn-icons-png.flaticon.com/512/5102/5102639.png'>
-               </div>
-               <v-list-item-title class='mx-5 pb-1 no-item-title text-center'>
-                  Немає жодного товару
-               </v-list-item-title>
-
-            </template>
-            <v-card-actions class="d-flex justify-center pt-0 px-5">
-               <v-btn block v-if='cart?.order_items.length' color='orange' class='text-white mx-5 my-5 rounded-lg'
-                  @click='goToPayment' variant='flat'>
-                  Оформити замовлення
-               </v-btn>
-               <v-btn v-else block class='text-white mx-5 my-5 mt-4 rounded-lg app-color' @click='goToCatalog'
-                  variant='flat'>
-                  Перейти в каталог
-               </v-btn>
-            </v-card-actions>
-         </v-card>
-      </ion-content>
+         <template v-else>
+            <div class="d-flex mt-5">
+               <img width='40%' class="cart-image" src='https://cdn-icons-png.flaticon.com/512/5102/5102639.png'>
+            </div>
+            <v-list-item-title class='mx-5 pb-1 no-item-title text-center'>
+               Немає жодного товару
+            </v-list-item-title>
+         </template>
+         <v-card-actions @touchmove.stop class="d-flex justify-center pt-0 px-5">
+            <v-btn block v-if='cart?.order_items.length' color='orange' class='text-white mx-5 my-5 rounded-lg btn-text'
+               @click='goToPayment' variant='flat'>
+               Оформити замовлення
+            </v-btn>
+            <v-btn v-else block class='text-white mx-5 my-5 mt-4 rounded-lg app-color btn-text' @click='goToCatalog'
+               variant='flat'>
+               Перейти в каталог
+            </v-btn>
+         </v-card-actions>
+      </v-card>
    </ion-modal>
 </template>
 
@@ -111,8 +113,8 @@ import AppProduct from '@/components/AppProduct.vue'
 import { useRouting } from '@/composables'
 import { Address } from '@/models'
 import { requestService } from '@/services'
-import { useCartStore, useOfferStore, useUserStore } from '@/stores'
-import { IonContent, IonModal } from '@ionic/vue'
+import { useCartStore, useUserStore } from '@/stores'
+import { IonModal } from '@ionic/vue'
 import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -122,9 +124,6 @@ defineProps<{
 }>()
 
 const request = requestService()
-
-const offerStore = useOfferStore()
-const { getOfferById } = offerStore
 
 const userStore = useUserStore()
 const { currentUser } = storeToRefs(userStore)
@@ -144,7 +143,8 @@ const menuOverviewItems = [
 ]
 
 const menuAccountItems = [
-   { name: 'Налаштування', icon: 'mdi-cog', routing: routing.toSettings },
+   // { name: 'Налаштування', icon: 'mdi-cog', routing: routing.toSettings },
+   { name: 'Змінити пароль', icon: 'mdi-cog', routing: routing.toPasswordChange },
    { name: 'Вихід', icon: 'mdi-logout-variant', routing: userStore.logout }
 ]
 
@@ -197,7 +197,10 @@ watch(drawer, async () => {
    margin: 0 auto;
 }
 
-.v-card {
+.v-card-actions {
    position: fixed;
+   bottom: -7px;
+   right: 0px;
+   left: 0px;
 }
 </style>

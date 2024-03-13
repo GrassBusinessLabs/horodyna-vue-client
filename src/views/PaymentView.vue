@@ -25,8 +25,8 @@
          </v-list-item-title>
          <v-sheet class="px-3">
             <v-list max-height="129" class='pa-0 bg-transparent'>
-               <app-payment-product v-for="item in selectedOrder?.order_items" :key="item.id"
-                  :offer='getOfferById(item.offer_id)' class='app-bg-color-form' />
+               <app-payment-product v-for="item in selectedOrder?.order_items" :key="item.id" :offer='item.offer'
+                  class='app-bg-color-form' />
             </v-list>
          </v-sheet>
 
@@ -52,46 +52,44 @@
          selectedDepartment ? selectedDepartment : orderDepartment }}
          </v-card-text>
 
-         <ion-modal style="--background: transparent" :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
-            :initial-breakpoint="0.6">
-            <ion-content style="--background: transparent">
-               <v-card class="text-center rounded-t-lg" height="600">
-                  <v-card-title class='py-5 text-center my-card-title address-search d-flex align-center justify-center'>
-                     Зміна відділення <img class="mail-image2"
-               src='https://play-lh.googleusercontent.com/mtyOm0Rp0PeG_BWE7M5j9gBWuU1Du34LLj-dLdSE1-006_BkFg32W3Cca00l2BBvNM0'>
-                  </v-card-title>
-                  <v-autocomplete density="compact" class="ma-5" v-model='addressModel' v-model:search='searchModel'
-                     :items='items' :loading='loading' autocomplete='off' item-title='Description'
-                     label='Введіть назву міста' prepend-inner-icon='mdi-map-marker' :no-filter='true'
-                     :hide-details='true' :return-object='true' @update:modelValue='selectHandler'
-                     @update:search='debounceSearch' />
-                  <v-sheet class="pr-10">
-                     <ion-select justify="start" label="" v-model="temporaryDepartment" aria-label="Відділення"
-                        interface="action-sheet" placeholder="Оберіть відділення">
-                        <ion-select-option v-for="department in mailDepartments" :key="department.SiteKey"
-                           :value="department.Description">{{ department.Description }}</ion-select-option>
-                     </ion-select>
-                  </v-sheet>
-                  <v-card-text class="pa-5 pt-1 mx-2 d-flex justify-center">
-                     <v-btn @click="addressModel = null" class='w-50 rounded-lg mr-4' color="indigo" variant='outlined'>
-                        Очистити
-                     </v-btn>
-                     <v-btn @click="changeOrderDepartment" class='app-color w-50 rounded-lg' variant='flat'>
-                        Змінити
-                     </v-btn>
-                  </v-card-text>
-               </v-card>
-            </ion-content>
+         <ion-modal :is-open="isOpen" @ionModalDidDismiss="modalDismissed" :handle="false" :initial-breakpoint="1"
+            :breakpoints="[0, 1]">
+            <v-card class="text-center rounded-t-lg" height="450">
+               <v-card-title class='py-5 text-center my-card-title address-search d-flex align-center justify-center'>
+                  Зміна відділення <img class="mail-image2"
+                     src='https://play-lh.googleusercontent.com/mtyOm0Rp0PeG_BWE7M5j9gBWuU1Du34LLj-dLdSE1-006_BkFg32W3Cca00l2BBvNM0'>
+               </v-card-title>
+               <v-autocomplete density="compact" class="ma-5" v-model='addressModel' v-model:search='searchModel'
+                  :items='items' :loading='loading' autocomplete='off' item-title='Description'
+                  label='Введіть назву міста' prepend-inner-icon='mdi-map-marker' :no-filter='true' :hide-details='true'
+                  :return-object='true' @update:modelValue='selectHandler' @update:search='debounceSearch' />
+               <v-sheet class="pr-10">
+                  <ion-select justify="start" label="" v-model="temporaryDepartment" aria-label="Відділення"
+                     interface="action-sheet" placeholder="Оберіть відділення">
+                     <ion-select-option v-for="department in mailDepartments" :key="department.SiteKey"
+                        :value="department.Description">{{ department.Description }}</ion-select-option>
+                  </ion-select>
+               </v-sheet>
+               <v-card-actions class="pa-5 pt-1 mx-2 d-flex justify-center">
+                  <v-btn @click="addressModel = null" class='w-50 rounded-lg mr-2' color="indigo" variant='outlined'>
+                     Очистити
+                  </v-btn>
+                  <v-btn @click="changeOrderDepartment" class='app-color w-50 rounded-lg' variant='flat'>
+                     Змінити
+                  </v-btn>
+               </v-card-actions>
+            </v-card>
          </ion-modal>
          <v-row class='ma-0 pb-0'>
             <v-col cols='6' class="pr-2">
-               <v-btn :block='true' color='indigo' variant='outlined' class='pb-0 rounded-lg'
+               <v-btn :block='true' color='indigo' variant='outlined' class='pb-0 rounded-lg btn-text'
                   @click='routing.toOrders()'>
                   Скасувати
                </v-btn>
             </v-col>
             <v-col cols='6' class="pl-2">
-               <v-btn @click="createSubmittedOrder" :block='true' class='app-color pb-0 rounded-lg' variant='flat'>
+               <v-btn @click="createSubmittedOrder" :block='true' class='app-color pb-0 rounded-lg btn-text'
+                  variant='flat'>
                   Замовити
                </v-btn>
             </v-col>
@@ -108,7 +106,7 @@ import PaymentLayout from '@/layouts/PaymentLayout.vue'
 import { UpdateOrder } from '@/models'
 import { CityItem, requestService } from '@/services'
 import { useCartStore, useOfferStore, useOrderStore, useUserStore } from '@/stores'
-import { IonContent, IonModal, IonSelect, IonSelectOption, onIonViewWillEnter, onIonViewWillLeave } from '@ionic/vue'
+import { IonModal, IonSelect, IonSelectOption, onIonViewWillEnter, onIonViewWillLeave } from '@ionic/vue'
 import axios from 'axios'
 import debounce from 'lodash.debounce'
 import { storeToRefs } from 'pinia'
@@ -330,6 +328,7 @@ ion-select {
    --background: rgb(247, 247, 247);
    border-bottom: 1px solid rgb(150, 150, 150);
    --padding-end: 20px;
+   --border-radius: 4px 4px 0 0;
 }
 
 .new-department {
@@ -353,5 +352,17 @@ ion-select {
    height: 28px;
    border-radius: 5px;
    margin-left: 8px;
+}
+
+.btn-text {
+   padding-top: 16px !important;
+   padding-bottom: 17px !important;
+}
+
+.v-card-actions {
+   position: fixed;
+   bottom: -8px;
+   right: 0px;
+   left: 0px;
 }
 </style>

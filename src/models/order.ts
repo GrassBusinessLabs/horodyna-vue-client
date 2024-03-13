@@ -55,7 +55,25 @@ export interface UpdateOrder {
 export interface OrderItem {
    id: number,
    order_id: number,
-   offer_id: number,
+   offer: {
+      id: number,
+      title: string,
+      description: string,
+      category: string,
+      price: number,
+      unit: string,
+      stock: number,
+      status: boolean,
+      image: string,
+      additional_images: [],
+      user: {
+          id: number,
+          name: string,
+          email: string,
+          phone_number: string
+      },
+      farm_id: number
+  },
    title: string,
    price: number,
    total_price: number,

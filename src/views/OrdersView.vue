@@ -11,40 +11,37 @@
          <v-list-item-title class='no-item-title text-center py-0'>
             Немає жодного замовлення
          </v-list-item-title>
-         <v-btn color='orange' class='text-white mt-4 w-100 rounded-lg' @click='routing.toCatalog()' variant='flat'>
+         <v-btn color='orange' class='text-white mt-4 w-100 rounded-lg btn-text' @click='routing.toCatalog()' variant='flat'>
             Перейти в каталог
          </v-btn>
       </v-sheet>
 
-      <ion-modal style="--background: transparent" :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
-         :initial-breakpoint="0.7">
-         <ion-content style="--background: transparent">
-            <v-card height='700' class='pa-0 rounded-t-lg app-item-color'>
-               <v-card-title class='py-4 text-center my-border my-title'>
-                  Деталі замовлення
-                  <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
-                     Вартість: {{ selectedOrder.total_price }} грн
-                  </v-list-item-subtitle>
-               </v-card-title>
-               <v-list max-height="300" class='pa-5 bg-transparent py-0 mt-5'>
-                  <app-product v-for="offer in offersDetails" :key="offer.id" :offer='offer' :order-info="{
+      <ion-modal :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
+         :handle="false" :initial-breakpoint="1" :breakpoints="[0, 1]">
+         <v-card height='604' class='pa-0 rounded-t-lg app-item-color'>
+            <v-card-title class='py-4 text-center my-border my-title'>
+               Деталі замовлення
+               <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
+                  Вартість: {{ selectedOrder.total_price }} грн
+               </v-list-item-subtitle>
+            </v-card-title>
+            <v-list @touchmove.stop max-height="407" class='pa-5 bg-transparent py-0 mt-5'>
+               <app-product v-for="offer in offersDetails" :key="offer.id" :offer='offer' :order-info="{
          hideIcons: false,
          order: selectedOrder
       }" class='app-bg-color-form' />
-               </v-list>
-               <v-card-actions class="pa-0 pr-4 mx-5 mt-4">
-                  <v-btn color='indigo' class='text-white rounded-lg w-50 mr-2' @click='deleteSplittedOrder'
-                     variant='outlined'>
-                     Видалити
-                  </v-btn>
-                  <v-btn class='text-white rounded-lg w-50 app-color' @click='goToPayment' variant='flat'>
-                     До замовлення
-                  </v-btn>
-               </v-card-actions>
-            </v-card>
-         </ion-content>
+            </v-list>
+            <v-card-actions @touchmove.stop class="pa-0 pr-4 mx-5 mt-4">
+               <v-btn color='indigo' class='text-white rounded-lg w-50 mr-2 btn-text' @click='deleteSplittedOrder'
+                  variant='outlined'>
+                  Видалити
+               </v-btn>
+               <v-btn class='text-white rounded-lg w-50 app-color btn-text' @click='goToPayment' variant='flat'>
+                  До замовлення
+               </v-btn>
+            </v-card-actions>
+         </v-card>
       </ion-modal>
-
    </orders-layout>
 </template>
 
@@ -56,7 +53,7 @@ import OrdersLayout from '@/layouts/OrdersLayout.vue'
 import { Offer, OrderById } from '@/models'
 import { requestService } from '@/services'
 import { useCartStore, useFarmStore, useOfferStore, useOrderStore } from '@/stores'
-import { IonContent, IonModal, onIonViewWillEnter } from '@ionic/vue'
+import { IonModal, onIonViewWillEnter } from '@ionic/vue'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
@@ -100,7 +97,7 @@ const offersDetails = ref<Offer[]>([])
 
 const showOrderDetails = async (order: OrderById) => {
    selectedOrder.value = order
-   const relatedOffers = offers.value?.filter(offer => order.order_items.some(item => item.offer_id === offer.id))
+   const relatedOffers = offers.value?.filter(offer => order.order_items.some(item => item.offer.id === offer.id))
    offersDetails.value = relatedOffers ? relatedOffers : [{
       id: -1,
       title: '',
@@ -157,5 +154,17 @@ const deleteSplittedOrder = async () => {
 
 .my-title {
    font-size: 25px;
+}
+
+.v-card-actions {
+   position: fixed;
+   bottom: 15px;
+   right: 0px;
+   left: 0px;
+}
+
+.btn-text {
+   padding-top: 4px !important;
+   padding-bottom: 5px !important;
 }
 </style>

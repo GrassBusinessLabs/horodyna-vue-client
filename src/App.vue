@@ -2,7 +2,7 @@
    <v-app>
       <ion-app>
          <ion-router-outlet />
-         <app-navigation mandatory v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change' && route.path !== '/admin-panel'">
+         <app-navigation mandatory v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/admin-panel'">
       </app-navigation>
       </ion-app>
    </v-app>

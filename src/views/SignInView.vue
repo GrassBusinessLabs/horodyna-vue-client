@@ -32,7 +32,7 @@
                      :block='true'
                      :disabled='isSubmitting'
                      type='submit'
-                     class='app-color rounded-lg'
+                     class='app-color rounded-lg btn-text'
                      variant='flat'
                   >
                      Вхід
@@ -86,8 +86,8 @@ const form = useForm({
       })
    ),
    initialValues: {
-      phone: '0951234567',
-      password: '222222'
+      phone: '',
+      password: ''
    }
 })
 

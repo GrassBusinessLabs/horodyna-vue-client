@@ -59,7 +59,7 @@ export const useOrderStore = defineStore('order', () => {
       const cartStore = useCartStore()
       const {cart} = storeToRefs(cartStore)
       
-      const cartProduct = cart.value?.order_items.find(item => item.offer_id === id)
+      const cartProduct = cart.value?.order_items.find(item => item.offer.id === id)
       return cartProduct ? cartProduct.amount : 0
    }
    

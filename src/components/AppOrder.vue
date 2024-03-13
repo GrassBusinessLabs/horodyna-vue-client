@@ -1,64 +1,37 @@
 <template>
-   <div @click='detailsHandler(order)' class="app-item-color d-flex justify-space-between align-center" :class="{'one-image-order': false}">
+   <div @click='detailsHandler(order)' class="app-item-color d-flex justify-space-between align-center" :class="{'one-image-order': order.order_items.length === 1}">
       <div class="d-flex justify-space-between align-center">
-         <!-- <img v-for="image in order.images" class="product-image" alt="Product image" :key="offer.id"
-            :src="linkIMG + '/' + image"> -->
 
-         <!-- <div>
-            <img class="product-image" alt="Product image" src="https://tut-cikavo.com/images/Nauka/tomatos.jpg">
-            <img class="product-image" alt="Product image" src="https://tut-cikavo.com/images/Nauka/tomatos.jpg">
-            <img class="product-image" alt="Product image" src="https://tut-cikavo.com/images/Nauka/tomatos.jpg">
-            <img class="product-image" alt="Product image" src="https://tut-cikavo.com/images/Nauka/tomatos.jpg">
-         </div> -->
-
-         <!-- <div v-if="order.images.length === 4">
-            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.images[0]">
-            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.images[1]">
-            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.images[2]">
-            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.images[3]">
+         <div v-if="order.order_items.length === 4">
+            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[0].offer.image">
+            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[1].offer.image">
+            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[2].offer.image">
+            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[3].offer.image">
          </div>
 
-         <div v-else-if="order.images.length === 3">
-            <img class="product-image3" alt="Product image" :src="linkIMG + '/' + order.images[0]">
-            <img class="product-image3" alt="Product image" :src="linkIMG + '/' + order.images[1]">
-            <img class="product-image3" alt="Product image" :src="linkIMG + '/' + order.images[2]">
+         <div v-else-if="order.order_items.length === 3">
+            <img class="product-image3" alt="Product image" :src="linkIMG + '/' + order.order_items[0].offer.image">
+            <img class="product-image3" alt="Product image" :src="linkIMG + '/' + order.order_items[1].offer.image">
+            <img class="product-image3" alt="Product image" :src="linkIMG + '/' + order.order_items[2].offer.image">
          </div>
 
-         <div v-else-if="order.images.length === 2">
-            <img class="product-image2" alt="Product image" :src="linkIMG + '/' + order.images[0]">
-            <img class="product-image2" alt="Product image" :src="linkIMG + '/' + order.images[1]">
+         <div v-else-if="order.order_items.length === 2">
+            <img class="product-image2" alt="Product image" :src="linkIMG + '/' + order.order_items[0].offer.image">
+            <img class="product-image2" alt="Product image" :src="linkIMG + '/' + order.order_items[1].offer.image">
+         </div>
+
+         <div v-else-if="order.order_items.length === 1">
+            <img class="product-image1" alt="Product image" :src="linkIMG + '/' + order.order_items[0].offer.image">
          </div>
 
          <div v-else>
-            <img class="product-image1" alt="Product image" :src="linkIMG + '/' + order.images[0]">
-         </div> -->
-
-         <div v-if="order.id === 65">
-            <img class="product-image" alt="Product image" src="https://tut-cikavo.com/images/Nauka/tomatos.jpg">
-            <img class="product-image" alt="Product image" src="https://today.ua/wp-content/uploads/2023/10/kartofel.jpg">
-            <img class="product-image" alt="Product image" src="https://images.unian.net/photos/2023_01/thumb_files/1000_545_1675013478-2668.jpg?1">
-            <img class="product-image" alt="Product image" src="https://content2.rozetka.com.ua/goods/images/big/178661066.jpg">
+            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[0].offer.image">
+            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[1].offer.image">
+            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[2].offer.image">
+            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[3].offer.image">
          </div>
 
-         <div v-else-if="order.id === 67">
-            <img class="product-image3" alt="Product image" src="https://tut-cikavo.com/images/Nauka/tomatos.jpg">
-            <img class="product-image3" alt="Product image" src="https://today.ua/wp-content/uploads/2023/10/kartofel.jpg">
-            <img class="product-image3" alt="Product image" src="https://images.unian.net/photos/2023_01/thumb_files/1000_545_1675013478-2668.jpg?1">
-         </div>
-
-         <div v-else-if="order.id === 68">
-            <img class="product-image2" alt="Product image" src="https://tut-cikavo.com/images/Nauka/tomatos.jpg">
-            <img class="product-image2" alt="Product image" src="https://today.ua/wp-content/uploads/2023/10/kartofel.jpg">
-         </div>
-
-         <div v-else>
-            <img class="product-image" alt="Product image" src="https://tut-cikavo.com/images/Nauka/tomatos.jpg">
-            <img class="product-image" alt="Product image" src="https://today.ua/wp-content/uploads/2023/10/kartofel.jpg">
-            <img class="product-image" alt="Product image" src="https://images.unian.net/photos/2023_01/thumb_files/1000_545_1675013478-2668.jpg?1">
-            <img class="product-image" alt="Product image" src="https://content2.rozetka.com.ua/goods/images/big/178661066.jpg">
-         </div>
-
-         <div class="order-info" :class="{'one-image-order-info': false}">
+         <div class="order-info" :class="{'one-image-order-info': order.order_items.length === 1}">
             <p class='my-font-size order-status'
                :class="order.status === 'DECLINED' ? 'declined' : (order.status === 'SUBMITTED' ? 'waiting' : (order.status === 'COMPLETED' ? 'completed' : ''))">
                {{ order.status === 'SUBMITTED' ? 'Очікує' :
@@ -112,50 +85,52 @@ function detailsHandler(event: Order): void {
 }
 
 .product-image {
-   width: 30px;
-   height: 30px;
+   width: 32px;
+   height: 32px;
    object-fit: cover;
    border-radius: 100%;
-   margin-right: -8px;
+   margin-right: -12px;
    margin-bottom: -6px;
-   border: 2px solid white;
+   border: 2px solid #f9f9f9;
+}
+
+.product-image:last-child {
+   margin-right: -8px;
 }
 
 .product-image3 {
+   width: 35px;
+   height: 35px;
+   object-fit: cover;
+   border-radius: 100%;
+   margin-right: -7px;
+   margin-bottom: -7px;
+   border: 2px solid #f9f9f9;
+}
+
+.product-image2 {
+   width: 31px;
+   height: 31px;
+   object-fit: cover;
+   border-radius: 100%;
+   margin-right: -13px;
+   margin-bottom: -7px;
+   border: 2px solid #f9f9f9;
+   margin-left: -1px;
+}
+
+.product-image1 {
    width: 37px;
    height: 37px;
    object-fit: cover;
    border-radius: 100%;
-   margin-right: -8px;
    margin-bottom: -7px;
-   border: 2px solid white;
-}
-
-.product-image2 {
-   width: 44px;
-   height: 44px;
-   object-fit: cover;
-   border-radius: 100%;
-   margin-right: -8px;
-   margin-bottom: -7px;
-   border: 2px solid white;
-}
-
-.product-image1 {
-   width: 46px;
-   height: 46px;
-   object-fit: cover;
-   border-radius: 100%;
-   margin-bottom: -7px;
-   border: 2px solid white;
+   border: 2px solid #f9f9f9;
+   margin-left: 5px;
 }
 
 .product-image2:last-child {
-   margin-right: -1px;
-}
-
-.product-image2:first-child {
-   margin-left: 7px;
+   margin-right: -5px;
 }
 
 .app-item-color {
@@ -178,7 +153,7 @@ function detailsHandler(event: Order): void {
 }
 
 .one-image-order-info {
-   margin-left: 10px;
+   margin-left: 16px;
 }
 
 .order-status {
@@ -208,7 +183,7 @@ function detailsHandler(event: Order): void {
 }
 
 .declined {
-   background-color: rgba(226, 34, 0, 0.781);
+   background-color: rgba(226, 34, 0, 0.699);
 }
 
 .waiting {

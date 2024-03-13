@@ -32,7 +32,7 @@ export const useCartStore = defineStore('cart', () => {
 
    async function addProductToCart(offer: Offer) {
       await setCart()
-      const selectedProduct = cart.value?.order_items.find(item => item.offer_id === offer.id)
+      const selectedProduct = cart.value?.order_items.find(item => item.offer.id === offer.id)
       if (selectedProduct) {
          const body: UpdateOrderItem = {
             id: selectedProduct.id,
@@ -55,7 +55,7 @@ export const useCartStore = defineStore('cart', () => {
 
    async function removeProductFromCart(offer: Offer) {
       await setCart() 
-      const selectedProduct = cart.value?.order_items.find(item => item.offer_id === offer.id)
+      const selectedProduct = cart.value?.order_items.find(item => item.offer.id === offer.id)
       if (selectedProduct && selectedProduct.amount > 1) {
          const body: UpdateOrderItem = {
             id: selectedProduct.id,

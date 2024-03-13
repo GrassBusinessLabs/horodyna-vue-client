@@ -29,34 +29,32 @@
          <v-list-item-title class='no-item-title text-center py-0'>
             Немає жодного замовлення
          </v-list-item-title>
-         <v-btn class='text-white mt-4 w-100 rounded-lg app-color' @click='routing.toCatalog()' variant='flat'>
+         <v-btn class='text-white mt-4 w-100 rounded-lg app-color btn-text' @click='routing.toCatalog()' variant='flat'>
             Перейти в каталог
          </v-btn>
       </v-sheet>
 
-      <ion-modal style="--background: transparent" :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
-         :initial-breakpoint="0.7">
-         <ion-content style="--background: transparent">
-            <v-card height='700' class='pa-0 rounded-t-lg app-item-color'>
-               <v-card-title class='py-4 text-center my-border my-title'>
-                  {{ offersDetails[0].user.name }}
-                  <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
-                     <!-- {{ offersDetails[0].user.phone_number }} -->
-                     095 823 4163
-                  </v-list-item-subtitle>
-                  <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
-                     Вартість: {{ selectedOrder.total_price }} грн
-                  </v-list-item-subtitle>
-               </v-card-title>
-               <v-list max-height="290" class='pa-5 h-100 bg-transparent py-0 mt-5'>
-                  <app-product v-for="offer in offersDetails" :key="offer.id" :offer='offer' :is-hide-seller="true"
-                     :order-info="{
+      <ion-modal :is-open="isOpen" @ionModalDidDismiss="modalDismissed" :handle="false" :initial-breakpoint="1"
+         :breakpoints="[0, 1]">
+         <v-card height='604' class='pa-0 rounded-t-lg app-item-color'>
+            <v-card-title class='py-4 text-center my-border my-title'>
+               {{ offersDetails[0].user.name }}
+               <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
+                  {{ offersDetails[0].user.phone_number }}
+                  <!-- 095 823 4163 -->
+               </v-list-item-subtitle>
+               <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
+                  Вартість: {{ selectedOrder.total_price }} грн
+               </v-list-item-subtitle>
+            </v-card-title>
+            <v-list @touchmove.stop max-height="438" class='pa-5 h-100 bg-transparent py-0 mt-5'>
+               <app-product v-for="offer in offersDetails" :key="offer.id" :offer='offer' :is-hide-seller="true"
+                  :order-info="{
          hideIcons: selectedOrder.status !== 'COMPLETED',
          order: selectedOrder
       }" class='app-bg-color-form' />
-               </v-list>
-            </v-card>
-         </ion-content>
+            </v-list>
+         </v-card>
       </ion-modal>
    </purchase-history-layout>
 </template>
@@ -69,7 +67,7 @@ import PurchaseHistoryLayout from '@/layouts/PurchaseHistoryLayout.vue'
 import { Offer, Order, OrderById } from '@/models'
 import { requestService } from '@/services'
 import { useCartStore, useFarmStore, useOfferStore, useOrderStore } from '@/stores'
-import { IonContent, IonModal, onIonViewWillEnter } from '@ionic/vue'
+import { IonModal, onIonViewWillEnter } from '@ionic/vue'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
@@ -118,7 +116,7 @@ const offersDetails = ref<Offer[]>([])
 const showOrderDetails = async (order: Order) => {
    const orderResponse = await request.getOrderById(order.id)
    selectedOrder.value = orderResponse
-   const relatedOffers = offers.value?.filter(offer => orderResponse.order_items.some(item => item.offer_id === offer.id))
+   const relatedOffers = offers.value?.filter(offer => orderResponse.order_items.some(item => item.offer.id === offer.id))
    offersDetails.value = relatedOffers ? relatedOffers : [{
       id: -1,
       title: '',
@@ -171,5 +169,17 @@ const showOrderDetails = async (order: Order) => {
 
 .cart-image {
    margin: 0 auto;
+}
+
+.v-card-actions {
+   position: fixed;
+   bottom: 15px;
+   right: 0px;
+   left: 0px;
+}
+
+.btn-text {
+   padding-top: 4px !important;
+   padding-bottom: 5px !important;
 }
 </style>
