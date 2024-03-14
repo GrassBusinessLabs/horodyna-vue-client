@@ -86,8 +86,8 @@ const form = useForm({
       })
    ),
    initialValues: {
-      phone: '',
-      password: ''
+      phone: '0951234567',
+      password: '222222'
    }
 })
 

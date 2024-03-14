@@ -25,7 +25,7 @@
                   Вартість: {{ selectedOrder.total_price }} грн
                </v-list-item-subtitle>
             </v-card-title>
-            <v-list @touchmove.stop max-height="407" class='pa-5 bg-transparent py-0 mt-5'>
+            <v-list @touchmove.stop max-height="410" class='pa-5 bg-transparent py-0 mt-5'>
                <app-product v-for="offer in offersDetails" :key="offer.id" :offer='offer' :order-info="{
          hideIcons: false,
          order: selectedOrder
@@ -158,7 +158,7 @@ const deleteSplittedOrder = async () => {
 
 .v-card-actions {
    position: fixed;
-   bottom: 15px;
+   bottom: 13px;
    right: 0px;
    left: 0px;
 }

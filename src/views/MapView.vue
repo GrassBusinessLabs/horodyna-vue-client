@@ -45,8 +45,8 @@
                   {{ selectedFarm.address }}
                </v-list-item-subtitle>
             </v-card-title>
-            <v-list v-if="selectedFarm.products?.length" @touchmove.stop max-height="407"
-               class='pa-5 pb-2 bg-transparent'>
+            <v-list v-if="selectedFarm.products?.length" @touchmove.stop max-height="447"
+               class='pa-5 py-0 mt-5 bg-transparent'>
                <div v-for="offer in selectedFarm.products" :key="offer.id" :class="{ 'inactive-offer': !offer.status }"
                   class='d-flex justify-space-between align-center payment-product app-bg-color-form'>
                   <div class="d-flex justify-space-between align-center">
@@ -262,6 +262,10 @@ watch(selectedOffer, async () => {
    padding: 7px 11px;
    border-radius: 17px;
    margin-bottom: 11px;
+}
+
+.payment-product:last-child {
+   margin-bottom: 0 !important;
 }
 
 .offer-title {

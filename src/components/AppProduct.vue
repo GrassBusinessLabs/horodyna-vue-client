@@ -140,6 +140,7 @@ function offerHandler(event: Offer): void {
 .product-counter {
    max-width: 23px;
    margin: 0 4px;
+   line-height: 0.9;
 }
 
 .product-item {

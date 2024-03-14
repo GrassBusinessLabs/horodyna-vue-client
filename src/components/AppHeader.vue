@@ -166,8 +166,12 @@ const goToPayment = () => {
 
 watch(drawer, async () => {
    if (drawer.value) {
-      const userAddressResponse = await request.getAddressByUserId(currentUser.value?.id ? currentUser.value.id : -1)
-      userAddress.value = userAddressResponse ? userAddressResponse : undefined
+      try {
+         const userAddressResponse = await request.getAddressByUserId(currentUser.value?.id ? currentUser.value.id : -1)
+         userAddress.value = userAddressResponse ? userAddressResponse : undefined
+      } catch (e) {
+         userAddress.value = undefined
+      }
    }
 })
 </script>

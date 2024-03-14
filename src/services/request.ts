@@ -60,6 +60,10 @@ export const requestService = () => {
       return api.post('/orders', body)
    }
 
+   async function deleteOrder(order_id: number): Promise<Order> {
+      return api.del(`/orders/${order_id}`)
+   }
+
    async function updateOrderDepartment(body: UpdateOrder): Promise<Order> {
       return api.put(`/orders/${body.order_id}`, body)
    }
@@ -112,6 +116,10 @@ export const requestService = () => {
       return api.del(`/orders/split/${farm_id}/${order_id}`)
    }
 
+   async function markOrderAsCompleted(order_id: number, body): Promise<void> {
+      return api.put(`/orders/receiver-status/${order_id}`, body)
+   }
+
    return {
       login,
       register,
@@ -122,6 +130,7 @@ export const requestService = () => {
       getOrders,
       getOrderById,
       createOrder,
+      deleteOrder,
       updateOrderDepartment,
       createOrderItem,
       updateOrderItem,
@@ -134,6 +143,7 @@ export const requestService = () => {
       getSplitOrders,
       submitSplittedOrder,
       deleteSplittedOrder,
-      getAddressByUserId
+      getAddressByUserId,
+      markOrderAsCompleted
    }
 }

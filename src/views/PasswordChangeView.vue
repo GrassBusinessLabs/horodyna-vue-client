@@ -69,12 +69,16 @@ import { useHandleError, useRouting } from '@/composables'
 import PasswordChangeLayout from '@/layouts/PasswordChangeLayout.vue'
 import type { PasswordChangeBody } from '@/models'
 import { formService, requestService } from '@/services'
+import { useUserStore } from '@/stores'
 
 const {handleError} = useHandleError()
 const routing = useRouting()
 
 const {vuetifyConfig, passwordValidator} = formService()
 const request = requestService()
+
+const userStore = useUserStore()
+const {logout} = userStore
 
 const form = useForm({
    validationSchema: toTypedSchema(
@@ -109,10 +113,11 @@ const submit = form.handleSubmit(async values => {
       }
 
       await request.changePassword(body)
-
-      await routing.toSettings()
+      await logout()
+      await routing.toSignIn()
 
       isSubmitting.value = false
+      form.resetForm()
    } catch (e) {
       console.error(e)
       handleError(e)
