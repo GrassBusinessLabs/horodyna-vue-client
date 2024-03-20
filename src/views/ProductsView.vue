@@ -1,7 +1,7 @@
 <template>
    <products-layout>
-      <v-list v-if="filteredOffers?.length" class='pa-0 bg-transparent'>
-         <app-product v-for='offer in filteredOffers' :key='offer.id' :offer='offer'
+      <v-list v-if="filteredOffers?.length" class='pa-0 ma-0 bg-transparent'>
+         <app-offer v-for='offer in filteredOffers' :key='offer.id' :offer='offer'
             @offer-details="showOfferDetails" />
       </v-list>
       <v-sheet v-else class='mx-auto pa-6 pt-5 rounded-lg'>
@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang='ts'>
-import AppProduct from '@/components/AppProduct.vue'
+import AppOffer from '@/components/AppOffer.vue'
 import { useRouting, useTranslate } from '@/composables'
 import ProductsLayout from '@/layouts/ProductsLayout.vue'
 import { Offer } from '@/models'
@@ -101,6 +101,10 @@ const showOfferDetails = (offer: Offer) => {
 </script>
 
 <style scoped>
+.offer-card:last-child {
+   margin-bottom: 20px;
+} 
+
 .no-item-title {
    font-size: 30px;
    white-space: normal;

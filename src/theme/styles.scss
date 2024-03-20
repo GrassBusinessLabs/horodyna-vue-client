@@ -1,6 +1,20 @@
 @import "@tomtom-international/web-sdk-maps/dist/maps.css";
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap');
 
+:root {
+	--color-primary: #529075;
+	--color-bg: #fafaf2;
+	--color-white: #fff;
+	--color-dark: #313131;
+	--color-light: #999;
+	--color-lightest: #ededed;
+}
+
+:root {
+  --font-family: "Inter", sans-serif;
+  --second-family: "SF Pro Text", sans-serif;
+}
+
 .Vue-Toastification__container.toast-dialog-container {
   width: 300px;
   left: auto;
