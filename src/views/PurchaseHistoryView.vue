@@ -5,8 +5,9 @@
             Активні
             <!-- <v-icon size="20" icon="mdi-truck"></v-icon> -->
          </v-list-item-title>
-         <app-order v-for="order in orders?.filter(order => order.status !== 'COMPLETED' && order.status !== 'DRAFT' && order.status !== 'DECLINED')" :order='order' :key="order.id"
-            @order-details='showOrderDetails(order)'></app-order>
+         <app-order
+            v-for="order in orders?.filter(order => order.status !== 'COMPLETED' && order.status !== 'DRAFT' && order.status !== 'DECLINED')"
+            :order='order' :key="order.id" @order-details='showOrderDetails(order)'></app-order>
 
          <v-list-item-title v-if="declinedOrders?.length" class="order-title mt-4">
             Відхилені
@@ -19,8 +20,8 @@
             Отримані
             <!-- <v-icon size="20" icon="mdi-check-circle"></v-icon> -->
          </v-list-item-title>
-         <app-order v-for="order in orders?.filter(order => order.status === 'COMPLETED')" :order='order' :key="order.id"
-            @order-details='showOrderDetails(order)' class="gotten-order"></app-order>
+         <app-order v-for="order in orders?.filter(order => order.status === 'COMPLETED')" :order='order'
+            :key="order.id" @order-details='showOrderDetails(order)' class="gotten-order"></app-order>
       </v-list>
       <v-sheet v-else class='mx-auto pa-5 pt-6 rounded-lg'>
          <div class="d-flex">
@@ -36,7 +37,9 @@
 
       <ion-modal :is-open="isOpen" @ionModalDidDismiss="modalDismissed" :handle="false" :initial-breakpoint="1"
          :breakpoints="[0, 1]">
-         <v-card :height="`${selectedOrder.status === 'SHIPPING' || selectedOrder.status === 'DECLINED' ? '600' : '576'}`" class='pa-0 rounded-t-lg app-item-color'>
+         <v-card
+            :height="`${selectedOrder.status === 'SHIPPING' || selectedOrder.status === 'DECLINED' ? '600' : '576'}`"
+            class='pa-0 rounded-t-lg app-item-color'>
             <v-card-title class='py-4 text-center my-border my-title'>
                {{ offersDetails[0].user.name }}
                <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
@@ -47,7 +50,8 @@
                   Вартість: {{ selectedOrder.total_price }} грн
                </v-list-item-subtitle>
             </v-card-title>
-            <v-list @touchmove.stop :max-height="`${selectedOrder.status === 'SHIPPING' || selectedOrder.status === 'DECLINED' ? '380' : '409'}`"
+            <v-list @touchmove.stop
+               :max-height="`${selectedOrder.status === 'SHIPPING' || selectedOrder.status === 'DECLINED' ? '380' : '409'}`"
                class='pa-5 h-100 bg-transparent py-0 mt-5'>
                <app-product v-for="offer in offersDetails" :key="offer.id" :offer='offer' :is-hide-seller="true"
                   :order-info="{
@@ -57,13 +61,15 @@
             </v-list>
             <v-card-actions v-if="selectedOrder.status === 'SHIPPING'" @touchmove.stop
                class="d-flex justify-center pt-0 px-5 mark-completed">
-               <v-btn block color='orange' class='text-white mx-5 my-5 rounded-lg btn-text' @click='markAsCompleted' variant='flat'>
+               <v-btn block color='orange' class='text-white mx-5 my-5 rounded-lg btn-text' @click='markAsCompleted'
+                  variant='flat'>
                   Позначити як отримане
                </v-btn>
             </v-card-actions>
             <v-card-actions v-else-if="selectedOrder.status === 'DECLINED'" @touchmove.stop
                class="d-flex justify-center pt-0 px-5 mark-completed">
-               <v-btn block class='text-white mx-5 my-5 rounded-lg btn-text app-color' @click='deleteDeclinedOrder' variant='flat'>
+               <v-btn block class='text-white mx-5 my-5 rounded-lg btn-text app-color' @click='deleteDeclinedOrder'
+                  variant='flat'>
                   Видалити
                </v-btn>
             </v-card-actions>
@@ -151,7 +157,7 @@ const showOrderDetails = async (order: Order) => {
 }
 
 const markAsCompleted = async () => {
-   request.markOrderAsCompleted(selectedOrder.value.id ? selectedOrder.value.id : -1, {status: "COMPLETED"})
+   request.markOrderAsCompleted(selectedOrder.value.id ? selectedOrder.value.id : -1, { status: "COMPLETED" })
    isOpen.value = false
    await new Promise(resolve => setTimeout(resolve, 1000))
    await populateOrders()
@@ -176,11 +182,13 @@ const deleteDeclinedOrder = async () => {
 }
 
 .order-title {
-   font-size: 18px;
-   margin-bottom: 6px;
-   margin-left: 3px;
-   color: rgb(83, 83, 83);
-   font-weight: 500;
+   font-family: var(--font-family);
+font-weight: 600;
+font-size: 17px;
+line-height: 120%;
+color: var(--color-dark);
+   margin-left: 17.2px;
+   margin-bottom: -10px;
 }
 
 .gotten-order {

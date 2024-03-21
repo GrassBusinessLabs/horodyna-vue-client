@@ -1,36 +1,30 @@
 <template>
-   <div :class="{ 'inactive-offer': !offer.status }" class='offer-card d-flex flex-column'>
-      <div class="offer-image-block">
-         <img @click="offerHandler(offer)" width="128" :src="linkIMG + '/' + offer.image" alt="Product image"
-            class="offer-image">
-      </div>
-      <div class="offer-info d-flex flex-column justify-space-between">
-         <div class="info-text d-flex justify-space-between">
+   <div class='cart-item d-flex align-center'>
+      <img @click="offerHandler(offer)" width="128" :src="linkIMG + '/' + offer.image" alt="Product image"
+         :class="`product-image ${offer.status ? '' : 'gray-scale'}`">
+
+      <div class="cart-item-info d-flex flex-column justify-space-between">
+         <div>
+            <div class="info-text d-flex justify-space-between">
             <div class="offer-title">
                {{ offer.title }}
             </div>
-            <div class="offer-rating d-flex align-center">
-               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                     d="M8.58699 8.236L11.185 3.004C11.2606 2.85259 11.3769 2.72523 11.5209 2.63622C11.6648 2.54721 11.8307 2.50006 12 2.50006C12.1692 2.50006 12.3351 2.54721 12.4791 2.63622C12.6231 2.72523 12.7394 2.85259 12.815 3.004L15.413 8.236L21.221 9.08C21.3885 9.10323 21.5461 9.17309 21.6759 9.28161C21.8056 9.39013 21.9022 9.53294 21.9546 9.69373C22.0071 9.85452 22.0133 10.0268 21.9725 10.191C21.9317 10.3551 21.8456 10.5045 21.724 10.622L17.522 14.692L18.514 20.442C18.641 21.18 17.861 21.742 17.194 21.394L12 18.678L6.80499 21.394C6.13899 21.743 5.35899 21.18 5.48599 20.441L6.47799 14.691L2.27599 10.621C2.15498 10.5034 2.06939 10.3542 2.02896 10.1903C1.98852 10.0265 1.99487 9.85457 2.04726 9.69415C2.09966 9.53373 2.19601 9.39122 2.32536 9.28284C2.45471 9.17445 2.61188 9.10452 2.77899 9.081L8.58699 8.236Z"
-                     stroke="#529075" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-               </svg>
-               <p class="offer-rate-number">4.5</p>
-            </div>
          </div>
-         <div class="offer-description">
+         <div class="cart-item-description">
             {{ offer.description }}
          </div>
-         <v-divider></v-divider>
+         </div>
+         
          <div class="info-price d-flex justify-space-between">
-            <p class="offer-price"> {{ offer.price }}₴ за {{ translate(offer?.unit) }}</p>
+            <p class="cart-item-price"> {{ offer.price }}₴ за {{ translate(offer?.unit) }}</p>
             <div class="d-flex align-center">
-               <svg @click="removeProductFromCart(offer)" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <svg @click="removeProductFromCart(offer)" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
                   <circle cx="10" cy="10" r="10" fill="#529075" />
                   <rect x="5" y="10.5555" width="1.11111" height="10" rx="0.555555" transform="rotate(-90 5 10.5555)"
                      fill="white" />
                </svg>
-               <p class="offer-amount">{{ getProductAmount(offer.id) }}</p>
+               <p class="cart-item-amount">{{ getProductAmount(offer.id) }}</p>
                <svg @click="addProductToCart(offer)" width="20" height="20" viewBox="0 0 20 20" fill="none"
                   xmlns="http://www.w3.org/2000/svg">
                   <circle cx="10" cy="10" r="10" fill="#529075" />
@@ -101,83 +95,52 @@ function offerHandler(event: Offer): void {
 </script>
 
 <style scoped>
-.offer-card {
+.cart-item {
    margin: 19px 15px;
-   margin-bottom: 30px;
+   margin-bottom: 21px;
    margin-left: 17.2px;
    width: 91.5%;
-   aspect-ratio: 1 / 1;
    box-shadow: 0 8px 24px 0 rgba(149, 157, 165, 0.2);
-   border-radius: 8px; 
+   border-radius: 8px;
+   background-color: white;
+   height: 100px;
 }
 
-.offer-image-block {
-   height: 62%;
+.cart-item-info {
    width: 100%;
+   height: 100px;
+   padding: 8px 14px 10px 14px;
 }
 
-.offer-info {
-   height: 38%;
-   width: 100%;
-   padding: 18px 16px 14px 16px;
-}
-
-.offer-image {
-   width: 100%;
-   height: 100%;
-   object-fit: cover;
-   border-radius: 8px 8px 0 0;
-}
-
-.offer-title {
-   font-family: var(--font-family);
+.cart-item-title {
    font-weight: 600;
-   font-size: 18px;
+   font-size: 16px;
    line-height: 120%;
    color: var(--color-dark);
 }
 
-.offer-price {
-   font-family: var(--font-family);
+.cart-item-price {
    font-weight: 600;
-   font-size: 18px;
+   font-size: 16px;
    line-height: 120%;
+   text-align: center;
    color: var(--color-dark);
 }
 
-.offer-description {
+.cart-item-description {
    font-family: var(--font-family);
    font-weight: 400;
-   font-size: 16px;
+   font-size: 12px;
    line-height: 120%;
    color: var(--color-light);
 }
 
-.offer-rate-number {
-   margin-left: 5px;
-   margin-top: 3.1px;
-   font-family: var(--font-family);
-   font-weight: 600;
-   font-size: 16px;
-   line-height: 120%;
-   color: var(--color-dark);
-}
-
-.offer-amount {
-   font-family: var(--font-family);
+.cart-item-amount {
    font-weight: 600;
    font-size: 16px;
    line-height: 120%;
    color: var(--color-dark);
    margin: 0 10px;
-}
-
-.info-price {
-   margin-top: 8px;
-}
-
-.v-divider {
-   margin-top: 7px;
 }
 
 .my-margin {
@@ -191,6 +154,13 @@ function offerHandler(event: Offer): void {
 .v-list-item {
    padding-top: 14px;
    padding-bottom: 14px;
+}
+
+.product-image {
+   width: 100px;
+   height: 100px;
+   object-fit: cover;
+   border-radius: 8px 0 0 8px;
 }
 
 .v-list-item-title {
@@ -214,6 +184,10 @@ function offerHandler(event: Offer): void {
    line-height: 0.9;
 }
 
+.product-item {
+   padding-right: 10px !important;
+}
+
 .inactive-offer {
    opacity: 70%;
 }
@@ -234,5 +208,9 @@ function offerHandler(event: Offer): void {
 
 .address-icon {
    margin-left: -3px;
+}
+
+.offer-title {
+   font-size: 16px;
 }
 </style>

@@ -1,37 +1,27 @@
 <template>
-   <v-col cols='1'
-      style="position: sticky; top: 0;"
-      class='pa-2 pr-1'
-      v-if='filteredProducts.length !== 0'
-   >
-      <div class='letter-block rounded-lg d-flex justify-center align-center app-color'>
+   <v-col cols='1' style="position: sticky; top: 0;" class='pa-2 pr-1' v-if='filteredProducts.length !== 0'>
+      <div class='letter-block d-flex justify-center align-center'>
          {{ letter }}
       </div>
    </v-col>
 
-   <v-col
-      cols='11'
-      class='pl-2 pr-0 pt-6'
-      v-if='filteredProducts.length !== 0'
-      :class="[letter, isFirst ? 'pt-9' : '']"
-   >
-   <v-list class='mt-2 bg-transparent'>
-         <v-list-item
-            v-for="product in filteredProducts"
-            :key="product.id"
-            @click='setCategory(product.name)'
-            class='pa-3 rounded-xl mb-3 app-item-color'
-         >
-            <template v-slot:prepend>
-               <v-avatar size="40" :image="product.img"></v-avatar>
-            </template>
-            <v-list-item-title class='my-font-size my-color'>
+   <v-col cols='11' class='pl-2 pr-0 pt-6' v-if='filteredProducts.length !== 0'
+      :class="[letter, isFirst ? 'pt-9' : '']">
+      <v-list class='mt-2 bg-transparent'>
+         <div v-for="product in filteredProducts" :key="product.id" @click='setCategory(product.name)'
+            class='mb-3 app-item-color category-block d-flex'>
+            <div>
+               <v-avatar size="38" :image="product.img"></v-avatar>
+            </div>
+            <div class="category-text">
+               <v-list-item-title>
                {{ product.name }}
             </v-list-item-title>
-            <v-list-item-subtitle class='my-subtitle-fs my-color'>
+            <v-list-item-subtitle class="category">
                {{ product.category }}
             </v-list-item-subtitle>
-         </v-list-item>
+            </div>
+         </div>
       </v-list>
    </v-col>
 </template>
@@ -52,7 +42,7 @@ const filteredProducts = productsData.filter((product) => props.letter === produ
    .sort((a, b) => a.name.localeCompare(b.name))
 
 const categoryStore = useCategoryStore()
-const {setCurrentCategory} = categoryStore
+const { setCurrentCategory } = categoryStore
 
 const setCategory = async (name: string) => {
    setCurrentCategory(name)
@@ -69,14 +59,39 @@ v-col {
 .letter-block {
    height: 23px;
    width: 23px;
-   font-size: 13px;
+   font-size: 12px;
+   background: var(--color-primary);
+   color: white;
+   border-radius: 6px;
 }
 
 .v-avatar {
-   border-radius: 15px;
+   border-radius: 12px;
 }
 
-.app-item-color {
-   padding-left: 13px !important;
+.category-block {
+   padding: 11px 12px 10px 11px !important;
+   border-radius: 18px;
+   box-shadow: 0 8px 24px 0 rgba(149, 157, 165, 0.2);
+}
+
+.v-list-item-title {
+   font-family: var(--font-family);
+   font-weight: 400;
+   font-size: 16px;
+   line-height: 120%;
+   color: var(--color-dark);
+   margin-top: 2px;
+}
+
+.category-text {
+   margin-left: 9px;
+}
+
+.category {
+   font-weight: 400;
+   font-size: 15px;
+   color: var(--color-light);
+   opacity: 100%;
 }
 </style>

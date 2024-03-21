@@ -4,8 +4,8 @@
          <v-layout class='rounded rounded-md'>
             <app-header :header-title="'Мої замовлення'" />
 
-            <v-main class='app-bg-color'>
-               <v-container class='pa-5 pb-0'>
+            <v-main>
+               <v-container class='pa-0'>
                   <slot />
                </v-container>
             </v-main>
@@ -15,16 +15,17 @@
 </template>
 
 <script lang='ts' setup>
-import { IonContent, IonPage } from '@ionic/vue'
 import AppHeader from '@/components/AppHeader.vue'
+import { IonContent, IonPage } from '@ionic/vue'
 </script>
 
 <style lang='scss' scoped>
 .v-main {
-   padding-bottom: 68px;
+   padding-bottom: 91px;
 }
 
 .v-container {
-   padding-top: 17px !important;
+   padding-top: 19px !important;
+   background: var(--color-bg);
 }
 </style>

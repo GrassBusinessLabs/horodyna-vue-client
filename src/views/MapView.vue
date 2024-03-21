@@ -207,7 +207,7 @@ watch(selectedOffer, async () => {
 
 <style lang='scss' scoped>
 .filter-btn {
-   bottom: 70px;
+   bottom: 103px;
    right: 12px;
    outline: 2.8px solid rgba(0, 0, 0, 0.055);
 }
@@ -226,7 +226,7 @@ watch(selectedOffer, async () => {
 .filters-block {
    height: 47px;
    background-color: white;
-   bottom: 70px;
+   bottom: 103px;
    left: 12px;
    right: 72px;
    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);

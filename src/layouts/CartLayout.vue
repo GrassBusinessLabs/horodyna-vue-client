@@ -2,7 +2,7 @@
    <ion-page>
       <ion-content :fullscreen='true'>
          <v-layout class='rounded rounded-md'>
-            <app-header :header-title="'Список продуктів'" />
+            <app-header :header-title="'Кошик'" />
 
             <v-main>
                <v-container class='pa-0'>
@@ -19,10 +19,9 @@ import AppHeader from '@/components/AppHeader.vue'
 import { IonContent, IonPage } from '@ionic/vue'
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 .v-main {
-   padding-top: 64px;
-   padding-bottom: 89px;
+   padding-bottom: 91px;
    background: var(--color-bg);
 }
 

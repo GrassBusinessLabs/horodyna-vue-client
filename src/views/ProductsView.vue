@@ -4,7 +4,7 @@
          <app-offer v-for='offer in filteredOffers' :key='offer.id' :offer='offer'
             @offer-details="showOfferDetails" />
       </v-list>
-      <v-sheet v-else class='mx-auto pa-6 pt-5 rounded-lg'>
+      <v-sheet v-else class='pa-6 pt-5 rounded-lg no-offer-sheet'>
          <v-list-item-title class='no-item-title text-center py-1'>
             Поки що немає жодного товару
          </v-list-item-title>
@@ -101,6 +101,11 @@ const showOfferDetails = (offer: Offer) => {
 </script>
 
 <style scoped>
+.no-offer-sheet {
+   margin: 19px 15px;
+   box-shadow: 0 8px 24px 0 rgba(149, 157, 165, 0.2);
+}
+
 .offer-card:last-child {
    margin-bottom: 20px;
 } 

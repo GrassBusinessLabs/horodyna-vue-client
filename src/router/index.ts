@@ -5,6 +5,7 @@ import AboutPage from '@/components/AboutPage.vue'
 import { useToastDialog } from '@/composables'
 import { authTokenService } from '@/services'
 import AdminPanelView from '@/views/AdminPanelView.vue'
+import CartView from '@/views/CartView.vue'
 import CatalogView from '@/views/CatalogView.vue'
 import ErrorView from '@/views/ErrorView.vue'
 import MapView from '@/views/MapView.vue'
@@ -97,6 +98,12 @@ const routes: RouteRecordRaw[] = [
       path: '/orders',
       name: 'Orders',
       component: OrdersView,
+      meta: { auth: true }
+   },
+   {
+      path: '/cart',
+      name: 'Cart',
+      component: CartView,
       meta: { auth: true }
    },
    {

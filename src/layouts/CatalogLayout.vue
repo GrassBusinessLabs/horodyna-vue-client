@@ -41,15 +41,16 @@ const scrollToLetter = (letter: string) => {
    height: calc(100vh - 64px);
    width: 100%;
    overflow: auto;
-   padding-bottom: 70px;
+   padding-bottom: 100px;
    padding-right: 44px;
+   background: #f0f0e8;
 }
 
 .v-list {
    position: fixed;
    top: 69px;
    right: 1.3px;
-   bottom: 72px;
+   bottom: 90px;
    display: flex;
    flex-direction: column;
    padding-right: 4px;
@@ -58,9 +59,9 @@ const scrollToLetter = (letter: string) => {
 .letter-block {
    height: 19.8px;
    width: 19.8px;
-   font-size: 14px;
-   color: #3b43d1;
-   font-weight: 500;
+   font-size: 15px;
+   color: var(--color-primary);
+   font-weight: 600;
 }
 </style>
 

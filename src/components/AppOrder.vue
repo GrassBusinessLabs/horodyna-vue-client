@@ -1,51 +1,24 @@
 <template>
-   <div @click='detailsHandler(order)' class="app-item-color d-flex justify-space-between align-center" :class="{'one-image-order': order.order_items.length === 1}">
-      <div class="d-flex justify-space-between align-center">
-
-         <div v-if="order.order_items.length === 4">
-            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[0].offer.image">
-            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[1].offer.image">
-            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[2].offer.image">
-            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[3].offer.image">
+   <div @click='detailsHandler(order)' class="order-block">
+      <div class="top-block d-flex">
+         <div>
+            <img class="order-image" alt="Product image" :src="linkIMG + '/' + order.order_items[0].offer.image">
          </div>
-
-         <div v-else-if="order.order_items.length === 3">
-            <img class="product-image3" alt="Product image" :src="linkIMG + '/' + order.order_items[0].offer.image">
-            <img class="product-image3" alt="Product image" :src="linkIMG + '/' + order.order_items[1].offer.image">
-            <img class="product-image3" alt="Product image" :src="linkIMG + '/' + order.order_items[2].offer.image">
-         </div>
-
-         <div v-else-if="order.order_items.length === 2">
-            <img class="product-image2" alt="Product image" :src="linkIMG + '/' + order.order_items[0].offer.image">
-            <img class="product-image2" alt="Product image" :src="linkIMG + '/' + order.order_items[1].offer.image">
-         </div>
-
-         <div v-else-if="order.order_items.length === 1">
-            <img class="product-image1" alt="Product image" :src="linkIMG + '/' + order.order_items[0].offer.image">
-         </div>
-
-         <div v-else>
-            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[0].offer.image">
-            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[1].offer.image">
-            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[2].offer.image">
-            <img class="product-image" alt="Product image" :src="linkIMG + '/' + order.order_items[3].offer.image">
-         </div>
-
-         <div class="order-info" :class="{'one-image-order-info': order.order_items.length === 1}">
-            <p class='my-font-size order-status'
+         <div class="order-text-block">
+            <p class="order-price">{{ order.total_price }} UAH</p>
+            <p class="order-seller">{{ orderSeller(order.order_items[0].farm.id) }}</p>
+            <p class='order-status'
                :class="order.status === 'DECLINED' ? 'declined' : (order.status === 'SUBMITTED' ? 'waiting' : (order.status === 'COMPLETED' ? 'completed' : ''))">
-               {{ order.status === 'SUBMITTED' ? 'Очікує' :
+               <span class="text-grey">Статус:</span> {{ order.status === 'SUBMITTED' ? 'Очікує' :
       (order.status === 'APPROVED' ? 'Схвалено' :
          (order.status === 'DECLINED' ? 'Відхилено' :
             (order.status === 'SHIPPING' ? 'Надіслано' : 'Отримано'))) }}
             </p>
-            <v-list-item-title class='order-seller'>
-               {{ orderSeller(order.order_items[0].farm.id) }}
-            </v-list-item-title>
-            <v-list-item-title class='my-margin order-price'>
-               {{ order.total_price }} UAH
-            </v-list-item-title>
          </div>
+      </div>
+      <v-divider></v-divider>
+      <div class="bottom-block mt-4">
+         <img v-for="item in order.order_items.filter((_, index) => index !== 0)" :key="item.id" class="order-image order-image-list-item" alt="Product image" :src="linkIMG + '/' + item.offer.image">
       </div>
    </div>
 </template>
@@ -80,18 +53,77 @@ function detailsHandler(event: Order): void {
 </script>
 
 <style scoped>
+.order-block {
+   margin: 19px 15px;
+   margin-bottom: 21px;
+   margin-left: 17.2px;
+   width: 91.5%;
+   box-shadow: 0 8px 24px 0 rgba(149, 157, 165, 0.2);
+   border-radius: 8px;
+   background-color: white;
+   padding: 14px;
+}
+
+.order-text-block {
+   margin-left: 12px;
+}
+
+.order-price {
+   font-family: var(--font-family);
+   font-weight: 600;
+   font-size: 18px;
+   line-height: 120%;
+   color: var(--color-dark);
+   margin-top: 5px;
+   margin-bottom: 5px;
+}
+
+.order-seller {
+   font-family: var(--font-family);
+   font-weight: 400;
+   font-size: 16px;
+   line-height: 120%;
+   color: var(--color-light);
+   margin-bottom: 2.5px;
+}
+
+.order-status {
+   color: white;
+   border-radius: 25px;
+   font-family: var(--font-family);
+   font-weight: 400;
+   font-size: 16px;
+   line-height: 120%;
+   color: rgb(0, 194, 32);
+}
+
+.v-divider {
+   margin: 9px 0;
+}
+
 .my-font-size {
    font-size: 17.8;
 }
 
-.product-image {
-   width: 32px;
-   height: 32px;
+.order-image {
+   width: 75px;
+   height: 75px;
    object-fit: cover;
-   border-radius: 100%;
-   margin-right: -12px;
-   margin-bottom: -6px;
+   border-radius: 10px;
    border: 2px solid #f9f9f9;
+}
+
+.bottom-block {
+   display: flex;
+   overflow-x: auto;
+}
+
+.order-image-list-item {
+   margin-right: 10px;
+}
+
+.order-image-list-item:last-child {
+   margin-right: 0;
 }
 
 .product-image:last-child {
@@ -156,41 +188,15 @@ function detailsHandler(event: Order): void {
    margin-left: 16px;
 }
 
-.order-status {
-   position: absolute;
-   top: 7px;
-   right: 6px;
-   background-color: rgb(0, 194, 32);
-   color: white;
-   border-radius: 25px;
-   padding: 1px 8px;
-}
-
-.order-price {
-   font-size: 18px;
-   font-weight: 500;
-   color: #000099a1;
-}
-
-.order-seller {
-   margin-top: 4px;
-   font-size: 16px;
-   height: 16px;
-   display: flex;
-   align-items: center;
-   color: rgba(0, 0, 0, 0.356);
-   font-weight: 500;
-}
-
 .declined {
-   background-color: rgba(226, 34, 0, 0.699);
+   color: rgba(226, 34, 0, 0.699);
 }
 
 .waiting {
-   background-color: rgb(168, 168, 168);
+   color: rgb(91, 91, 255);
 }
 
 .completed {
-   background-color: rgba(168, 168, 168, 0.877);
+   color: rgb(91, 91, 255);
 }
 </style>
