@@ -7,7 +7,7 @@
          </div>
          <div class="order-text-block">
             <p class="order-seller">{{ orderSeller(order.order_items[0].farm.id) }}</p>
-            <p class="order-date">{{ formattedDate }}</p>
+            <p class="order-date">{{ date }}</p>
             <p class='order-items-quantity'>Найменувань: {{ order.order_items.length }}</p>
          </div>
       </div>
@@ -69,21 +69,16 @@ function detailsHandler(event: Order): void {
    emit('orderDetails', event)
 }
 
-const formattedDate = ref('')
+const date = ref('')
 
 onMounted(() => {
-   const originalDate = props.order.created_data
-   const dateObj = new Date(originalDate)
-   const day = dateObj.getDate()
-   const month = dateObj.getMonth() + 1
-   const year = dateObj.getFullYear()
-   const hours = dateObj.getHours()
-   const minutes = dateObj.getMinutes()
-
-   const formattedDay = day < 10 ? `0${day}` : `${day}`
-   const formattedMonth = month < 10 ? `0${month}` : `${month}`
-
-   formattedDate.value = `${formattedDay}.${formattedMonth}.${year}, ${hours}:${minutes}`
+   const isoDate = new Date(props.order.created_data)
+   const day = isoDate.getDate().toString().padStart(2, '0')
+   const month = (isoDate.getMonth() + 1).toString().padStart(2, '0')
+   const year = isoDate.getFullYear()
+   const hours = isoDate.getHours().toString().padStart(2, '0')
+   const minutes = isoDate.getMinutes().toString().padStart(2, '0')
+   date.value = `${day}.${month}.${year}, ${hours}:${minutes}`
 })
 </script>
 

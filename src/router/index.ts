@@ -8,6 +8,7 @@ import AdminPanelView from '@/views/AdminPanelView.vue'
 import CartView from '@/views/CartView.vue'
 import CatalogView from '@/views/CatalogView.vue'
 import ErrorView from '@/views/ErrorView.vue'
+import FarmersView from '@/views/FarmersView.vue'
 import MapView from '@/views/MapView.vue'
 import OrdersView from '@/views/OrdersView.vue'
 import PasswordChangeView from '@/views/PasswordChangeView.vue'
@@ -104,6 +105,12 @@ const routes: RouteRecordRaw[] = [
       path: '/cart',
       name: 'Cart',
       component: CartView,
+      meta: { auth: true }
+   },
+   {
+      path: '/farmers',
+      name: 'Farmers',
+      component: FarmersView,
       meta: { auth: true }
    },
    {

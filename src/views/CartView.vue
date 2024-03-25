@@ -11,7 +11,7 @@
             </p>
          </div>
          <div class="text-center">
-            <v-btn class="order-btn">Оформити замовлення</v-btn>
+            <v-btn class="app-btn">Оформити замовлення</v-btn>
          </div>
       </v-list>
       <template v-else>
@@ -160,23 +160,6 @@ const deleteDeclinedOrder = async () => {
    color: var(--color-primary);
    margin-right: 17.2px;
    margin-top: 20px;
-}
-
-.order-btn {
-   text-transform: none;
-   box-shadow: 0 8px 24px 0 rgba(149, 157, 165, 0.2);
-   background: var(--color-primary);
-   color: white;
-   border-radius: 40px;
-   padding: 10px 48px;
-   width: 226px;
-   height: 41px;
-   letter-spacing: 0;
-   font-family: var(--font-family);
-   font-weight: 600;
-   font-size: 14px;
-   line-height: 150%;
-   color: var(--color-white);
 }
 
 .no-item-title {

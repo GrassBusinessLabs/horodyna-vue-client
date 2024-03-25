@@ -50,6 +50,10 @@ export const useRouting = () => {
    async function toCart() {
       return ionRouter.navigate('/cart')
    }
+
+   async function toFarmers() {
+      return ionRouter.navigate('/farmers')
+   }
    
    return {
       toSignIn,
@@ -63,5 +67,6 @@ export const useRouting = () => {
       toRegister,
       toPasswordChange,
       toOrders,
-      toCart
+      toCart,
+      toFarmers
    }}
