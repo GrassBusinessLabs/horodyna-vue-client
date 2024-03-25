@@ -25,7 +25,7 @@ import { IonContent, IonPage } from '@ionic/vue'
 }
 
 .v-container {
-   padding-top: 19px !important;
+   padding-top: 10px !important;
    background: var(--color-bg);
 }
 </style>

@@ -2,23 +2,40 @@
    <div @click='detailsHandler(order)' class="order-block">
       <div class="top-block d-flex">
          <div>
-            <img class="order-image" alt="Product image" :src="linkIMG + '/' + order.order_items[0].offer.image">
+            <img class="order-image" alt="Product image"
+               src="https://companynewheroes.com/wp-content/blogs.dir/18/files/2019/09/Lucas-De-Man-Fotograaf-Anne-Harbers-2-1024x683.jpg">
          </div>
          <div class="order-text-block">
-            <p class="order-price">{{ order.total_price }} UAH</p>
             <p class="order-seller">{{ orderSeller(order.order_items[0].farm.id) }}</p>
-            <p class='order-status'
-               :class="order.status === 'DECLINED' ? 'declined' : (order.status === 'SUBMITTED' ? 'waiting' : (order.status === 'COMPLETED' ? 'completed' : ''))">
-               <span class="text-grey">Статус:</span> {{ order.status === 'SUBMITTED' ? 'Очікує' :
-      (order.status === 'APPROVED' ? 'Схвалено' :
-         (order.status === 'DECLINED' ? 'Відхилено' :
-            (order.status === 'SHIPPING' ? 'Надіслано' : 'Отримано'))) }}
-            </p>
+            <p class="order-date">{{ formattedDate }}</p>
+            <p class='order-items-quantity'>Найменувань: {{ order.order_items.length }}</p>
          </div>
       </div>
-      <v-divider></v-divider>
-      <div class="bottom-block mt-4">
-         <img v-for="item in order.order_items.filter((_, index) => index !== 0)" :key="item.id" class="order-image order-image-list-item" alt="Product image" :src="linkIMG + '/' + item.offer.image">
+      <div class="d-flex">
+         <p v-for="(item, index) in order.order_items" :key="item.id" class="order-item-title">{{ item.offer.title }}{{
+      index === order.order_items.length - 1 ? '' : ', ' }}</p>
+      </div>
+      <div class="divider"></div>
+      <div class="bottom-block mt-2 d-flex justify-space-between align-center">
+         <div class="info-price d-flex justify-space-between">
+            <p class="order-sum"> Сума:</p>
+            <p class="order-sum ml-1">
+               {{ order.product_price }}₴
+            </p>
+         </div>
+         <div class="order-details-text d-flex align-center">Деталі замовлення <svg class="ml-1 svg-arrow" width="8"
+               height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <g clip-path="url(#clip0_2647_1504)">
+                  <path
+                     d="M2.70547 0.705384C2.3159 0.315811 1.68428 0.315811 1.2947 0.705384C0.905431 1.09466 0.905087 1.72569 1.29393 2.11538L4.46529 5.29366C4.85479 5.68401 4.85479 6.31599 4.46529 6.70634L1.29393 9.88462C0.905087 10.2743 0.905431 10.9053 1.2947 11.2946C1.68428 11.6842 2.3159 11.6842 2.70547 11.2946L7.29298 6.70711C7.68351 6.31658 7.68351 5.68342 7.29298 5.29289L2.70547 0.705384Z"
+                     fill="#529075" />
+               </g>
+               <defs>
+                  <clipPath id="clip0_2647_1504">
+                     <rect width="8" height="12" fill="white" />
+                  </clipPath>
+               </defs>
+            </svg></div>
       </div>
    </div>
 </template>
@@ -26,8 +43,9 @@
 <script setup lang='ts'>
 import { Offer, Order, OrderById } from '@/models'
 import { useFarmStore } from '@/stores'
+import { onMounted, ref } from 'vue'
 
-defineProps<{
+const props = defineProps<{
    order: OrderById,
    relatedOffers: Offer[]
 }>()
@@ -50,18 +68,58 @@ const emit = defineEmits<{
 function detailsHandler(event: Order): void {
    emit('orderDetails', event)
 }
+
+const formattedDate = ref('')
+
+onMounted(() => {
+   const originalDate = props.order.created_data
+   const dateObj = new Date(originalDate)
+   const day = dateObj.getDate()
+   const month = dateObj.getMonth() + 1
+   const year = dateObj.getFullYear()
+   const hours = dateObj.getHours()
+   const minutes = dateObj.getMinutes()
+
+   const formattedDay = day < 10 ? `0${day}` : `${day}`
+   const formattedMonth = month < 10 ? `0${month}` : `${month}`
+
+   formattedDate.value = `${formattedDay}.${formattedMonth}.${year}, ${hours}:${minutes}`
+})
 </script>
 
 <style scoped>
+.top-block {
+   margin-bottom: 1px;
+}
+
+.order-sum {
+   font-weight: 600;
+   font-size: 16px;
+   line-height: 120%;
+   color: var(--color-dark);
+}
+
+.order-details-text {
+   font-weight: 400;
+   font-size: 14px;
+   line-height: 120%;
+   color: var(--color-primary);
+}
+
+.svg-arrow {
+   margin-top: 2px;
+}
+
 .order-block {
-   margin: 19px 15px;
-   margin-bottom: 21px;
+   margin: 20px 15px;
+   margin-bottom: 20px;
    margin-left: 17.2px;
    width: 91.5%;
    box-shadow: 0 8px 24px 0 rgba(149, 157, 165, 0.2);
    border-radius: 8px;
    background-color: white;
    padding: 14px;
+   padding-bottom: 12px;
 }
 
 .order-text-block {
@@ -69,7 +127,6 @@ function detailsHandler(event: Order): void {
 }
 
 .order-price {
-   font-family: var(--font-family);
    font-weight: 600;
    font-size: 18px;
    line-height: 120%;
@@ -79,12 +136,35 @@ function detailsHandler(event: Order): void {
 }
 
 .order-seller {
-   font-family: var(--font-family);
+   font-weight: 600;
+   font-size: 18px;
+   line-height: 120%;
+   color: var(--color-dark);
+   margin-bottom: 1px;
+   margin-top: 3px;
+}
+
+.order-date {
    font-weight: 400;
-   font-size: 16px;
+   font-size: 14px;
+   line-height: 120%;
+   color: var(--color-dark);
+   margin-bottom: 3px;
+}
+
+.order-items-quantity {
+   font-weight: 400;
+   font-size: 14px;
    line-height: 120%;
    color: var(--color-light);
-   margin-bottom: 2.5px;
+}
+
+.order-item-title {
+   font-weight: 400;
+   font-size: 14px;
+   line-height: 120%;
+   color: var(--color-light);
+   margin-right: 3px;
 }
 
 .order-status {
@@ -97,7 +177,7 @@ function detailsHandler(event: Order): void {
    color: rgb(0, 194, 32);
 }
 
-.v-divider {
+.divider {
    margin: 9px 0;
 }
 
@@ -106,8 +186,8 @@ function detailsHandler(event: Order): void {
 }
 
 .order-image {
-   width: 75px;
-   height: 75px;
+   width: 64px;
+   height: 64px;
    object-fit: cover;
    border-radius: 10px;
    border: 2px solid #f9f9f9;

@@ -1,25 +1,15 @@
 <template>
    <purchase-history-layout>
-      <v-list v-if="activeOrders?.length" density="compact" class="py-0 bg-transparent">
-         <v-list-item-title v-if="activeOrders?.length" class="order-title">
-            Активні
-            <!-- <v-icon size="20" icon="mdi-truck"></v-icon> -->
-         </v-list-item-title>
+      <v-list v-if="activeOrders?.length || declinedOrders?.length || completedOrders?.length" density="compact" class="py-0 bg-transparent">
          <app-order
             v-for="order in orders?.filter(order => order.status !== 'COMPLETED' && order.status !== 'DRAFT' && order.status !== 'DECLINED')"
             :order='order' :key="order.id" @order-details='showOrderDetails(order)'></app-order>
 
-         <v-list-item-title v-if="declinedOrders?.length" class="order-title mt-4">
-            Відхилені
-            <!-- <v-icon size="21" icon="mdi-close-box"></v-icon> -->
-         </v-list-item-title>
+         <div v-if="declinedOrders?.length" class="history-title">Відхилені замовлення</div>
          <app-order v-for="order in orders?.filter(order => order.status === 'DECLINED')" :order='order' :key="order.id"
             @order-details='showOrderDetails(order)' class="gotten-order"></app-order>
 
-         <v-list-item-title v-if="completedOrders?.length" class="order-title mt-4">
-            Отримані
-            <!-- <v-icon size="20" icon="mdi-check-circle"></v-icon> -->
-         </v-list-item-title>
+         <div v-if="completedOrders?.length" class="history-title">Історія замовлень</div>
          <app-order v-for="order in orders?.filter(order => order.status === 'COMPLETED')" :order='order'
             :key="order.id" @order-details='showOrderDetails(order)' class="gotten-order"></app-order>
       </v-list>
@@ -173,6 +163,17 @@ const deleteDeclinedOrder = async () => {
 </script>
 
 <style lang='scss' scoped>
+.history-title {
+   font-weight: 600;
+   font-size: 18px;
+   line-height: 150%;
+   letter-spacing: -0.01em;
+   text-align: center;
+   color: var(--color-dark);
+   margin-bottom: 5px;
+   margin-top: 50px;
+}
+
 .no-item-title {
    font-size: 21px;
    white-space: normal;
@@ -182,17 +183,16 @@ const deleteDeclinedOrder = async () => {
 }
 
 .order-title {
-   font-family: var(--font-family);
-font-weight: 600;
-font-size: 17px;
-line-height: 120%;
-color: var(--color-dark);
+   font-weight: 600;
+   font-size: 17px;
+   line-height: 120%;
+   color: var(--color-dark);
    margin-left: 17.2px;
    margin-bottom: -10px;
 }
 
 .gotten-order {
-   opacity: 70%;
+   opacity: 0.7;
 }
 
 .order-sum {
