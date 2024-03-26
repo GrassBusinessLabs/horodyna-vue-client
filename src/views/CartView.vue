@@ -1,6 +1,6 @@
 <template>
    <cart-layout>
-      <v-list v-if='cart?.order_items.length' @touchmove.stop max-height="407" class='pa-0 pb-5 bg-transparent'>
+      <v-list v-if='cart?.order_items.length' @touchmove.stop class='pa-0 pb-5 bg-transparent'>
          <div class="d-flex justify-end clear-cart">Очистити кошик</div>
          <app-cart-item v-for="item in cart.order_items" :key="item.id" :offer='item.offer' class='app-bg-color-form' />
          <v-divider class="mx-4"></v-divider>

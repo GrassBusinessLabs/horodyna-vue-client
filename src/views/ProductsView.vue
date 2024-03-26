@@ -15,14 +15,14 @@
       <ion-modal :is-open="isOpen" @ionModalDidDismiss="modalDismissed" :handle="false" :initial-breakpoint="1"
          :breakpoints="[0, 1]">
          <v-card @touchmove.stop class='pa-0'>
+            <svg @click="modalDismissed" class="close-btn" width="32" height="32" viewBox="0 0 32 32" fill="none"
+               xmlns="http://www.w3.org/2000/svg">
+               <circle cx="16" cy="16" r="16" fill="#529075" />
+               <path
+                  d="M8.64645 15.6464C8.45118 15.8417 8.45118 16.1583 8.64645 16.3536L11.8284 19.5355C12.0237 19.7308 12.3403 19.7308 12.5355 19.5355C12.7308 19.3403 12.7308 19.0237 12.5355 18.8284L9.70711 16L12.5355 13.1716C12.7308 12.9763 12.7308 12.6597 12.5355 12.4645C12.3403 12.2692 12.0237 12.2692 11.8284 12.4645L8.64645 15.6464ZM23 15.5L9 15.5L9 16.5L23 16.5L23 15.5Z"
+                  fill="white" />
+            </svg>
             <v-list class="pa-0 pb-6 bg-transparent">
-               <svg @click="isOpen = false" class="close-btn" width="32" height="32" viewBox="0 0 32 32" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="16" cy="16" r="16" fill="#529075" />
-                  <path
-                     d="M8.64645 15.6464C8.45118 15.8417 8.45118 16.1583 8.64645 16.3536L11.8284 19.5355C12.0237 19.7308 12.3403 19.7308 12.5355 19.5355C12.7308 19.3403 12.7308 19.0237 12.5355 18.8284L9.70711 16L12.5355 13.1716C12.7308 12.9763 12.7308 12.6597 12.5355 12.4645C12.3403 12.2692 12.0237 12.2692 11.8284 12.4645L8.64645 15.6464ZM23 15.5L9 15.5L9 16.5L23 16.5L23 15.5Z"
-                     fill="white" />
-               </svg>
                <v-carousel hide-delimiters class="rounded-lg" height="220" :show-arrows="false"
                   v-if='offersDetails?.image'>
                   <v-carousel-item :src='linkIMG + offersDetails?.image' cover>
@@ -36,7 +36,7 @@
                <div class="offer-details mt-1">
                   <div class="d-flex justify-space-between">
                      <p class="offer-name">{{ offersDetails?.title }}</p>
-                     <p class="offer-price">{{ offersDetails?.price }}₴ за {{ translate(offersDetails?.unit) }}</p>
+                     <p class="offer-price">{{ offersDetails?.price }}₴/{{ translate(offersDetails?.unit) }}</p>
                   </div>
                   <p class="offer-description">{{ offersDetails?.description }}</p>
                </div>
@@ -240,12 +240,6 @@ svg:last-child {
 .btn-text {
    padding-top: 4px !important;
    padding-bottom: 5px !important;
-}
-
-.v-card {
-   height: 100vh !important;
-   background: var(--color-bg);
-   overflow-y: auto;
 }
 
 .divider {

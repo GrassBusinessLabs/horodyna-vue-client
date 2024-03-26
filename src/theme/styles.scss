@@ -142,3 +142,9 @@ ion-modal {
 	line-height: 150%;
 	color: var(--color-white);
 }
+
+.v-card {
+	height: 100vh !important;
+	background: var(--color-bg);
+	overflow-y: auto;
+}

@@ -1,37 +1,24 @@
 <template>
-   <div class='cart-item d-flex align-center'>
-      <img @click="offerHandler(offer)" width="128" :src="linkIMG + '/' + offer.image" alt="Product image"
+   <div @click="offerHandler(offer)" class='cart-item d-flex align-center'>
+      <img width="128" :src="linkIMG + '/' + offer.image" alt="Product image"
          :class="`product-image ${offer.status ? '' : 'gray-scale'}`">
 
-      <div class="cart-item-info d-flex flex-column justify-space-between">
+      <div class="order-item-info d-flex flex-column justify-space-between">
          <div>
             <div class="info-text d-flex justify-space-between">
-            <div class="offer-title">
-               {{ offer.title }}
+               <div class="offer-title">
+                  {{ offer.title }}
+               </div>
+            </div>
+            <div class="cart-item-description">
+               {{ offer.description }}
             </div>
          </div>
-         <div class="cart-item-description">
-            {{ offer.description }}
-         </div>
-         </div>
-         
-         <div class="info-price d-flex justify-space-between">
-            <p class="cart-item-price"> {{ offer.price }}₴/{{ translate(offer?.unit) }}</p>
+
+         <div class="bottom-block d-flex justify-space-between align-center">
+            <p class="cart-item-amount">{{ offer.price }}₴ х {{ amount }}{{ translate(offer?.unit) }}</p>
             <div class="d-flex align-center">
-               <svg @click="removeProductFromCart(offer)" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="10" cy="10" r="10" fill="#529075" />
-                  <rect x="5" y="10.5555" width="1.11111" height="10" rx="0.555555" transform="rotate(-90 5 10.5555)"
-                     fill="white" />
-               </svg>
-               <p class="cart-item-amount">{{ getProductAmount(offer.id) }}</p>
-               <svg @click="addProductToCart(offer)" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="10" cy="10" r="10" fill="#529075" />
-                  <rect x="9.44446" y="5" width="1.11111" height="10" rx="0.555556" fill="white" />
-                  <rect x="5" y="10.5556" width="1.11111" height="10" rx="0.555555" transform="rotate(-90 5 10.5556)"
-                     fill="white" />
-               </svg>
+               <p class="cart-item-price"> {{ offer.price * amount }}₴</p>
             </div>
          </div>
       </div>
@@ -50,6 +37,7 @@ interface OrderInfo {
 
 const props = defineProps<{
    offer: Offer,
+   amount: number,
    orderInfo?: OrderInfo,
    isHideSeller?: boolean
 }>()
@@ -95,21 +83,24 @@ function offerHandler(event: Offer): void {
 </script>
 
 <style scoped>
+.bottom-block {
+   margin-bottom: 10px;
+}
+
+.order-item-info {
+   height: 100px;
+   width: 100%;
+   padding: 0 14px;
+}
+
 .cart-item {
    margin: 19px 15px;
    margin-bottom: 21px;
-   margin-left: 17.2px;
-   width: 91.5%;
+   width: calc(100% - 30px);
    box-shadow: 0 8px 24px 0 rgba(149, 157, 165, 0.2);
    border-radius: 8px;
    background-color: white;
    height: 100px;
-}
-
-.cart-item-info {
-   width: 100%;
-   height: 100px;
-   padding: 12px 14px 9px 14px;
 }
 
 .cart-item-title {
@@ -128,19 +119,18 @@ function offerHandler(event: Offer): void {
 }
 
 .cart-item-description {
-   font-family: var(--font-family);
    font-weight: 400;
    font-size: 12px;
    line-height: 120%;
    color: var(--color-light);
+   margin-bottom: 6px;
 }
 
 .cart-item-amount {
-   font-weight: 600;
-   font-size: 16px;
+   font-weight: 400;
+   font-size: 12px;
    line-height: 120%;
-   color: var(--color-dark);
-   margin: 0 10px;
+   color: var(--color-light);
 }
 
 .my-margin {
@@ -215,5 +205,7 @@ function offerHandler(event: Offer): void {
    font-size: 16px;
    line-height: 120%;
    color: var(--color-dark);
+   margin-top: 12px;
+   margin-bottom: 3px;
 }
 </style>

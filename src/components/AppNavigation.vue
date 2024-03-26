@@ -41,7 +41,7 @@
                stroke-linejoin="round" />
             <path d="M14 7H30" stroke="#EDEDED" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" />
          </svg>
-         <span>Покупки</span>
+         <span>Замовлення</span>
       </v-btn>
 
       <v-btn @click='routing.toCart'>

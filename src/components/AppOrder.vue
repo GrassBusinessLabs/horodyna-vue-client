@@ -1,5 +1,5 @@
 <template>
-   <div @click='detailsHandler(order)' class="order-block">
+   <div class="order-block">
       <div class="top-block d-flex">
          <div>
             <img class="order-image" alt="Product image"
@@ -23,7 +23,7 @@
                {{ order.product_price }}₴
             </p>
          </div>
-         <div class="order-details-text d-flex align-center">Деталі замовлення <svg class="ml-1 svg-arrow" width="8"
+         <div @click='detailsHandler(order)' class="order-details-text d-flex align-center">Деталі замовлення <svg class="ml-1 svg-arrow" width="8"
                height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                <g clip-path="url(#clip0_2647_1504)">
                   <path
