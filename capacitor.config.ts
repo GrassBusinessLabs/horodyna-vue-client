@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'Городина',
+  appId: 'com.horodunaclient.app',
+  appName: 'horodyna client',
   webDir: 'dist',
   server: {
     androidScheme: 'https'
