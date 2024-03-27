@@ -13,7 +13,7 @@
       <ion-modal :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
       :handle="false" :initial-breakpoint="1"
          :breakpoints="[0, 1]">
-            <v-card height='604' class='pa-0 rounded-t-lg app-item-color'>
+            <v-card class='pa-0 rounded-t-lg app-item-color'>
                <v-card-title class='py-6 text-center my-border card-title'>
                   Фільтри
                   <v-icon size='27' icon="mdi-filter-cog"></v-icon>
@@ -38,42 +38,14 @@
 
       <ion-modal :is-open="isOpen2" @ionModalDidDismiss="modalDismissed2" :handle="false" :initial-breakpoint="1"
          :breakpoints="[0, 1]">
-         <v-card height='604' class='pa-0 rounded-t-lg app-item-color'>
-            <v-card-title class='py-4 text-center my-border my-title'>
-               {{ selectedFarm.name }}
-               <v-list-item-subtitle class='my-subtitle py-1'>
-                  {{ selectedFarm.address }}
-               </v-list-item-subtitle>
-            </v-card-title>
-            <v-list v-if="selectedFarm.products?.length" @touchmove.stop max-height="447"
-               class='pa-5 py-0 mt-5 bg-transparent'>
-               <div v-for="offer in selectedFarm.products" :key="offer.id" :class="{ 'inactive-offer': !offer.status }"
-                  class='d-flex justify-space-between align-center payment-product app-bg-color-form'>
-                  <div class="d-flex justify-space-between align-center">
-                     <img width="128" :src="linkIMG + '/' + offer.image" alt="Product image"
-                        :class="`product-image ${offer.status ? '' : 'gray-scale'}`">
-                     <div class="ml-2">
-                        <v-list-item-title class='offer-title'>
-                           {{ offer.title }}
-                        </v-list-item-title>
-                        <v-list-item-title class='my-subtitle-fs my-color my-height'>
-                           {{ offer.price }} грн за {{ translate(offer?.unit) }}
-                        </v-list-item-title>
-                     </div>
-                  </div>
-                  <div v-if="offer.status" class="d-flex align-center">
-                     <v-icon class="text-grey-darken-1" icon="mdi-minus-circle-outline" size='29' color='black'
-                        @click='removeProductFromCart(offer)'></v-icon>
-                     <v-list-item-subtitle class='my-font-size mx-2 font-weight-bold'>
-                        {{ getProductAmount(offer.id) }} {{ getProductAmount(offer.id) ? translate(offer?.unit)
-         :
-         '' }}
-                     </v-list-item-subtitle>
-                     <v-icon class="text-grey-darken-1" icon="mdi-plus-circle-outline" size='29' color='black'
-                        @click='addProductToCart(offer)'></v-icon>
-                  </div>
-                  <div class="inactive-title text-center mr-1 font-weight-medium" v-else>Немає в наявності</div>
-               </div>
+         <v-card @touchmove.stop class='pa-0 rounded-t-lg app-item-color'>
+            <div class="farm-header d-flex align-center justify-center">
+               <p>{{ selectedFarm.address }}</p>
+            </div>
+            <v-list v-if="selectedFarm.products?.length" 
+               class='pa-0 py-2 bg-transparent farm-items-list'>
+               <app-farm-item v-for="offer in selectedFarm.products" :key="offer.id" :offer="offer" :class="{ 'inactive-offer': !offer.status }">
+               </app-farm-item>
             </v-list>
             <v-list-item-title v-else class='no-item-title text-center mt-5 py-1'>
                Немає жодного товару
@@ -84,6 +56,7 @@
 </template>
 
 <script lang='ts' setup>
+import AppFarmItem from '@/components/AppFarmItem.vue'
 import AppMap from '@/components/AppMap.vue'
 import { useTranslate } from '@/composables'
 import { productsData } from '@/constants/products.ts'
@@ -206,6 +179,32 @@ watch(selectedOffer, async () => {
 </script>
 
 <style lang='scss' scoped>
+.farm-items-list {
+   margin-top: 100px;
+}
+
+.farm-header {
+   height: 100px;
+   width: 100%;
+   background: var(--color-primary);
+   position: fixed;
+   z-index: 2;
+}
+
+.farm-header p {
+   font-weight: 600;
+   font-size: 18px;
+   line-height: 150%;
+   letter-spacing: -0.01em;
+   text-align: center;
+   color: var(--color-white);
+   padding: 0 20px;
+}
+
+.v-card {
+	height: 75vh !important;
+}
+
 .filter-btn {
    bottom: 103px;
    right: 12px;

@@ -23,7 +23,7 @@
                   fill="white" />
             </svg>
             <v-list class="pa-0 pb-6 bg-transparent">
-               <v-carousel hide-delimiters class="rounded-lg" height="220" :show-arrows="false"
+               <v-carousel :hide-delimiters="!offersDetails?.additional_images.length" hide-delimiter-background class="rounded-lg" height="220" :show-arrows="false"
                   v-if='offersDetails?.image'>
                   <v-carousel-item :src='linkIMG + offersDetails?.image' cover>
                   </v-carousel-item>

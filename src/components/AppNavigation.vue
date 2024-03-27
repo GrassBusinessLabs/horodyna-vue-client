@@ -100,6 +100,11 @@ setCart()
 </script>
 
 <style lang='scss' scoped>
+.v-btn {
+   padding: 0 !important;
+   width: 80px !important;
+}
+
 .my-min-height {
    min-height: 91px;
    border-radius: 8px 8px 0 0;

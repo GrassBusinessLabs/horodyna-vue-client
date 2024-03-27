@@ -5,7 +5,7 @@
             <app-header :header-title="'Замовлення по фермам'" />
 
             <v-main class='app-bg-color'>
-               <v-container class='pa-4 pt-5 pb-0'>
+               <v-container class='pa-0'>
                   <slot />
                </v-container>
             </v-main>
@@ -22,5 +22,6 @@ import { IonContent, IonPage } from '@ionic/vue'
 <style lang='scss' scoped>
 .v-main {
    padding-bottom: 71px;
+   background: var(--color-bg);
 }
 </style>

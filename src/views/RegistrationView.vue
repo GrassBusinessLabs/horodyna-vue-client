@@ -1,11 +1,13 @@
 <template>
    <registration-layout>
-      <v-sheet class='mx-auto pa-6 rounded-lg' width='350'>
+      <v-sheet class='mx-auto pa-6 px-0 rounded-lg bg-transparent' width='350'>
+         <p class="app-name-title text-center">Horodyna</p>
          <v-form @submit.prevent='submit'>
             <v-row>
-               <v-col cols='12'>
-                  <v-text-field v-model='username' v-bind='usernameAttrs' label="Ім'я" :disabled='isSubmitting'
-                     :hide-details='true' type='text'></v-text-field>
+               <v-col cols='12' class="pb-1">
+                  <p class="input-label">Ім'я</p>
+                  <v-text-field placeholder="Ваше ім'я" v-model='username' v-bind='usernameAttrs' label=""
+                     variant="outlined" :disabled='isSubmitting' :hide-details='true' type='text'></v-text-field>
                </v-col>
 
                <!-- <v-col cols='12'>
@@ -19,37 +21,37 @@
                   ></v-text-field>
                </v-col> -->
 
-               <v-col cols='12'>
-                  <v-text-field v-model='phone' v-bind='phoneAttrs' label='Номер телефону' :disabled='isSubmitting'
-                     :hide-details='true' type='text'></v-text-field>
+               <v-col cols='12' class="pb-1">
+                  <p class="input-label">Телефон</p>
+                  <v-text-field placeholder="+380XXXXXXXXX" v-model='phone' v-bind='phoneAttrs' label=""
+                     variant="outlined" :disabled='isSubmitting' :hide-details='true' type='text'></v-text-field>
                </v-col>
 
-               <v-col cols='12'>
-                  <v-text-field v-model='password' v-bind='passwordAttrs' label='Пароль' :disabled='isSubmitting'
-                     :hide-details='true' :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+               <v-col cols='12' class="pb-1">
+                  <p class="input-label">Пароль</p>
+                  <v-text-field placeholder="******" v-model='password' v-bind='passwordAttrs' label=""
+                     variant="outlined" :disabled='isSubmitting' :hide-details='true'
+                     :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                      :type="showPassword ? 'text' : 'password'"
                      @click:append-inner='showPassword = !showPassword'></v-text-field>
                </v-col>
 
-               <v-col cols='12'>
-                  <v-text-field v-model='repeatedPassword' v-bind='repeatedPasswordAttrs' label='Підтвердіть пароль'
-                     :disabled='isSubmitting' :hide-details='true'
+               <v-col cols='12' class="pb-4">
+                  <p class="input-label">Підтвердіть пароль</p>
+                  <v-text-field placeholder="******" v-model='repeatedPassword' v-bind='repeatedPasswordAttrs' label=""
+                     variant="outlined" :disabled='isSubmitting' :hide-details='true'
                      :append-inner-icon="showRepeatedPassword ? 'mdi-eye' : 'mdi-eye-off'"
                      :type="showRepeatedPassword ? 'text' : 'password'"
                      @click:append-inner='showRepeatedPassword = !showRepeatedPassword'></v-text-field>
                </v-col>
 
-               <v-col cols='12' class='pb-0'>
-                  <v-btn :block='true' :disabled='isSubmitting' type='submit' class='app-color rounded-lg btn-text'
-                     variant='flat'>
-                     Зареєструвати
-                  </v-btn>
+               <v-col cols='12' class="pb-0">
+                  <div class="text-center">
+                     <v-btn type='submit' class="app-btn">Зареєструватися</v-btn>
+                  </div>
                </v-col>
                <v-col cols='12' class='pb-0 d-flex justify-center' @click='routing.toSignIn'>
-                  Вже є аккаунт?
-                  <v-list-item-title class='pa-0 ml-1 h-auto w-auto text-capitalize text-blue-accent-4'>
-                     Вхід
-                  </v-list-item-title>
+                  <p class="create-account-text">Створити аккаунт</p>
                </v-col>
             </v-row>
          </v-form>
@@ -137,4 +139,34 @@ const submit = form.handleSubmit(async values => {
 })
 </script>
 
-<style lang='scss' scoped></style>
+<style lang='scss' scoped>
+.create-account-text {
+   font-weight: 400;
+   font-size: 14px;
+   line-height: 120%;
+   color: var(--color-primary);
+}
+
+.input-label {
+   font-weight: 400;
+   font-size: 16px;
+   color: var(--color-dark);
+   margin-bottom: 2px;
+   margin-left: 5px;
+}
+
+.app-name-title {
+   font-weight: 400;
+   font-size: 32px;
+   line-height: 69%;
+   text-align: center;
+   color: var(--color-primary);
+   margin-bottom: 40px;
+}
+
+.v-text-field {
+   background-color: white;
+   outline: none !important;
+   border-radius: 50px;
+}
+</style>

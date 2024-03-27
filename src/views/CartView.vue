@@ -11,7 +11,7 @@
             </p>
          </div>
          <div class="text-center">
-            <v-btn class="app-btn">Оформити замовлення</v-btn>
+            <v-btn @click='goToOrders' class="app-btn">Оформити замовлення</v-btn>
          </div>
       </v-list>
       <template v-else>
@@ -22,7 +22,7 @@
             Немає жодного товару
          </v-list-item-title>
       </template>
-      <v-card-actions @touchmove.stop class="d-flex justify-center pt-0 px-5">
+      <!-- <v-card-actions @touchmove.stop class="d-flex justify-center pt-0 px-5">
          <v-btn block v-if='cart?.order_items.length' color='orange' class='text-white mx-5 my-5 rounded-lg btn-text'
             @click='goToPayment' variant='flat'>
             Оформити замовлення
@@ -31,7 +31,7 @@
             variant='flat'>
             Перейти в каталог
          </v-btn>
-      </v-card-actions>
+      </v-card-actions> -->
    </cart-layout>
 </template>
 
@@ -85,9 +85,9 @@ const modalDismissed = () => {
    isOpen.value = false
 }
 
-const goToCatalog = () => {
+const goToOrders = () => {
    isOpen.value = false
-   routing.toCatalog()
+   routing.toOrders()
 }
 
 const selectedOrder = ref<Partial<OrderById>>({})

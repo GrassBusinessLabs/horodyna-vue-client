@@ -69,7 +69,6 @@
       <ion-modal :is-open="isOpen" @ionModalDidDismiss="modalDismissed" :handle="false" :initial-breakpoint="1"
          :breakpoints="[0, 1]">
          <v-card @touchmove.stop
-            :height="`${selectedOrder.status === 'SHIPPING' || selectedOrder.status === 'DECLINED' ? '600' : '576'}`"
             class='pa-0'>
             <svg @click="modalDismissed" class="close-btn" width="24" height="24" viewBox="0 0 24 24" fill="none"
                xmlns="http://www.w3.org/2000/svg">
@@ -97,18 +96,20 @@
             </v-list> -->
 
             <v-list @touchmove.stop class='pa-0 pb-5 pt-2 bg-transparent'>
-         <app-order-item v-for="item in selectedOrder.order_items" :key="item.id" :offer='item.offer' :amount="item.amount" class='app-bg-color-form' />
-         <v-divider class="mx-4"></v-divider>
-         <div class="info-price d-flex justify-space-between">
-            <p class="total-sum-title"> Сума до замовлення:</p>
-            <p class="total-sum">
-               {{ selectedOrder?.product_price }}₴
-            </p>
-         </div>
-         <!-- <div class="text-center">
-            <v-btn class="app-btn">Оформити замовлення</v-btn>
-         </div> -->
-      </v-list>
+               <app-order-item v-for="item in selectedOrder.order_items" :key="item.id" :offer='item.offer'
+                  :amount="item.amount" class='app-bg-color-form' />
+               <v-divider class="mx-4"></v-divider>
+               <div class="info-price d-flex justify-space-between">
+                  <p class="total-sum-title"> Сума до замовлення:</p>
+                  <p class="total-sum">
+                     {{ selectedOrder?.product_price }}₴
+                  </p>
+               </div>
+
+               <div v-if="selectedOrder.status === 'SHIPPING'" class="text-center">
+                  <v-btn class="app-btn">Позначити як отримане</v-btn>
+               </div>
+            </v-list>
             <!-- <v-card-actions v-if="selectedOrder.status === 'SHIPPING'" @touchmove.stop
                class="d-flex justify-center pt-0 px-5 mark-completed">
                <v-btn block color='orange' class='text-white mx-5 my-5 rounded-lg btn-text' @click='markAsCompleted'

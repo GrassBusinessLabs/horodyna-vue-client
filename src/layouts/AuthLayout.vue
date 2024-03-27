@@ -2,8 +2,6 @@
    <ion-page>
       <ion-content :fullscreen='true'>
          <v-layout class='rounded rounded-md'>
-            <app-header :header-title="'Авторизація'" />
-
             <v-main class='d-flex align-center justify-center app-bg-color-form'>
                <slot />
             </v-main>
@@ -14,7 +12,10 @@
 
 <script lang='ts' setup>
 import { IonContent, IonPage } from '@ionic/vue'
-import AppHeader from '@/components/AppHeader.vue'
 </script>
 
-<style lang='scss' scoped></style>
+<style lang='scss' scoped>
+.v-main {
+   background: var(--color-bg);
+}
+</style>

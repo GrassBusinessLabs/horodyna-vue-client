@@ -1,53 +1,65 @@
 <template>
    <orders-layout>
-      <v-list v-if="temporaryOrders" density="compact" class="py-0 bg-transparent">
-         <v-list-item-title class="order-title">
-            Очікують підтвердження <v-icon size="20" icon="mdi-clock-time-eight"></v-icon>
-         </v-list-item-title>
-         <app-farm-order v-for="order in temporaryOrders.splited_orders" :order='order' :key="order.id"
-            @order-details='showOrderDetails(order)'></app-farm-order>
+      <v-list v-if="temporaryOrders" density="compact" class="py-2 bg-transparent">
+         <app-order v-for="order in temporaryOrders.splited_orders" :is-splitted-order="true" :order='order' :key="order.id"
+            @order-details='showOrderDetails(order)'></app-order>
       </v-list>
       <v-sheet v-else class='mx-auto pa-6 pt-5 rounded-lg'>
          <v-list-item-title class='no-item-title text-center py-0'>
             Немає жодного замовлення
          </v-list-item-title>
-         <v-btn color='orange' class='text-white mt-4 w-100 rounded-lg btn-text' @click='routing.toCatalog()' variant='flat'>
+         <v-btn color='orange' class='text-white mt-4 w-100 rounded-lg btn-text' @click='routing.toCatalog()'
+            variant='flat'>
             Перейти в каталог
          </v-btn>
       </v-sheet>
 
-      <ion-modal :is-open="isOpen" @ionModalDidDismiss="modalDismissed"
-         :handle="false" :initial-breakpoint="1" :breakpoints="[0, 1]">
-         <v-card height='604' class='pa-0 rounded-t-lg app-item-color'>
-            <v-card-title class='py-4 text-center my-border my-title'>
-               Деталі замовлення
-               <v-list-item-subtitle class='my-subtitle pt-2 pb-1'>
-                  Вартість: {{ selectedOrder.total_price }} грн
-               </v-list-item-subtitle>
-            </v-card-title>
-            <v-list @touchmove.stop max-height="410" class='pa-5 bg-transparent py-0 mt-5'>
-               <app-product v-for="offer in offersDetails" :key="offer.id" :offer='offer' :order-info="{
-         hideIcons: false,
-         order: selectedOrder
-      }" class='app-bg-color-form' />
+      <ion-modal :is-open="isOpen" @ionModalDidDismiss="modalDismissed" :handle="false" :initial-breakpoint="1"
+         :breakpoints="[0, 1]">
+         <v-card @touchmove.stop class='pa-0'>
+            <svg @click="modalDismissed" class="close-btn" width="24" height="24" viewBox="0 0 24 24" fill="none"
+               xmlns="http://www.w3.org/2000/svg">
+               <g clip-path="url(#clip0_28_536)">
+                  <path
+                     d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
+                     fill="white" />
+               </g>
+               <defs>
+                  <clipPath id="clip0_28_536">
+                     <rect width="24" height="24" fill="white" />
+                  </clipPath>
+               </defs>
+            </svg>
+            <div class="details-header d-flex align-center justify-center">
+               <p>Замовлення</p>
+            </div>
+
+            <v-list @touchmove.stop class='pa-0 pb-5 pt-2 bg-transparent'>
+               <app-order-item v-for="item in selectedOrder.order_items" :key="item.id" :offer='item.offer'
+                  :amount="item.amount" class='app-bg-color-form' />
+               <v-divider class="mx-4"></v-divider>
+               <div class="info-price d-flex justify-space-between">
+                  <p class="total-sum-title"> Сума до замовлення:</p>
+                  <p class="total-sum">
+                     {{ selectedOrder?.product_price }}₴
+                  </p>
+               </div>
+
+               <div class="text-center mb-4">
+                  <v-btn @click='deleteSplittedOrder' class="app-btn-outline">Видалити</v-btn>
+               </div>
+               <div class="text-center">
+                  <v-btn @click='goToPayment' class="app-btn">До замовлення</v-btn>
+               </div>
             </v-list>
-            <v-card-actions @touchmove.stop class="pa-0 pr-4 mx-5 mt-4">
-               <v-btn color='indigo' class='text-white rounded-lg w-50 mr-2 btn-text' @click='deleteSplittedOrder'
-                  variant='outlined'>
-                  Видалити
-               </v-btn>
-               <v-btn class='text-white rounded-lg w-50 app-color btn-text' @click='goToPayment' variant='flat'>
-                  До замовлення
-               </v-btn>
-            </v-card-actions>
          </v-card>
       </ion-modal>
    </orders-layout>
 </template>
 
 <script lang='ts' setup>
-import AppFarmOrder from '@/components/AppFarmOrder.vue'
-import AppProduct from '@/components/AppProduct.vue'
+import AppOrder from '@/components/AppOrder.vue'
+import AppOrderItem from '@/components/AppOrderItem.vue'
 import { useRouting } from '@/composables'
 import OrdersLayout from '@/layouts/OrdersLayout.vue'
 import { Offer, OrderById } from '@/models'
@@ -132,6 +144,50 @@ const deleteSplittedOrder = async () => {
 </script>
 
 <style lang='scss' scoped>
+.total-sum-title {
+   font-weight: 600;
+   font-size: 16px;
+   line-height: 120%;
+   color: #000;
+}
+
+.total-sum {
+   font-weight: 600;
+   font-size: 16px;
+   line-height: 120%;
+   color: #000;
+}
+
+.info-price {
+   padding: 14px 16px;
+}
+
+.details-header {
+   height: 64px;
+   width: 100%;
+   background: var(--color-primary);
+}
+
+.details-header p {
+   font-weight: 600;
+   font-size: 18px;
+   line-height: 150%;
+   letter-spacing: -0.01em;
+   text-align: center;
+   color: var(--color-white);
+}
+
+ion-modal {
+   --border-radius: 0;
+}
+
+.close-btn {
+   position: absolute;
+   top: 20px;
+   right: 15px;
+   z-index: 2;
+}
+
 .no-item-title {
    font-size: 34px;
    white-space: normal;

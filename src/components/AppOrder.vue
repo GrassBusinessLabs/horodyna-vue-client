@@ -47,7 +47,8 @@ import { onMounted, ref } from 'vue'
 
 const props = defineProps<{
    order: OrderById,
-   relatedOffers: Offer[]
+   relatedOffers: Offer[],
+   isSplittedOrder?: boolean
 }>()
 
 const farmStore = useFarmStore()

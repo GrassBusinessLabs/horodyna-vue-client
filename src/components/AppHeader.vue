@@ -34,10 +34,11 @@
    </v-navigation-drawer>
    <v-app-bar class='position-fixed text-white d-flex justify-center' elevation='0'>
       <v-container class='d-flex pl-3'>
-         <!-- <v-btn
+      <v-btn
                v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change' && route.path !== '/admin-panel' && route.path !== '/payment' && route.path !== '/orders' && route.path !== '/products'"
                class='pa-0 w-auto h-auto mr-4' icon='mdi-menu' @click.stop='drawer = !drawer'>
             </v-btn>
+         <!-- 
             <v-btn v-if="route.path === '/admin-panel'" class='pa-0 w-auto h-auto mr-4' icon='mdi-arrow-left'
                @click='routing.toCatalog'>
             </v-btn>
@@ -53,10 +54,23 @@
             <v-btn v-if="route.path === '/password-change'" class='pa-0 w-auto h-auto mr-4' icon='mdi-arrow-left'
                @click='routing.toCatalog'>
             </v-btn> -->
-         <v-app-bar-title class="ml-3" :class="{'ml-11': route.path === '/products'}">{{ headerTitle }}</v-app-bar-title>
+         <v-app-bar-title class="ml-3" :class="{'ml-11': route.path === '/products' || route.path === '/orders'}">{{ headerTitle }}</v-app-bar-title>
       </v-container>
       <template v-slot:append>
          <svg v-if="route.path === '/products'" @click='routing.toCatalog' class="mr-2" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_30_898)">
+               <path
+                  d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
+                  fill="white" />
+            </g>
+            <defs>
+               <clipPath id="clip0_30_898">
+                  <rect width="24" height="24" fill="white" />
+               </clipPath>
+            </defs>
+         </svg>
+
+         <svg v-else-if="route.path === '/orders'" @click='routing.toCart' class="mr-2" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_30_898)">
                <path
                   d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"

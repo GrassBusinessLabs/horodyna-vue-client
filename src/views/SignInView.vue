@@ -1,6 +1,6 @@
 <template>
    <auth-layout>
-      <v-sheet class='mx-auto pa-6 rounded-lg' width='350'>
+      <v-sheet class='mx-auto pa-6 rounded-lg bg-transparent' width='350'>
          <v-form @submit.prevent='submit'>
             <v-row>
                <v-col cols='12'>
