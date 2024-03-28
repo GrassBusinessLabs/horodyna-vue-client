@@ -55,6 +55,10 @@ export const useRouting = () => {
       return ionRouter.navigate('/farmers')
    }
    
+   async function toProfile() {
+      return ionRouter.navigate('/profile')
+   }
+
    return {
       toSignIn,
       toCatalog,
@@ -68,5 +72,6 @@ export const useRouting = () => {
       toPasswordChange,
       toOrders,
       toCart,
-      toFarmers
+      toFarmers,
+      toProfile
    }}

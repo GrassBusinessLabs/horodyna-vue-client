@@ -14,6 +14,7 @@ import OrdersView from '@/views/OrdersView.vue'
 import PasswordChangeView from '@/views/PasswordChangeView.vue'
 import PaymentView from '@/views/PaymentView.vue'
 import ProductsView from '@/views/ProductsView.vue'
+import ProfileView from '@/views/ProfileView.vue'
 import PurchaseHistoryView from '@/views/PurchaseHistoryView.vue'
 import RegistrationView from '@/views/RegistrationView.vue'
 import SettingsView from '@/views/SettingsView.vue'
@@ -111,6 +112,12 @@ const routes: RouteRecordRaw[] = [
       path: '/farmers',
       name: 'Farmers',
       component: FarmersView,
+      meta: { auth: true }
+   },
+   {
+      path: '/profile',
+      name: 'Profile',
+      component: ProfileView,
       meta: { auth: true }
    },
    {

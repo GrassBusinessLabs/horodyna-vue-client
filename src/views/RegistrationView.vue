@@ -6,7 +6,7 @@
             <v-row>
                <v-col cols='12' class="pb-1">
                   <p class="input-label">Ім'я</p>
-                  <v-text-field placeholder="Ваше ім'я" v-model='username' v-bind='usernameAttrs' label=""
+                  <v-text-field density="compact" placeholder="Ваше ім'я" v-model='username' v-bind='usernameAttrs' label=""
                      variant="outlined" :disabled='isSubmitting' :hide-details='true' type='text'></v-text-field>
                </v-col>
 
@@ -23,13 +23,13 @@
 
                <v-col cols='12' class="pb-1">
                   <p class="input-label">Телефон</p>
-                  <v-text-field placeholder="+380XXXXXXXXX" v-model='phone' v-bind='phoneAttrs' label=""
+                  <v-text-field density="compact" placeholder="+380XXXXXXXXX" v-model='phone' v-bind='phoneAttrs' label=""
                      variant="outlined" :disabled='isSubmitting' :hide-details='true' type='text'></v-text-field>
                </v-col>
 
                <v-col cols='12' class="pb-1">
                   <p class="input-label">Пароль</p>
-                  <v-text-field placeholder="******" v-model='password' v-bind='passwordAttrs' label=""
+                  <v-text-field density="compact" placeholder="******" v-model='password' v-bind='passwordAttrs' label=""
                      variant="outlined" :disabled='isSubmitting' :hide-details='true'
                      :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                      :type="showPassword ? 'text' : 'password'"
@@ -38,7 +38,7 @@
 
                <v-col cols='12' class="pb-4">
                   <p class="input-label">Підтвердіть пароль</p>
-                  <v-text-field placeholder="******" v-model='repeatedPassword' v-bind='repeatedPasswordAttrs' label=""
+                  <v-text-field density="compact" placeholder="******" v-model='repeatedPassword' v-bind='repeatedPasswordAttrs' label=""
                      variant="outlined" :disabled='isSubmitting' :hide-details='true'
                      :append-inner-icon="showRepeatedPassword ? 'mdi-eye' : 'mdi-eye-off'"
                      :type="showRepeatedPassword ? 'text' : 'password'"
@@ -51,7 +51,7 @@
                   </div>
                </v-col>
                <v-col cols='12' class='pb-0 d-flex justify-center' @click='routing.toSignIn'>
-                  <p class="create-account-text">Створити аккаунт</p>
+                  <p class="create-account-text">Увійти в аккаунт</p>
                </v-col>
             </v-row>
          </v-form>
@@ -168,5 +168,6 @@ const submit = form.handleSubmit(async values => {
    background-color: white;
    outline: none !important;
    border-radius: 50px;
+   padding-top: 5px;
 }
 </style>

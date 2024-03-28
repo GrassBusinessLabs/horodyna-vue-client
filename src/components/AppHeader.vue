@@ -1,6 +1,6 @@
 <template>
    <v-navigation-drawer v-model='drawer' :temporary='true' class='position-fixed' width='290'>
-      <v-list-item class='my-padding pl-4 pb-2'>
+      <v-list-item class='my-padding pl-4 pb-2 pt-9'>
          <v-list-item-title class='user-name app-font-regular'>{{ currentUser?.name }}</v-list-item-title>
          <app-address-form :user-address="userAddress" :is-menu-button="true"
             @close-menu="drawer = false"></app-address-form>
@@ -36,7 +36,7 @@
       <v-container class='d-flex pl-3'>
       <v-btn
                v-if="route.path !== '/sign-in' && route.path !== '/register' && route.path !== '/password-change' && route.path !== '/admin-panel' && route.path !== '/payment' && route.path !== '/orders' && route.path !== '/products'"
-               class='pa-0 w-auto h-auto mr-4' icon='mdi-menu' @click.stop='drawer = !drawer'>
+               class='pa-0 w-auto h-auto mr-4 menu-icon' icon='mdi-menu' @click.stop='drawer = !drawer'>
             </v-btn>
          <!-- 
             <v-btn v-if="route.path === '/admin-panel'" class='pa-0 w-auto h-auto mr-4' icon='mdi-arrow-left'
@@ -169,6 +169,7 @@ const menuOverviewItems = [
 ]
 
 const menuAccountItems = [
+   { name: 'Профіль', icon: 'mdi-account-circle', routing: routing.toProfile },
    // { name: 'Налаштування', icon: 'mdi-cog', routing: routing.toSettings },
    { name: 'Змінити пароль', icon: 'mdi-cog', routing: routing.toPasswordChange },
    { name: 'Вихід', icon: 'mdi-logout-variant', routing: userStore.logout }
@@ -203,6 +204,13 @@ watch(drawer, async () => {
 </script>
 
 <style lang='scss' scoped>
+.menu-icon {
+   position: fixed;
+   left: 25px;
+   // top: 20px;
+   top: 32px;
+}
+
 .my-padding {
    padding: 11.6px;
    padding-top: 9.5px;

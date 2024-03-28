@@ -1,13 +1,17 @@
 <template>
    <auth-layout>
-      <v-sheet class='mx-auto pa-6 rounded-lg bg-transparent' width='350'>
+      <v-sheet class='mx-auto pa-0 rounded-lg bg-transparent' width='350'>
+         <p class="app-name-title text-center">Horodyna</p>
          <v-form @submit.prevent='submit'>
             <v-row>
-               <v-col cols='12'>
-                  <v-text-field
+               <v-col cols='12'  class="pb-1">
+                  <p class="input-label">Телефон</p>
+                  <v-text-field density="compact"
                      v-model='phone'
                      v-bind='phoneAttrs'
-                     label='Номер телефону'
+                     placeholder="+380XXXXXXXXX"
+                     label=""
+                     variant="outlined"
                      :disabled='isSubmitting'
                      :hide-details='true'
                      type='text'
@@ -15,10 +19,13 @@
                </v-col>
 
                <v-col cols='12'>
-                  <v-text-field
+                  <p class="input-label">Пароль</p>
+                  <v-text-field density="compact"
                      v-model='password'
                      v-bind='passwordAttrs'
-                     label='Пароль'
+                     placeholder="******"
+                     label=""
+                     variant="outlined"
                      :disabled='isSubmitting'
                      :hide-details='true'
                      :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -28,27 +35,16 @@
                </v-col>
 
                <v-col cols='12' class='pb-0'>
-                  <v-btn
-                     :block='true'
-                     :disabled='isSubmitting'
-                     type='submit'
-                     class='app-color rounded-lg btn-text'
-                     variant='flat'
-                  >
-                     Вхід
-                  </v-btn>
+                  <div class="text-center">
+                     <v-btn type='submit' class="app-btn">Вхід</v-btn>
+                  </div>
                </v-col>
                <v-col
                   cols='12'
                   class='d-flex justify-center pb-0'
                   @click='routing.toRegister'
                >
-                  Немає аккаунту?
-                  <v-list-item-title
-                     class='pa-0 ml-1 h-auto w-auto text-capitalize text-blue-accent-4'
-                  >
-                     Реєстрація
-                  </v-list-item-title>
+               <p class="enter-account-text">Створити аккаунт</p>
                </v-col>
             </v-row>
          </v-form>
@@ -88,6 +84,9 @@ const form = useForm({
    initialValues: {
       phone: '0951234567',
       password: '222222'
+
+      // phone: '',
+      // password: ''
    }
 })
 
@@ -126,4 +125,34 @@ const submit = form.handleSubmit(async values => {
 </script>
 
 <style lang='scss' scoped>
+.enter-account-text {
+   font-weight: 400;
+   font-size: 14px;
+   line-height: 120%;
+   color: var(--color-primary);
+}
+
+.v-text-field {
+   background-color: white;
+   outline: none !important;
+   border-radius: 50px;
+   padding-top: 5px;
+}
+
+.app-name-title {
+   font-weight: 400;
+   font-size: 32px;
+   line-height: 69%;
+   text-align: center;
+   color: var(--color-primary);
+   margin-bottom: 40px;
+}
+
+.input-label {
+   font-weight: 400;
+   font-size: 16px;
+   color: var(--color-dark);
+   margin-bottom: 2px;
+   margin-left: 5px;
+}
 </style>

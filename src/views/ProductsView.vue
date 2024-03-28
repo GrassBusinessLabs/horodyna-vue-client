@@ -251,7 +251,8 @@ svg:last-child {
 
 .close-btn {
    position: absolute;
-   top: 15px;
+   /* top: 15px; */
+   top: 35px;
    left: 15px;
    z-index: 2;
 }
